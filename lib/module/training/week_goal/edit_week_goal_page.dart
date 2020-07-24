@@ -24,6 +24,19 @@ class _EditWeekGoalPageState extends State<EditWeekGoalPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        leading: IconButton(
+          icon: Icon(
+            Icons.arrow_back_ios,
+            color: Colors.black,
+          ),
+          onPressed: () {
+            Navigator.of(context).pop('back tu edit ve');
+          },
+        ),
+      ),
       body: SafeArea(
         child: Container(
           margin: EdgeInsets.only(

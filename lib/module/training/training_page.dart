@@ -272,7 +272,7 @@ class _TrainingPageState extends State<TrainingPage> {
                           pageTransitionAnimation:
                               PageTransitionAnimation.cupertino,
                           withNavBar: false,
-                        );
+                        ).then((value) => print(value));
                       },
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
