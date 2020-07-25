@@ -1,6 +1,8 @@
 import 'package:calendar_strip/calendar_strip.dart';
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
+import 'package:women_fitness_flutter/module/training/detail/detail_training_page.dart';
+import 'package:women_fitness_flutter/module/training/week_goal/calendar_week_goal_page.dart';
 import 'package:women_fitness_flutter/module/training/week_goal/edit_week_goal_page.dart';
 import 'package:women_fitness_flutter/shared/app_color.dart';
 import 'package:women_fitness_flutter/shared/size_config.dart';
@@ -12,6 +14,8 @@ class TrainingPage extends StatefulWidget {
 }
 
 class _TrainingPageState extends State<TrainingPage> {
+  String weekTraining = '4';
+
   DateTime startDate = DateTime.now().subtract(Duration(days: 2));
   DateTime endDate = DateTime.now().add(Duration(days: 2));
   DateTime selectedDate = DateTime.now().subtract(Duration(days: 2));
@@ -150,50 +154,67 @@ class _TrainingPageState extends State<TrainingPage> {
           ),
           AspectRatio(
             aspectRatio: 1.65,
-            child: Container(
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(defaultSize),
-                  image: DecorationImage(
-                      fit: BoxFit.fill,
-                      image: AssetImage(
-                        'assets/images/fullbodyworkout.jpg',
-                      ))),
+            child: InkWell(
+              onTap: () {
+                pushNewScreenWithRouteSettings(
+                  context,
+                  screen: DetailTrainingPage(),
+                  settings: RouteSettings(
+                    name: '/training/detail',
+                    arguments: {
+                      'test': 123,
+                    },
+                  ),
+                  withNavBar: false,
+                  pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                );
+              },
               child: Container(
-                margin: EdgeInsets.only(left: defaultSize * 2),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    TextApp(
-                      content: 'FULL BODY',
-                      textColor: Colors.white,
-                      size: defaultSize * 2.5,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    TextApp(
-                      content: '7X4 CHALLENGE',
-                      textColor: Colors.white,
-                      size: defaultSize * 2.5,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    SizedBox(
-                      height: defaultSize,
-                    ),
-                    Container(
-                      width: defaultSize * 12,
-                      height: defaultSize * 4.5,
-                      decoration: BoxDecoration(
-                          color: AppColor.main,
-                          borderRadius: BorderRadius.circular(defaultSize * 2)),
-                      child: Center(
-                        child: TextApp(
-                          content: 'START',
-                          size: defaultSize * 2,
-                          textColor: Colors.white,
-                        ),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(defaultSize),
+                    image: DecorationImage(
+                        fit: BoxFit.fill,
+                        image: AssetImage(
+                          'assets/images/fullbodyworkout.jpg',
+                        ))),
+                child: Container(
+                  margin: EdgeInsets.only(left: defaultSize * 2),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      TextApp(
+                        content: 'FULL BODY',
+                        textColor: Colors.white,
+                        size: defaultSize * 2.5,
+                        fontWeight: FontWeight.bold,
                       ),
-                    )
-                  ],
+                      TextApp(
+                        content: '7X4 CHALLENGE',
+                        textColor: Colors.white,
+                        size: defaultSize * 2.5,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      SizedBox(
+                        height: defaultSize,
+                      ),
+                      Container(
+                        width: defaultSize * 12,
+                        height: defaultSize * 4.5,
+                        decoration: BoxDecoration(
+                            color: AppColor.main,
+                            borderRadius:
+                                BorderRadius.circular(defaultSize * 2)),
+                        child: Center(
+                          child: TextApp(
+                            content: 'START',
+                            size: defaultSize * 2,
+                            textColor: Colors.white,
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -272,7 +293,13 @@ class _TrainingPageState extends State<TrainingPage> {
                           pageTransitionAnimation:
                               PageTransitionAnimation.cupertino,
                           withNavBar: false,
-                        ).then((value) => print(value));
+                        ).then((value) {
+                          if (value != null) {
+                            setState(() {
+                              weekTraining = value;
+                            });
+                          }
+                        });
                       },
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -285,7 +312,7 @@ class _TrainingPageState extends State<TrainingPage> {
                             width: 5,
                           ),
                           TextApp(
-                            content: '0/3',
+                            content: '0/$weekTraining',
                           )
                         ],
                       ),
@@ -295,22 +322,38 @@ class _TrainingPageState extends State<TrainingPage> {
               ),
             ),
             Expanded(
-              child: CalendarStrip(
-                startDate: startDate,
-                endDate: endDate,
-                onDateSelected: null,
-                dateTileBuilder: dateTileBuilder,
-                iconColor: Colors.black87,
-                monthNameWidget: (monthName) => Container(
-                  child: TextApp(
-                    content: monthName,
-                    size: SizeConfig.defaultSize * 2,
-                    textColor: AppColor.main,
+              child: InkWell(
+                onTap: () {
+                  pushNewScreenWithRouteSettings(
+                    context,
+                    screen: CalendarWeekGoalPage(),
+                    settings: RouteSettings(
+                      name: '/training/week_goal/calendar_week_goal',
+                      arguments: {
+                        'test': 123,
+                      },
+                    ),
+                    withNavBar: false,
+                    pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                  );
+                },
+                child: CalendarStrip(
+                  startDate: startDate,
+                  endDate: endDate,
+                  onDateSelected: null,
+                  dateTileBuilder: dateTileBuilder,
+                  iconColor: Colors.black87,
+                  monthNameWidget: (monthName) => Container(
+                    child: TextApp(
+                      content: monthName,
+                      size: SizeConfig.defaultSize * 2,
+                      textColor: AppColor.main,
+                    ),
+                    padding: EdgeInsets.only(top: 8, bottom: 4),
                   ),
-                  padding: EdgeInsets.only(top: 8, bottom: 4),
+                  markedDates: markedDates,
+                  containerDecoration: BoxDecoration(color: Colors.transparent),
                 ),
-                markedDates: markedDates,
-                containerDecoration: BoxDecoration(color: Colors.transparent),
               ),
             ),
           ],

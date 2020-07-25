@@ -33,7 +33,7 @@ class _EditWeekGoalPageState extends State<EditWeekGoalPage> {
             color: Colors.black,
           ),
           onPressed: () {
-            Navigator.of(context).pop('back tu edit ve');
+            Navigator.of(context).pop();
           },
         ),
       ),
@@ -193,7 +193,9 @@ class _EditWeekGoalPageState extends State<EditWeekGoalPage> {
                       borderRadius: BorderRadius.circular(30),
                     ),
                     color: AppColor.main,
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.of(context).pop(weeklyTraining);
+                    },
                     child: Center(
                       child: TextApp(
                         content: 'SAVE',
