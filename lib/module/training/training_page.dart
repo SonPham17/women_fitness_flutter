@@ -1,7 +1,8 @@
 import 'package:calendar_strip/calendar_strip.dart';
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
-import 'package:women_fitness_flutter/module/training/detail/detail_training_page.dart';
+import 'package:women_fitness_flutter/module/training/challenge/challenge_training_page.dart';
+import 'package:women_fitness_flutter/module/training/favorite/favorite_training_page.dart';
 import 'package:women_fitness_flutter/module/training/week_goal/calendar_week_goal_page.dart';
 import 'package:women_fitness_flutter/module/training/week_goal/edit_week_goal_page.dart';
 import 'package:women_fitness_flutter/shared/app_color.dart';
@@ -68,54 +69,70 @@ class _TrainingPageState extends State<TrainingPage> {
               fontWeight: FontWeight.bold,
             ),
           ),
-          AspectRatio(
-            aspectRatio: 1.65,
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(defaultSize),
-                image: DecorationImage(
-                  fit: BoxFit.fill,
-                  image: AssetImage(
-                    'assets/images/favorite_bg.jpg',
+          GestureDetector(
+            onTap: (){
+              pushNewScreenWithRouteSettings(
+                context,
+                screen: FavoriteTrainingPage(),
+                settings: RouteSettings(
+                  name: '/training/favorite',
+                  arguments: {
+                    'test': 123,
+                  },
+                ),
+                withNavBar: false,
+                pageTransitionAnimation: PageTransitionAnimation.cupertino,
+              );
+            },
+            child: AspectRatio(
+              aspectRatio: 1.65,
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(defaultSize),
+                  image: DecorationImage(
+                    fit: BoxFit.fill,
+                    image: AssetImage(
+                      'assets/images/favorite_bg.jpg',
+                    ),
                   ),
                 ),
-              ),
-              child: Container(
-                margin: EdgeInsets.only(left: defaultSize * 2),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    TextApp(
-                      content: 'START YOUR',
-                      textColor: Colors.white,
-                      size: defaultSize * 2.5,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    TextApp(
-                      content: 'WORKOUT',
-                      textColor: Colors.white,
-                      size: defaultSize * 2.5,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    SizedBox(
-                      height: defaultSize,
-                    ),
-                    Container(
-                      width: defaultSize * 12,
-                      height: defaultSize * 4.5,
-                      decoration: BoxDecoration(
-                          color: AppColor.main,
-                          borderRadius: BorderRadius.circular(defaultSize * 2)),
-                      child: Center(
-                        child: TextApp(
-                          content: 'GO!',
-                          size: defaultSize * 2,
-                          textColor: Colors.white,
-                        ),
+                child: Container(
+                  margin: EdgeInsets.only(left: defaultSize * 2),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      TextApp(
+                        content: 'START YOUR',
+                        textColor: Colors.white,
+                        size: defaultSize * 2.5,
+                        fontWeight: FontWeight.bold,
                       ),
-                    )
-                  ],
+                      TextApp(
+                        content: 'WORKOUT',
+                        textColor: Colors.white,
+                        size: defaultSize * 2.5,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      SizedBox(
+                        height: defaultSize,
+                      ),
+                      Container(
+                        width: defaultSize * 12,
+                        height: defaultSize * 4.5,
+                        decoration: BoxDecoration(
+                            color: AppColor.main,
+                            borderRadius: BorderRadius.circular(defaultSize * 2)),
+                        child: Center(
+                          child: TextApp(
+                            content: 'GO!',
+                            size: defaultSize * 2,
+                            textColor: Colors.white,
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -158,9 +175,9 @@ class _TrainingPageState extends State<TrainingPage> {
               onTap: () {
                 pushNewScreenWithRouteSettings(
                   context,
-                  screen: DetailTrainingPage(),
+                  screen: ChallengeTrainingPage(),
                   settings: RouteSettings(
-                    name: '/training/detail',
+                    name: '/training/challenge',
                     arguments: {
                       'test': 123,
                     },
@@ -340,7 +357,20 @@ class _TrainingPageState extends State<TrainingPage> {
                 child: CalendarStrip(
                   startDate: startDate,
                   endDate: endDate,
-                  onDateSelected: null,
+                  onDateSelected: (date){
+                    pushNewScreenWithRouteSettings(
+                      context,
+                      screen: CalendarWeekGoalPage(),
+                      settings: RouteSettings(
+                        name: '/training/week_goal/calendar_week_goal',
+                        arguments: {
+                          'test': 123,
+                        },
+                      ),
+                      withNavBar: false,
+                      pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                    );
+                  },
                   dateTileBuilder: dateTileBuilder,
                   iconColor: Colors.black87,
                   monthNameWidget: (monthName) => Container(
