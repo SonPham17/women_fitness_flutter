@@ -25,8 +25,8 @@ class _FavoriteTrainingPageState extends State<FavoriteTrainingPage> {
     var listData = List<Section>();
     listData = await workOutProvider.getAllSection();
     print(listData[0].descriptionLanguage);
-    var map = json.decode(listData[0].descriptionLanguage);
-    print(map);
+//    var map = json.decode(listData[0].descriptionLanguage);
+//    print(map);
   }
 
   @override

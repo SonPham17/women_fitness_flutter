@@ -27,36 +27,40 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        elevation: 0,
+        centerTitle: true,
         title: TextApp(
           content: 'Women\'s Fitness',
         ),
       ),
-      body: PersistentTabView(
-        controller: _controller,
-        items: _navBarsItems(),
-        screens: _buildScreens(),
-        confineInSafeArea: false,
-        backgroundColor: Colors.white,
-        handleAndroidBackButtonPress: true,
-        resizeToAvoidBottomInset: true,
-        // This needs to be true if you want to move up the screen when keyboard appears.
-        hideNavigationBarWhenKeyboardShows: true,
-        stateManagement: true,
-        decoration: NavBarDecoration(
-          borderRadius: BorderRadius.circular(10.0),
-          colorBehindNavBar: Colors.white,
+      body: SafeArea(
+        child: PersistentTabView(
+          controller: _controller,
+          items: _navBarsItems(),
+          screens: _buildScreens(),
+          confineInSafeArea: false,
+          backgroundColor: Colors.white,
+          handleAndroidBackButtonPress: true,
+          resizeToAvoidBottomInset: true,
+          // This needs to be true if you want to move up the screen when keyboard appears.
+          hideNavigationBarWhenKeyboardShows: true,
+          stateManagement: true,
+          decoration: NavBarDecoration(
+            borderRadius: BorderRadius.circular(10.0),
+            colorBehindNavBar: Colors.white,
+          ),
+          popAllScreensOnTapOfSelectedTab: true,
+          itemAnimationProperties: ItemAnimationProperties(
+            duration: Duration(milliseconds: 200),
+            curve: Curves.ease,
+          ),
+          screenTransitionAnimation: ScreenTransitionAnimation(
+            animateTabTransition: true,
+            curve: Curves.ease,
+            duration: Duration(milliseconds: 200),
+          ),
+          navBarStyle: NavBarStyle.style3,
         ),
-        popAllScreensOnTapOfSelectedTab: true,
-        itemAnimationProperties: ItemAnimationProperties(
-          duration: Duration(milliseconds: 200),
-          curve: Curves.ease,
-        ),
-        screenTransitionAnimation: ScreenTransitionAnimation(
-          animateTabTransition: true,
-          curve: Curves.ease,
-          duration: Duration(milliseconds: 200),
-        ),
-        navBarStyle: NavBarStyle.style3,
       ),
     );
   }

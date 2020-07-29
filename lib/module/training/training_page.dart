@@ -192,7 +192,7 @@ class _TrainingPageState extends State<TrainingPage> {
                     image: DecorationImage(
                         fit: BoxFit.fill,
                         image: AssetImage(
-                          'assets/images/fullbodyworkout.jpg',
+                          'assets/images/sections/fullbodyworkout.jpg',
                         ))),
                 child: Container(
                   margin: EdgeInsets.only(left: defaultSize * 2),

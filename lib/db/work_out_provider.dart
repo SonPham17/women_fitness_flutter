@@ -12,10 +12,10 @@ class WorkOutProvider {
     return maps.map((challenge) => Challenge.fromData(challenge)).toList();
   }
 
-  Future<List<Section>> getAllSection() async{
-    final Database db= WomenFitnessDatabase.instance.database;
+  Future<List<Section>> getAllSection() async {
+    final Database db = WomenFitnessDatabase.instance.database;
 
-    final List<Map<String,dynamic>> maps = await db.query('section');
+    final List<Map<String, dynamic>> maps = await db.query('section');
 
     return maps.map((section) => Section.fromData(section)).toList();
   }

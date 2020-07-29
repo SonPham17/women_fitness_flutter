@@ -1,11 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:women_fitness_flutter/db/women_fitness_database.dart';
+import 'package:women_fitness_flutter/injector/injector.dart';
 import 'package:women_fitness_flutter/module/home/home_page.dart';
 import 'package:women_fitness_flutter/shared/app_color.dart';
+import 'package:women_fitness_flutter/shared/supervisor_bloc.dart';
 
-void main() async{
+Future<void> main() async {
+  //init kiwi
+  Injector.setup();
+  Bloc.observer = SupervisorBloc();
+
   WidgetsFlutterBinding.ensureInitialized();
   await initializeDateFormatting();
   await WomenFitnessDatabase.instance.init();
