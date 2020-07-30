@@ -29,10 +29,11 @@ class _WorkoutPageState extends State<WorkoutPage> {
                   fontFamily: 'OpenSans',
                 ),
                 tabs: listTab
-                    .map((item) => Tab(
-                  text: item.title,
-//                  icon: Icon(item.iconData),
-                ))
+                    .map(
+                      (item) => Tab(
+                        text: item.title,
+                      ),
+                    )
                     .toList(),
               ),
             ),

@@ -1,4 +1,5 @@
-import 'package:flutter/cupertino.dart';
+import 'dart:convert';
+
 import 'package:women_fitness_flutter/shared/model/description_language.dart';
 import 'package:women_fitness_flutter/shared/model/title_language.dart';
 
@@ -22,8 +23,11 @@ class Section {
     level = map['level'];
     type = map['type'];
     status = map['status'];
-    workoutsId = map['workoutsId'];
-    titleLanguage = map['title_language'];
-    descriptionLanguage = map['description_language'];
+    workoutsId = (json.decode(map['workoutsId']) as List)
+        ?.map((e) => e as String)
+        ?.toList();
+    titleLanguage = TitleLanguage.fromJson(json.decode(map['title_language']));
+    descriptionLanguage =
+        DescriptionLanguage.fromJson(json.decode(map['description_language']));
   }
 }

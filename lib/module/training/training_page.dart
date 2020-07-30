@@ -92,7 +92,7 @@ class _TrainingPageState extends State<TrainingPage> {
                   image: DecorationImage(
                     fit: BoxFit.fill,
                     image: AssetImage(
-                      'assets/images/favorite_bg.jpg',
+                      'assets/images/sections/absworkout1.jpg',
                     ),
                   ),
                 ),
