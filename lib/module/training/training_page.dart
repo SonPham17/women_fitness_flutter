@@ -1,20 +1,33 @@
 import 'package:calendar_strip/calendar_strip.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:like_button/like_button.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
+import 'package:women_fitness_flutter/injector/injector.dart';
 import 'package:women_fitness_flutter/module/training/challenge/challenge_training_page.dart';
 import 'package:women_fitness_flutter/module/training/favorite/favorite_training_page.dart';
+import 'package:women_fitness_flutter/module/training/training_bloc.dart';
+import 'package:women_fitness_flutter/module/training/training_events.dart';
+import 'package:women_fitness_flutter/module/training/training_states.dart';
 import 'package:women_fitness_flutter/module/training/week_goal/calendar_week_goal_page.dart';
 import 'package:women_fitness_flutter/module/training/week_goal/edit_week_goal_page.dart';
 import 'package:women_fitness_flutter/shared/app_color.dart';
+import 'package:women_fitness_flutter/shared/model/section.dart';
 import 'package:women_fitness_flutter/shared/size_config.dart';
 import 'package:women_fitness_flutter/shared/widget/text_app.dart';
 
 class TrainingPage extends StatefulWidget {
+  final List<Section> listSections;
+
+  TrainingPage({@required this.listSections});
+
   @override
   _TrainingPageState createState() => _TrainingPageState();
 }
 
 class _TrainingPageState extends State<TrainingPage> {
+  TrainingBloc _trainingBloc;
+
   String weekTraining = '4';
 
   DateTime startDate = DateTime.now().subtract(Duration(days: 2));
@@ -25,6 +38,14 @@ class _TrainingPageState extends State<TrainingPage> {
     DateTime.now().subtract(Duration(days: 2)),
     DateTime.now().add(Duration(days: 4))
   ];
+
+  @override
+  void initState() {
+    super.initState();
+
+    _trainingBloc = Injector.resolve<TrainingBloc>()
+      ..add(TrainingGetSectionFavoriteEvent(listSections: widget.listSections));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,8 +63,167 @@ class _TrainingPageState extends State<TrainingPage> {
             Divider(),
             _buildChallenge(),
             Divider(),
-            _buildFavorite(),
+            BlocProvider<TrainingBloc>(
+              create: (_) => _trainingBloc,
+              child: BlocConsumer<TrainingBloc, TrainingState>(
+                builder: (context, state){
+                  if(state is TrainingStateInitial){
+                    return _buildFavorite();
+                  }
+
+                  var listFavorite = (state as TrainingStateGetFavoriteDone).lists;
+                  return _buildWorkOut(listFavorite, 'FAVORITE');
+                },
+                listener: (context, state) {
+                  if (state is TrainingStateGetFavoriteDone) {
+                    print(state.lists.length);
+                  }
+                },
+              ),
+            ),
           ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildWorkOut(List<Section> listAbs, String title) => Container(
+    margin: EdgeInsets.only(left: 15, right: 15),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        TextApp(
+          content: title,
+          textColor: Colors.black,
+          size: 15,
+          fontWeight: FontWeight.bold,
+        ),
+        SizedBox(
+          height: 15,
+        ),
+        ListView(
+          physics: NeverScrollableScrollPhysics(),
+          shrinkWrap: true,
+          children:
+          listAbs.map((section) => _buildItemWorkOut(section)).toList(),
+        ),
+      ],
+    ),
+  );
+
+  Widget _buildItemWorkOut(Section section) {
+    double defaultSize = SizeConfig.defaultSize;
+    print(section.isLiked);
+    return Container(
+      margin: EdgeInsets.only(bottom: 15),
+      child: AspectRatio(
+        aspectRatio: 2,
+        child: InkWell(
+          onTap: () {
+//        pushNewScreenWithRouteSettings(
+//          context,
+//          screen: ChallengeTrainingPage(),
+//          settings: RouteSettings(
+//            name: '/training/challenge',
+//            arguments: {
+//              'test': 123,
+//            },
+//          ),
+//          withNavBar: false,
+//          pageTransitionAnimation: PageTransitionAnimation.cupertino,
+//        );
+          },
+          child: Container(
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                image: DecorationImage(
+                    fit: BoxFit.fill,
+                    image: AssetImage(
+                      'assets/images/sections/${section.thumb}.jpg',
+                    ))),
+            child: Container(
+              margin: EdgeInsets.only(left: 20),
+              child: Stack(
+                children: <Widget>[
+                  Positioned(
+                    right: 0,
+                    child: Container(
+                      padding: EdgeInsets.all(10),
+                      child: LikeButton(
+                        onTap: (bool isLiked) async {
+//                          if (isLiked) {
+//                            _workOutHomeBloc
+//                                .add(WorkOutHomeUnLikeEvent(section: section));
+//                          } else {
+//                            _workOutHomeBloc
+//                                .add(WorkOutHomeLikeEvent(section: section));
+//                          }
+                          return !isLiked;
+                        },
+                        size: 30,
+                        isLiked: section.isLiked,
+                        likeBuilder: (isLiked) => Icon(
+                          isLiked ? Icons.favorite : Icons.favorite_border,
+                          color: isLiked ? Colors.red : Colors.white,
+                          size: 30,
+                        ),
+                      ),
+                    ),
+                  ),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      TextApp(
+                        content: section.title.toUpperCase(),
+                        textColor: Colors.white,
+                        size: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      SizedBox(
+                        height: 5,
+                      ),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: <Widget>[
+                          Icon(
+                            Icons.flash_on,
+                            size: 20,
+                            color: AppColor.main,
+                          ),
+                          Icon(
+                            Icons.flash_on,
+                            size: 20,
+                            color: section.level == 2
+                                ? AppColor.main
+                                : (section.level == 3
+                                ? AppColor.main
+                                : Colors.white),
+                          ),
+                          Icon(
+                            Icons.flash_on,
+                            size: 20,
+                            color: section.level == 3
+                                ? AppColor.main
+                                : Colors.white,
+                          ),
+                          TextApp(
+                            size: 13,
+                            content: '${section.workoutsId.length} workouts',
+                            textColor: Colors.white,
+                          )
+                        ],
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
         ),
       ),
     );
@@ -70,7 +250,7 @@ class _TrainingPageState extends State<TrainingPage> {
             ),
           ),
           GestureDetector(
-            onTap: (){
+            onTap: () {
               pushNewScreenWithRouteSettings(
                 context,
                 screen: FavoriteTrainingPage(),
@@ -122,7 +302,8 @@ class _TrainingPageState extends State<TrainingPage> {
                         height: defaultSize * 4.5,
                         decoration: BoxDecoration(
                             color: AppColor.main,
-                            borderRadius: BorderRadius.circular(defaultSize * 2)),
+                            borderRadius:
+                                BorderRadius.circular(defaultSize * 2)),
                         child: Center(
                           child: TextApp(
                             content: 'GO!',
@@ -357,7 +538,7 @@ class _TrainingPageState extends State<TrainingPage> {
                 child: CalendarStrip(
                   startDate: startDate,
                   endDate: endDate,
-                  onDateSelected: (date){
+                  onDateSelected: (date) {
                     pushNewScreenWithRouteSettings(
                       context,
                       screen: CalendarWeekGoalPage(),
@@ -368,7 +549,8 @@ class _TrainingPageState extends State<TrainingPage> {
                         },
                       ),
                       withNavBar: false,
-                      pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                      pageTransitionAnimation:
+                          PageTransitionAnimation.cupertino,
                     );
                   },
                   dateTileBuilder: dateTileBuilder,
@@ -454,4 +636,10 @@ class _TrainingPageState extends State<TrainingPage> {
           ],
         ),
       );
+
+  @override
+  void dispose() {
+    super.dispose();
+    _trainingBloc.close();
+  }
 }

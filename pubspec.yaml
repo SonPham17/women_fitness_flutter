@@ -41,6 +41,7 @@ dependencies:
   rxdart: ^0.24.1
   kiwi: ^2.0.0
   like_button: ^1.0.1
+  shared_preferences: ^0.5.8
 
 dev_dependencies:
   flutter_test:

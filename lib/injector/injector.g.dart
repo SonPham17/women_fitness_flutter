@@ -9,14 +9,20 @@ part of 'injector.dart';
 class _$Injector extends Injector {
   void _configureBlocs() {
     final KiwiContainer container = KiwiContainer();
+    container.registerFactory(
+        (c) => WorkOutHomeBloc(trainingBloc: c<TrainingBloc>()));
     container
-        .registerFactory((c) => WorkOutHomeBloc(workOutRepo: c<WorkOutRepo>()));
+        .registerFactory((c) => WorkOutBloc(workOutRepo: c<WorkOutRepo>()));
+    container.registerFactory((c) => SplashBloc(workOutRepo: c<WorkOutRepo>()));
+    container.registerSingleton(
+        (c) => TrainingBloc(trainingRepo: c<TrainingRepo>()));
   }
 
   void _configureRepo() {
     final KiwiContainer container = KiwiContainer();
-    container.registerFactory(
+    container.registerSingleton(
         (c) => WorkOutRepo(workOutProvider: c<WorkOutProvider>()));
+    container.registerFactory((c) => TrainingRepo());
   }
 
   void _configureProvider() {

@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:women_fitness_flutter/data/spref/spref.dart';
 import 'package:women_fitness_flutter/shared/model/description_language.dart';
 import 'package:women_fitness_flutter/shared/model/title_language.dart';
 
@@ -14,6 +15,7 @@ class Section {
   List<String> workoutsId;
   TitleLanguage titleLanguage;
   DescriptionLanguage descriptionLanguage;
+  bool isLiked;
 
   Section.fromData(Map<String, dynamic> map) {
     id = map['id'];
@@ -29,5 +31,8 @@ class Section {
     titleLanguage = TitleLanguage.fromJson(json.decode(map['title_language']));
     descriptionLanguage =
         DescriptionLanguage.fromJson(json.decode(map['description_language']));
+    SPref.instance.getBool(title).then((value) {
+      isLiked = value ?? false;
+    });
   }
 }

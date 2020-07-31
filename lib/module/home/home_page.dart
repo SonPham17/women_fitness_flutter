@@ -6,6 +6,8 @@ import 'package:women_fitness_flutter/module/setting/setting_page.dart';
 import 'package:women_fitness_flutter/module/training/training_page.dart';
 import 'package:women_fitness_flutter/module/workout/workout_page.dart';
 import 'package:women_fitness_flutter/shared/app_color.dart';
+import 'package:women_fitness_flutter/shared/model/section.dart';
+import 'package:women_fitness_flutter/shared/model/work_out.dart';
 import 'package:women_fitness_flutter/shared/widget/text_app.dart';
 
 class HomePage extends StatefulWidget {
@@ -15,12 +17,23 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   PersistentTabController _controller;
+  List<Section> listSections;
+  List<WorkOut> listWorkOuts;
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _controller = PersistentTabController(initialIndex: 0);
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    var args = ModalRoute.of(context).settings.arguments as Map;
+    if (args != null) {
+      listSections = args['list_section'];
+      listWorkOuts = args['list_workout'];
+    }
   }
 
   @override
@@ -96,8 +109,12 @@ class _HomePageState extends State<HomePage> {
 
   List<Widget> _buildScreens() {
     return [
-      TrainingPage(),
-      WorkoutPage(),
+      TrainingPage(
+        listSections: listSections,
+      ),
+      WorkoutPage(
+        listSections: listSections,
+      ),
       ReportPage(),
       SettingPage(),
     ];

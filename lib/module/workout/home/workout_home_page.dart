@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:like_button/like_button.dart';
+import 'package:women_fitness_flutter/data/spref/spref.dart';
 import 'package:women_fitness_flutter/injector/injector.dart';
 import 'package:women_fitness_flutter/module/workout/home/workout_home_bloc.dart';
 import 'package:women_fitness_flutter/module/workout/home/workout_home_events.dart';
@@ -11,6 +12,10 @@ import 'package:women_fitness_flutter/shared/size_config.dart';
 import 'package:women_fitness_flutter/shared/widget/text_app.dart';
 
 class WorkOutHomePage extends StatefulWidget {
+  final List<Section> listSections;
+
+  WorkOutHomePage({this.listSections});
+
   @override
   _WorkOutHomePageState createState() => _WorkOutHomePageState();
 }
@@ -25,8 +30,7 @@ class _WorkOutHomePageState extends State<WorkOutHomePage>
   @override
   void initState() {
     super.initState();
-    _workOutHomeBloc = Injector.resolve<WorkOutHomeBloc>()
-      ..add(WorkOutHomeGetDataEvent(first: true));
+    _workOutHomeBloc = Injector.resolve<WorkOutHomeBloc>();
   }
 
   @override
@@ -39,12 +43,6 @@ class _WorkOutHomePageState extends State<WorkOutHomePage>
           print(state);
         },
         builder: (context, state) {
-          if (state is WorkOutHomeStateLoading ||
-              state is WorkOutHomeStateInitial) {
-            return const SizedBox();
-          }
-
-          final List<Section> listSections = state.listSections;
           return SingleChildScrollView(
             scrollDirection: Axis.vertical,
             child: Column(
@@ -63,13 +61,15 @@ class _WorkOutHomePageState extends State<WorkOutHomePage>
                   ),
                 ),
                 Divider(),
-                _buildWorkOut(listSections.sublist(0, 3), 'ABS WORKOUT'),
+                _buildWorkOut(widget.listSections.sublist(0, 3), 'ABS WORKOUT'),
                 Divider(),
-                _buildWorkOut(listSections.sublist(3, 6), 'BUTT WORKOUT'),
+                _buildWorkOut(
+                    widget.listSections.sublist(3, 6), 'BUTT WORKOUT'),
                 Divider(),
-                _buildWorkOut(listSections.sublist(6, 7), 'ARM WORKOUT'),
+                _buildWorkOut(widget.listSections.sublist(6, 7), 'ARM WORKOUT'),
                 Divider(),
-                _buildWorkOut(listSections.sublist(7, 10), 'THIGH WORKOUT'),
+                _buildWorkOut(
+                    widget.listSections.sublist(7, 10), 'THIGH WORKOUT'),
               ],
             ),
           );
@@ -104,6 +104,7 @@ class _WorkOutHomePageState extends State<WorkOutHomePage>
 
   Widget _buildItemWorkOut(Section section) {
     double defaultSize = SizeConfig.defaultSize;
+    print(section.isLiked);
     return Container(
       margin: EdgeInsets.only(bottom: 15),
       child: AspectRatio(
@@ -140,7 +141,18 @@ class _WorkOutHomePageState extends State<WorkOutHomePage>
                     child: Container(
                       padding: EdgeInsets.all(10),
                       child: LikeButton(
+                        onTap: (bool isLiked) async {
+                          if (isLiked) {
+                            _workOutHomeBloc
+                                .add(WorkOutHomeUnLikeEvent(section: section));
+                          } else {
+                            _workOutHomeBloc
+                                .add(WorkOutHomeLikeEvent(section: section));
+                          }
+                          return !isLiked;
+                        },
                         size: 30,
+                        isLiked: section.isLiked,
                         likeBuilder: (isLiked) => Icon(
                           isLiked ? Icons.favorite : Icons.favorite_border,
                           color: isLiked ? Colors.red : Colors.white,

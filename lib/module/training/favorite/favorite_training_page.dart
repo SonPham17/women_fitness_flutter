@@ -20,11 +20,6 @@ class _FavoriteTrainingPageState extends State<FavoriteTrainingPage> {
   void didChangeDependencies() async {
     super.didChangeDependencies();
 
-    WorkOutProvider workOutProvider = WorkOutProvider();
-
-    var listData = List<Section>();
-    listData = await workOutProvider.getAllSection();
-    print(listData[0].descriptionLanguage);
 //    var map = json.decode(listData[0].descriptionLanguage);
 //    print(map);
   }

@@ -1,15 +1,33 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:women_fitness_flutter/injector/injector.dart';
 import 'package:women_fitness_flutter/module/workout/home/workout_home_page.dart';
 import 'package:women_fitness_flutter/module/workout/routines/workout_routines_page.dart';
+import 'package:women_fitness_flutter/module/workout/workout_bloc.dart';
+import 'package:women_fitness_flutter/module/workout/workout_events.dart';
+import 'package:women_fitness_flutter/module/workout/workout_states.dart';
 import 'package:women_fitness_flutter/shared/app_color.dart';
+import 'package:women_fitness_flutter/shared/model/section.dart';
+import 'package:women_fitness_flutter/shared/model/work_out.dart';
 
 class WorkoutPage extends StatefulWidget {
+  final List<Section> listSections;
+
+  WorkoutPage({@required this.listSections});
+
   @override
   _WorkoutPageState createState() => _WorkoutPageState();
 }
 
 class _WorkoutPageState extends State<WorkoutPage> {
   final controller = PageController();
+  WorkOutBloc _workOutBloc;
+
+  @override
+  void initState() {
+    super.initState();
+    _workOutBloc = Injector.resolve<WorkOutBloc>();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -17,38 +35,54 @@ class _WorkoutPageState extends State<WorkoutPage> {
       child: DefaultTabController(
         length: listTab.length,
         initialIndex: 0,
-        child: Column(
-          children: <Widget>[
-            Container(
-              color: AppColor.main,
-              child: TabBar(
-                labelColor: Colors.white,
-                unselectedLabelColor: Colors.black,
-                indicatorColor: Colors.white,
-                labelStyle: TextStyle(
-                  fontFamily: 'OpenSans',
-                ),
-                tabs: listTab
-                    .map(
-                      (item) => Tab(
-                        text: item.title,
-                      ),
-                    )
-                    .toList(),
+        child: Column(children: <Widget>[
+          Container(
+            color: AppColor.main,
+            child: TabBar(
+              labelColor: Colors.white,
+              unselectedLabelColor: Colors.black,
+              indicatorColor: Colors.white,
+              labelStyle: TextStyle(
+                fontFamily: 'OpenSans',
               ),
+              tabs: listTab
+                  .map(
+                    (item) => Tab(
+                      text: item.title,
+                    ),
+                  )
+                  .toList(),
             ),
-            Expanded(
-              child: TabBarView(
-                children: <Widget>[
-                  WorkOutHomePage(),
-                  WorkOutRoutinesPage(),
-                ],
-              ),
-            )
-          ],
-        ),
+          ),
+          BlocProvider<WorkOutBloc>(
+            create: (_) => _workOutBloc,
+            child: BlocConsumer<WorkOutBloc, WorkOutState>(
+              listener: (context, state) {},
+              builder: (context, state) {
+                return Expanded(
+                  child: TabBarView(
+                    children: <Widget>[
+                      WorkOutHomePage(
+                        listSections: widget.listSections,
+                      ),
+                      WorkOutRoutinesPage(
+                        listSections: widget.listSections,
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
+          ),
+        ]),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _workOutBloc.close();
   }
 }
 
