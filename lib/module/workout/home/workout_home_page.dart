@@ -41,6 +41,7 @@ class _WorkOutHomePageState extends State<WorkOutHomePage>
       child: BlocConsumer<WorkOutHomeBloc, WorkOutHomeState>(
         listener: (context, state) {
           print(state);
+          print(widget.listSections);
         },
         builder: (context, state) {
           return SingleChildScrollView(
@@ -104,7 +105,6 @@ class _WorkOutHomePageState extends State<WorkOutHomePage>
 
   Widget _buildItemWorkOut(Section section) {
     double defaultSize = SizeConfig.defaultSize;
-    print(section.isLiked);
     return Container(
       margin: EdgeInsets.only(bottom: 15),
       child: AspectRatio(
@@ -143,9 +143,11 @@ class _WorkOutHomePageState extends State<WorkOutHomePage>
                       child: LikeButton(
                         onTap: (bool isLiked) async {
                           if (isLiked) {
+                            section.isLiked = false;
                             _workOutHomeBloc
                                 .add(WorkOutHomeUnLikeEvent(section: section));
                           } else {
+                            section.isLiked = true;
                             _workOutHomeBloc
                                 .add(WorkOutHomeLikeEvent(section: section));
                           }

@@ -1,10 +1,6 @@
-
 import 'package:equatable/equatable.dart';
 
-abstract class WorkOutEvent extends Equatable{
-  @override
-  List<Object> get props => [];
-}
+abstract class WorkOutEvent {}
 
 class WorkOutGetDataEvent extends WorkOutEvent {
   final bool first;

@@ -2,10 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:women_fitness_flutter/shared/model/section.dart';
 
-abstract class TrainingState extends Equatable {
-  @override
-  List<Object> get props => [];
-}
+abstract class TrainingState {}
 
 class TrainingStateInitial extends TrainingState {}
 

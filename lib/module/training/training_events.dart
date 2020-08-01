@@ -2,15 +2,19 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:women_fitness_flutter/shared/model/section.dart';
 
-abstract class TrainingEvent extends Equatable {
-  @override
-  List<Object> get props => [];
+abstract class TrainingEvent  {
 }
 
 class TrainingLikeEvent extends TrainingEvent {
   final Section section;
 
   TrainingLikeEvent({@required this.section});
+}
+
+class TrainingUnLikeEvent extends TrainingEvent {
+  final Section section;
+
+  TrainingUnLikeEvent({@required this.section});
 }
 
 class TrainingGetSectionFavoriteEvent extends TrainingEvent {

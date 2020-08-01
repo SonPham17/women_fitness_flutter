@@ -1,9 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:women_fitness_flutter/shared/model/section.dart';
 
-abstract class WorkOutHomeEvent extends Equatable {
-  @override
-  List<Object> get props => [];
+abstract class WorkOutHomeEvent{
 }
 
 class WorkOutHomeFetchedEvent extends WorkOutHomeEvent {}
@@ -24,4 +22,10 @@ class WorkOutHomeUnLikeEvent extends WorkOutHomeEvent{
   final Section section;
 
   WorkOutHomeUnLikeEvent({this.section});
+}
+
+class WorkOutHomeRefreshListEvent extends WorkOutHomeEvent{
+  final Section section;
+
+  WorkOutHomeRefreshListEvent({this.section});
 }

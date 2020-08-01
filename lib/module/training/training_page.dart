@@ -4,6 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:like_button/like_button.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:women_fitness_flutter/injector/injector.dart';
+import 'package:women_fitness_flutter/module/home/home_bloc.dart';
+import 'package:women_fitness_flutter/module/home/home_events.dart';
 import 'package:women_fitness_flutter/module/training/challenge/challenge_training_page.dart';
 import 'package:women_fitness_flutter/module/training/favorite/favorite_training_page.dart';
 import 'package:women_fitness_flutter/module/training/training_bloc.dart';
@@ -11,15 +13,21 @@ import 'package:women_fitness_flutter/module/training/training_events.dart';
 import 'package:women_fitness_flutter/module/training/training_states.dart';
 import 'package:women_fitness_flutter/module/training/week_goal/calendar_week_goal_page.dart';
 import 'package:women_fitness_flutter/module/training/week_goal/edit_week_goal_page.dart';
+import 'package:women_fitness_flutter/module/workout/home/workout_home_bloc.dart';
+import 'package:women_fitness_flutter/module/workout/home/workout_home_events.dart';
+import 'package:women_fitness_flutter/module/workout/routines/workout_routines_bloc.dart';
+import 'package:women_fitness_flutter/module/workout/routines/workout_routines_events.dart';
 import 'package:women_fitness_flutter/shared/app_color.dart';
 import 'package:women_fitness_flutter/shared/model/section.dart';
+import 'package:women_fitness_flutter/shared/model/work_out.dart';
 import 'package:women_fitness_flutter/shared/size_config.dart';
 import 'package:women_fitness_flutter/shared/widget/text_app.dart';
 
 class TrainingPage extends StatefulWidget {
   final List<Section> listSections;
+  final List<WorkOut> listWorkOuts;
 
-  TrainingPage({@required this.listSections});
+  TrainingPage({@required this.listSections, this.listWorkOuts});
 
   @override
   _TrainingPageState createState() => _TrainingPageState();
@@ -27,6 +35,9 @@ class TrainingPage extends StatefulWidget {
 
 class _TrainingPageState extends State<TrainingPage> {
   TrainingBloc _trainingBloc;
+  WorkOutHomeBloc _workOutHomeBloc;
+  WorkOutRoutinesBloc _workOutRoutinesBloc;
+  HomeBloc _homeBloc;
 
   String weekTraining = '4';
 
@@ -45,6 +56,9 @@ class _TrainingPageState extends State<TrainingPage> {
 
     _trainingBloc = Injector.resolve<TrainingBloc>()
       ..add(TrainingGetSectionFavoriteEvent(listSections: widget.listSections));
+    _workOutHomeBloc = Injector.resolve<WorkOutHomeBloc>();
+    _workOutRoutinesBloc = Injector.resolve<WorkOutRoutinesBloc>();
+    _homeBloc = Injector.resolve<HomeBloc>();
   }
 
   @override
@@ -63,15 +77,32 @@ class _TrainingPageState extends State<TrainingPage> {
             Divider(),
             _buildChallenge(),
             Divider(),
-            BlocProvider<TrainingBloc>(
-              create: (_) => _trainingBloc,
+            MultiBlocProvider(
+              providers: [
+                BlocProvider<TrainingBloc>(
+                  create: (_) => _trainingBloc,
+                ),
+                BlocProvider<WorkOutHomeBloc>(
+                  create: (_) => _workOutHomeBloc,
+                ),
+                BlocProvider<WorkOutRoutinesBloc>(
+                  create: (_) => _workOutRoutinesBloc,
+                ),
+                BlocProvider<HomeBloc>(
+                  create: (_) => _homeBloc,
+                ),
+              ],
               child: BlocConsumer<TrainingBloc, TrainingState>(
-                builder: (context, state){
-                  if(state is TrainingStateInitial){
+                builder: (context, state) {
+                  if (state is TrainingStateInitial) {
                     return _buildFavorite();
                   }
 
-                  var listFavorite = (state as TrainingStateGetFavoriteDone).lists;
+                  var listFavorite =
+                      (state as TrainingStateGetFavoriteDone).lists;
+                  if (listFavorite.length == 0) {
+                    return _buildFavorite();
+                  }
                   return _buildWorkOut(listFavorite, 'FAVORITE');
                 },
                 listener: (context, state) {
@@ -88,50 +119,48 @@ class _TrainingPageState extends State<TrainingPage> {
   }
 
   Widget _buildWorkOut(List<Section> listAbs, String title) => Container(
-    margin: EdgeInsets.only(left: 15, right: 15),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        TextApp(
-          content: title,
-          textColor: Colors.black,
-          size: 15,
-          fontWeight: FontWeight.bold,
+        margin: EdgeInsets.only(left: 15, right: 15),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            TextApp(
+              content: title,
+              textColor: Colors.black,
+              size: 15,
+              fontWeight: FontWeight.bold,
+            ),
+            SizedBox(
+              height: 15,
+            ),
+            ListView(
+              physics: NeverScrollableScrollPhysics(),
+              shrinkWrap: true,
+              children:
+                  listAbs.map((section) => _buildItemWorkOut(section)).toList(),
+            ),
+          ],
         ),
-        SizedBox(
-          height: 15,
-        ),
-        ListView(
-          physics: NeverScrollableScrollPhysics(),
-          shrinkWrap: true,
-          children:
-          listAbs.map((section) => _buildItemWorkOut(section)).toList(),
-        ),
-      ],
-    ),
-  );
+      );
 
   Widget _buildItemWorkOut(Section section) {
-    double defaultSize = SizeConfig.defaultSize;
-    print(section.isLiked);
     return Container(
       margin: EdgeInsets.only(bottom: 15),
       child: AspectRatio(
         aspectRatio: 2,
         child: InkWell(
           onTap: () {
-//        pushNewScreenWithRouteSettings(
-//          context,
-//          screen: ChallengeTrainingPage(),
-//          settings: RouteSettings(
-//            name: '/training/challenge',
-//            arguments: {
-//              'test': 123,
-//            },
-//          ),
-//          withNavBar: false,
-//          pageTransitionAnimation: PageTransitionAnimation.cupertino,
-//        );
+            pushNewScreenWithRouteSettings(
+              context,
+              screen: FavoriteTrainingPage(
+                section: section,
+                listWorkOuts: widget.listWorkOuts,
+              ),
+              settings: RouteSettings(
+                name: '/training/favorite',
+              ),
+              withNavBar: false,
+              pageTransitionAnimation: PageTransitionAnimation.cupertino,
+            );
           },
           child: Container(
             decoration: BoxDecoration(
@@ -151,13 +180,14 @@ class _TrainingPageState extends State<TrainingPage> {
                       padding: EdgeInsets.all(10),
                       child: LikeButton(
                         onTap: (bool isLiked) async {
-//                          if (isLiked) {
-//                            _workOutHomeBloc
-//                                .add(WorkOutHomeUnLikeEvent(section: section));
-//                          } else {
-//                            _workOutHomeBloc
-//                                .add(WorkOutHomeLikeEvent(section: section));
-//                          }
+                          if (isLiked) {
+                            section.isLiked = false;
+                            _workOutHomeBloc.add(
+                                WorkOutHomeRefreshListEvent(section: section));
+                            _workOutRoutinesBloc.add(
+                                WorkOutRoutinesRefreshListEvent(
+                                    section: section));
+                          }
                           return !isLiked;
                         },
                         size: 30,
@@ -198,8 +228,8 @@ class _TrainingPageState extends State<TrainingPage> {
                             color: section.level == 2
                                 ? AppColor.main
                                 : (section.level == 3
-                                ? AppColor.main
-                                : Colors.white),
+                                    ? AppColor.main
+                                    : Colors.white),
                           ),
                           Icon(
                             Icons.flash_on,
@@ -251,18 +281,7 @@ class _TrainingPageState extends State<TrainingPage> {
           ),
           GestureDetector(
             onTap: () {
-              pushNewScreenWithRouteSettings(
-                context,
-                screen: FavoriteTrainingPage(),
-                settings: RouteSettings(
-                  name: '/training/favorite',
-                  arguments: {
-                    'test': 123,
-                  },
-                ),
-                withNavBar: false,
-                pageTransitionAnimation: PageTransitionAnimation.cupertino,
-              );
+              _homeBloc.add(HomeShowTabWorkOutEvent());
             },
             child: AspectRatio(
               aspectRatio: 1.65,
@@ -641,5 +660,8 @@ class _TrainingPageState extends State<TrainingPage> {
   void dispose() {
     super.dispose();
     _trainingBloc.close();
+    _homeBloc.close();
+    _workOutHomeBloc.close();
+    _workOutRoutinesBloc.close();
   }
 }

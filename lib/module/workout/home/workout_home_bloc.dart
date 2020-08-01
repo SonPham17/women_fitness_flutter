@@ -24,6 +24,9 @@ class WorkOutHomeBloc extends Bloc<WorkOutHomeEvent, WorkOutHomeState> {
       case WorkOutHomeUnLikeEvent:
         yield* _mapUnLikeEvent(workOutHomeEvent);
         break;
+      case WorkOutHomeRefreshListEvent:
+        yield* _mapRefreshListEvent(workOutHomeEvent);
+        break;
     }
   }
 
@@ -34,6 +37,14 @@ class WorkOutHomeBloc extends Bloc<WorkOutHomeEvent, WorkOutHomeState> {
 
   Stream<WorkOutHomeState> _mapUnLikeEvent(
       WorkOutHomeUnLikeEvent event) async* {
+    _trainingBloc.add(TrainingUnLikeEvent(section: event.section));
     SPref.instance.setBool(event.section.title, false);
+  }
+
+  Stream<WorkOutHomeState> _mapRefreshListEvent(
+      WorkOutHomeRefreshListEvent event) async* {
+    _trainingBloc.add(TrainingUnLikeEvent(section: event.section));
+    SPref.instance.setBool(event.section.title, false);
+    yield WorkOutHomeStateRefresh();
   }
 }
