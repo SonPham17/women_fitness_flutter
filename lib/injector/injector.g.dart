@@ -16,7 +16,7 @@ class _$Injector extends Injector {
     container.registerSingleton((c) => HomeBloc());
     container
         .registerFactory((c) => WorkOutBloc(workOutRepo: c<WorkOutRepo>()));
-    container.registerFactory(
+    container.registerSingleton(
         (c) => FavoriteTrainingBloc(trainingRepo: c<TrainingRepo>()));
     container.registerFactory((c) => SplashBloc(workOutRepo: c<WorkOutRepo>()));
     container.registerSingleton(
@@ -27,7 +27,8 @@ class _$Injector extends Injector {
     final KiwiContainer container = KiwiContainer();
     container.registerSingleton(
         (c) => WorkOutRepo(workOutProvider: c<WorkOutProvider>()));
-    container.registerSingleton((c) => TrainingRepo());
+    container
+        .registerSingleton((c) => TrainingRepo(workOutRepo: c<WorkOutRepo>()));
   }
 
   void _configureProvider() {

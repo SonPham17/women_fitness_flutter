@@ -132,6 +132,7 @@ class _HomePageState extends State<HomePage> {
       ),
       WorkoutPage(
         listSections: listSections,
+        listWorkOuts: listWorkOuts,
       ),
       ReportPage(),
       SettingPage(),

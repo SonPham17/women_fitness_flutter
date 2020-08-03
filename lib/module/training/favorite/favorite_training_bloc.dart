@@ -15,6 +15,7 @@ class FavoriteTrainingBloc
   @override
   Stream<FavoriteTrainingState> mapEventToState(
       FavoriteTrainingEvent favoriteTrainingEvent) async* {
+    print('bloc ${favoriteTrainingEvent.runtimeType}');
     switch (favoriteTrainingEvent.runtimeType) {
       case FavoriteTrainingGetWorkOutBySectionEvent:
         var getWorkOutEvent =
@@ -23,6 +24,13 @@ class FavoriteTrainingBloc
             getWorkOutEvent.listWorkOuts, getWorkOutEvent.section);
         yield FavoriteTrainingStateGetWorkOutBySectionDone(
             listWorkOutBySection: list);
+        break;
+      case FavoriteTrainingResetItemWorkOutEvent:
+        var resetWorkOut =
+            favoriteTrainingEvent as FavoriteTrainingResetItemWorkOutEvent;
+        var workOutReset =
+            await _trainingRepo.getWorkOutByReset(resetWorkOut.workOut);
+        yield FavoriteTrainingStateResetWorkOut(workOut: workOutReset);
         break;
     }
   }

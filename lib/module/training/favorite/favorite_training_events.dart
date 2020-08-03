@@ -12,3 +12,9 @@ class FavoriteTrainingGetWorkOutBySectionEvent extends FavoriteTrainingEvent {
       {@required this.section, @required this.listWorkOuts,});
 
 }
+
+class FavoriteTrainingResetItemWorkOutEvent extends FavoriteTrainingEvent{
+  final WorkOut workOut;
+
+  FavoriteTrainingResetItemWorkOutEvent({this.workOut});
+}

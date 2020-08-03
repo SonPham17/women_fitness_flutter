@@ -7,6 +7,7 @@ import 'package:women_fitness_flutter/shared/app_color.dart';
 import 'package:women_fitness_flutter/shared/model/section.dart';
 import 'package:women_fitness_flutter/shared/model/work_out.dart';
 import 'package:women_fitness_flutter/shared/size_config.dart';
+import 'package:women_fitness_flutter/shared/widget/dialog_item_workout.dart';
 import 'package:women_fitness_flutter/shared/widget/text_app.dart';
 
 import 'favorite_training_events.dart';
@@ -23,6 +24,7 @@ class FavoriteTrainingPage extends StatefulWidget {
 
 class _FavoriteTrainingPageState extends State<FavoriteTrainingPage> {
   FavoriteTrainingBloc _favoriteTrainingBloc;
+  List<WorkOut> listWorkOutBySection;
 
   @override
   void initState() {
@@ -46,11 +48,9 @@ class _FavoriteTrainingPageState extends State<FavoriteTrainingPage> {
           builder: (context, state) {
             if (state is FavoriteTrainingStateInitial) {
               return SizedBox();
+            } else if (state is FavoriteTrainingStateGetWorkOutBySectionDone) {
+              listWorkOutBySection = state.listWorkOutBySection;
             }
-
-            var listWorkOutBySection =
-                (state as FavoriteTrainingStateGetWorkOutBySectionDone)
-                    .listWorkOutBySection;
             return Container(
               child: Stack(
                 children: <Widget>[
@@ -58,15 +58,15 @@ class _FavoriteTrainingPageState extends State<FavoriteTrainingPage> {
                     body: CustomScrollView(
                       slivers: <Widget>[
                         SliverPadding(
-                          padding: EdgeInsets.all(10),
-                          sliver: SliverList(
-                            delegate: SliverChildListDelegate([
-                              Center(
-                                child: TextApp(
-                                  content: '1231212',
-                                ),
-                              )
-                            ]),
+                          padding: EdgeInsets.only(
+                              top: 10, left: 20, right: 20, bottom: 62),
+                          sliver: SliverFixedExtentList(
+                            itemExtent: 110,
+                            delegate: SliverChildBuilderDelegate(
+                              (context, index) => _buildItemWorkOut(
+                                  listWorkOutBySection[index]),
+                              childCount: listWorkOutBySection.length,
+                            ),
                           ),
                         )
                       ],
@@ -85,6 +85,17 @@ class _FavoriteTrainingPageState extends State<FavoriteTrainingPage> {
                             fontWeight: FontWeight.bold,
                           ),
                           flexibleSpace: _buildFlexible(),
+                          actions: <Widget>[
+                            InkWell(
+                              child: Container(
+                                child: Icon(Icons.sort),
+                                padding: EdgeInsets.all(10),
+                              ),
+                              onTap: () {
+                                print('sort');
+                              },
+                            )
+                          ],
                         ),
                       ];
                     },
@@ -127,6 +138,63 @@ class _FavoriteTrainingPageState extends State<FavoriteTrainingPage> {
       ),
     );
   }
+
+  Widget _buildItemWorkOut(WorkOut workOut) => Container(
+        child: Column(
+          children: <Widget>[
+            InkWell(
+              onTap: () {
+                showDialog(
+                  context: context,
+                  builder: (context) => DialogItemWorkOut(
+                    workOut: workOut,
+                  ),
+                ).then((value) {
+                  if (value != null) {
+                    setState(() {
+                      workOut = value;
+                    });
+                  }
+                });
+              },
+              child: Row(
+                children: <Widget>[
+                  Image.asset(
+                    'assets/data/${workOut.anim}_0.gif',
+                    width: 90,
+                    height: 90,
+                    fit: BoxFit.cover,
+                  ),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        TextApp(
+                          content: workOut.title.toUpperCase(),
+                          size: 19,
+                          maxLines: 2,
+                          textOverflow: TextOverflow.ellipsis,
+                        ),
+                        TextApp(
+                          content: workOut.timeDefault == 0
+                              ? 'x${workOut.countDefault}'
+                              : '00:${workOut.timeDefault}',
+                          textColor: AppColor.main,
+                          size: 17,
+                        )
+                      ],
+                    ),
+                  )
+                ],
+              ),
+            ),
+            Divider(),
+          ],
+        ),
+      );
 
   Widget _buildFlexible() => FlexibleSpaceBar(
         collapseMode: CollapseMode.pin,

@@ -6,6 +6,8 @@ class TextApp extends StatelessWidget {
   final FontWeight fontWeight;
   final Color textColor;
   final TextAlign textAlign;
+  final int maxLines;
+  final TextOverflow textOverflow;
 
   TextApp({
     this.textAlign,
@@ -13,6 +15,8 @@ class TextApp extends StatelessWidget {
     this.size,
     this.textColor,
     this.fontWeight,
+    this.maxLines,
+    this.textOverflow,
   });
 
   @override
@@ -25,7 +29,9 @@ class TextApp extends StatelessWidget {
         color: textColor,
         fontWeight: fontWeight,
       ),
+      overflow: textOverflow,
       textAlign: textAlign,
+      maxLines: maxLines,
     );
   }
 }

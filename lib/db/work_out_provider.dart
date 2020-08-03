@@ -28,4 +28,11 @@ class WorkOutProvider {
 
     return maps.map((workout) => WorkOut.fromData(workout)).toList();
   }
+
+  Future<WorkOut> getWorkOutByReset(int id) async {
+    final Database db = WomenFitnessDatabase.instance.database;
+
+    final List<Map<String, dynamic>> maps = await db.rawQuery('SELECT * FROM workout WHERE id=?',[id]);
+    return WorkOut.fromData(maps[0]);
+  }
 }

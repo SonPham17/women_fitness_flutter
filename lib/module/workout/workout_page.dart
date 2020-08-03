@@ -12,8 +12,9 @@ import 'package:women_fitness_flutter/shared/model/work_out.dart';
 
 class WorkoutPage extends StatefulWidget {
   final List<Section> listSections;
+  final List<WorkOut> listWorkOuts;
 
-  WorkoutPage({@required this.listSections});
+  WorkoutPage({@required this.listSections, @required this.listWorkOuts});
 
   @override
   _WorkoutPageState createState() => _WorkoutPageState();
@@ -64,9 +65,11 @@ class _WorkoutPageState extends State<WorkoutPage> {
                     children: <Widget>[
                       WorkOutHomePage(
                         listSections: widget.listSections,
+                        listWorkOuts: widget.listWorkOuts,
                       ),
                       WorkOutRoutinesPage(
                         listSections: widget.listSections,
+                        listWorkOuts: widget.listWorkOuts,
                       ),
                     ],
                   ),

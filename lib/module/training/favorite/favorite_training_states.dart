@@ -12,3 +12,9 @@ class FavoriteTrainingStateGetWorkOutBySectionDone
   FavoriteTrainingStateGetWorkOutBySectionDone(
       {@required this.listWorkOutBySection});
 }
+
+class FavoriteTrainingStateResetWorkOut extends FavoriteTrainingState{
+  WorkOut workOut;
+
+  FavoriteTrainingStateResetWorkOut({this.workOut});
+}

@@ -33,7 +33,7 @@ abstract class Injector {
   @Register.singleton(WorkOutRoutinesBloc)
   @Register.singleton(HomeBloc)
   @Register.factory(WorkOutBloc)
-  @Register.factory(FavoriteTrainingBloc)
+  @Register.singleton(FavoriteTrainingBloc)
   @Register.factory(SplashBloc)
   @Register.singleton(TrainingBloc)
   void _configureBlocs();

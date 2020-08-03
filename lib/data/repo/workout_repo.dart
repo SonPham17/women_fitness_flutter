@@ -15,4 +15,8 @@ class WorkOutRepo {
   Future<List<Section>> getDataMainSection() async{
     return await _workOutProvider.getAllSection();
   }
+
+  Future<WorkOut> getWorkOutByReset(WorkOut workOut) async{
+    return _workOutProvider.getWorkOutByReset(workOut.id);
+  }
 }

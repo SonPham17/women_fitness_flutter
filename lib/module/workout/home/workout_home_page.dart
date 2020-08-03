@@ -1,20 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:like_button/like_button.dart';
+import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:women_fitness_flutter/data/spref/spref.dart';
 import 'package:women_fitness_flutter/injector/injector.dart';
+import 'package:women_fitness_flutter/module/training/favorite/favorite_training_page.dart';
 import 'package:women_fitness_flutter/module/workout/home/workout_home_bloc.dart';
 import 'package:women_fitness_flutter/module/workout/home/workout_home_events.dart';
 import 'package:women_fitness_flutter/module/workout/home/workout_home_states.dart';
 import 'package:women_fitness_flutter/shared/app_color.dart';
 import 'package:women_fitness_flutter/shared/model/section.dart';
+import 'package:women_fitness_flutter/shared/model/work_out.dart';
 import 'package:women_fitness_flutter/shared/size_config.dart';
 import 'package:women_fitness_flutter/shared/widget/text_app.dart';
 
 class WorkOutHomePage extends StatefulWidget {
   final List<Section> listSections;
+  final List<WorkOut> listWorkOuts;
 
-  WorkOutHomePage({this.listSections});
+  WorkOutHomePage({this.listSections,this.listWorkOuts});
 
   @override
   _WorkOutHomePageState createState() => _WorkOutHomePageState();
@@ -111,18 +115,18 @@ class _WorkOutHomePageState extends State<WorkOutHomePage>
         aspectRatio: 2,
         child: InkWell(
           onTap: () {
-//        pushNewScreenWithRouteSettings(
-//          context,
-//          screen: ChallengeTrainingPage(),
-//          settings: RouteSettings(
-//            name: '/training/challenge',
-//            arguments: {
-//              'test': 123,
-//            },
-//          ),
-//          withNavBar: false,
-//          pageTransitionAnimation: PageTransitionAnimation.cupertino,
-//        );
+            pushNewScreenWithRouteSettings(
+              context,
+              screen: FavoriteTrainingPage(
+                section: section,
+                listWorkOuts: widget.listWorkOuts,
+              ),
+              settings: RouteSettings(
+                name: '/training/favorite',
+              ),
+              withNavBar: false,
+              pageTransitionAnimation: PageTransitionAnimation.cupertino,
+            );
           },
           child: Container(
             decoration: BoxDecoration(
