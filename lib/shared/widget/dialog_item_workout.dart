@@ -34,7 +34,6 @@ class _DialogItemWorkOutState extends State<DialogItemWorkOut> {
       create: (_) => favoriteTrainingBloc,
       child: BlocConsumer<FavoriteTrainingBloc, FavoriteTrainingState>(
         builder: (context, state) {
-          print('build dialog ${state.runtimeType}');
           return Dialog(
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(15),
@@ -114,10 +113,14 @@ class _DialogItemWorkOutState extends State<DialogItemWorkOut> {
                           child: InkWell(
                             onTap: () {
                               setState(() {
-                                if (widget.workOut.timeDefault == 0) {
-                                  widget.workOut.countDefault--;
+                                if (widget.workOut.type == 0) {
+                                  if (widget.workOut.timeDefault != 0) {
+                                    widget.workOut.timeDefault--;
+                                  }
                                 } else {
-                                  widget.workOut.timeDefault--;
+                                  if (widget.workOut.countDefault != 0) {
+                                    widget.workOut.countDefault--;
+                                  }
                                 }
                               });
                             },
@@ -140,9 +143,9 @@ class _DialogItemWorkOutState extends State<DialogItemWorkOut> {
                       Padding(
                         padding: const EdgeInsets.only(left: 35, right: 35),
                         child: TextApp(
-                          content: widget.workOut.timeDefault == 0
+                          content: widget.workOut.type == 1
                               ? '${widget.workOut.countDefault}'
-                              : '00:${widget.workOut.timeDefault}',
+                              : convertSecondToTime(widget.workOut.timeDefault),
                           fontWeight: FontWeight.bold,
                           size: 20,
                         ),
@@ -156,7 +159,7 @@ class _DialogItemWorkOutState extends State<DialogItemWorkOut> {
                           child: InkWell(
                             onTap: () {
                               setState(() {
-                                if (widget.workOut.timeDefault == 0) {
+                                if (widget.workOut.type == 1) {
                                   widget.workOut.countDefault++;
                                 } else {
                                   widget.workOut.timeDefault++;
@@ -193,7 +196,6 @@ class _DialogItemWorkOutState extends State<DialogItemWorkOut> {
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(25)),
                             onPressed: () {
-                              print('reset');
                               favoriteTrainingBloc.add(
                                 FavoriteTrainingResetItemWorkOutEvent(
                                   workOut: widget.workOut,
@@ -240,9 +242,7 @@ class _DialogItemWorkOutState extends State<DialogItemWorkOut> {
           );
         },
         listener: (context, state) {
-          print('listen ngoai dialog ${state.runtimeType}');
           if (state is FavoriteTrainingStateResetWorkOut) {
-            print('listen dialog ${state.runtimeType}');
             setState(() {
               widget.workOut.timeDefault = state.workOut.timeDefault;
               widget.workOut.countDefault = state.workOut.countDefault;
@@ -253,10 +253,24 @@ class _DialogItemWorkOutState extends State<DialogItemWorkOut> {
     );
   }
 
+  String convertSecondToTime(int second) {
+    if (second < 60) {
+      if (second < 10) {
+        return '00:0$second';
+      }
+      return '00:$second';
+    }
+    int minute = second ~/ 60;
+    int s = second - minute * 60;
+    if (s < 10) {
+      return '$minute:0$s';
+    }
+    return '$minute:$s';
+  }
+
   @override
   void dispose() {
     super.dispose();
-    print('dispose');
     favoriteTrainingBloc.close();
   }
 }

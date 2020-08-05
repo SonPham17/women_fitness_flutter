@@ -13,8 +13,13 @@ class FavoriteTrainingGetWorkOutBySectionEvent extends FavoriteTrainingEvent {
 
 }
 
+class FavoriteTrainingResetListWorkOutEvent extends FavoriteTrainingEvent{
+}
+
 class FavoriteTrainingResetItemWorkOutEvent extends FavoriteTrainingEvent{
   final WorkOut workOut;
 
   FavoriteTrainingResetItemWorkOutEvent({this.workOut});
 }
+
+class FavoriteTrainingEditEvent extends FavoriteTrainingEvent{}

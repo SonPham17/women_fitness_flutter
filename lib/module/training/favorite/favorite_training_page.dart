@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:women_fitness_flutter/injector/injector.dart';
+import 'package:women_fitness_flutter/module/training/favorite/edit/favorite_training_edit_page.dart';
 import 'package:women_fitness_flutter/module/training/favorite/favorite_training_bloc.dart';
 import 'package:women_fitness_flutter/module/training/favorite/favorite_training_states.dart';
 import 'package:women_fitness_flutter/shared/app_color.dart';
@@ -25,6 +27,7 @@ class FavoriteTrainingPage extends StatefulWidget {
 class _FavoriteTrainingPageState extends State<FavoriteTrainingPage> {
   FavoriteTrainingBloc _favoriteTrainingBloc;
   List<WorkOut> listWorkOutBySection;
+  WorkOut currentWorkOut;
 
   @override
   void initState() {
@@ -86,13 +89,31 @@ class _FavoriteTrainingPageState extends State<FavoriteTrainingPage> {
                           ),
                           flexibleSpace: _buildFlexible(),
                           actions: <Widget>[
-                            InkWell(
-                              child: Container(
-                                child: Icon(Icons.sort),
-                                padding: EdgeInsets.all(10),
-                              ),
-                              onTap: () {
-                                print('sort');
+                            IconButton(
+                              icon: Icon(Icons.sort),
+                              tooltip: 'Sort',
+                              onPressed: () {
+                                var listWorkOutCurrent = listWorkOutBySection
+                                    .map((item) => WorkOut.copyModel(item))
+                                    .toList();
+                                pushNewScreenWithRouteSettings(
+                                  context,
+                                  screen: FavoriteTrainingEditPage(),
+                                  settings: RouteSettings(
+                                      name: '/training/favorite/edit',
+                                      arguments: {'data': listWorkOutCurrent}),
+                                  withNavBar: false,
+                                  pageTransitionAnimation:
+                                      PageTransitionAnimation.cupertino,
+                                ).then((value) {
+                                  print(listWorkOutBySection[0].timeDefault);
+                                  if (value != null) {
+                                    setState(() {
+                                      listWorkOutBySection.clear();
+                                      listWorkOutBySection.addAll(value);
+                                    });
+                                  }
+                                });
                               },
                             )
                           ],
@@ -144,15 +165,17 @@ class _FavoriteTrainingPageState extends State<FavoriteTrainingPage> {
           children: <Widget>[
             InkWell(
               onTap: () {
+                currentWorkOut = WorkOut.copyModel(workOut);
                 showDialog(
                   context: context,
                   builder: (context) => DialogItemWorkOut(
-                    workOut: workOut,
+                    workOut: currentWorkOut,
                   ),
                 ).then((value) {
                   if (value != null) {
                     setState(() {
-                      workOut = value;
+                      workOut.timeDefault = (value as WorkOut).timeDefault;
+                      workOut.countDefault = (value as WorkOut).countDefault;
                     });
                   }
                 });

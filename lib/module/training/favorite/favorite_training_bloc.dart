@@ -3,10 +3,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:women_fitness_flutter/data/repo/training_repo.dart';
 import 'package:women_fitness_flutter/module/training/favorite/favorite_training_events.dart';
 import 'package:women_fitness_flutter/module/training/favorite/favorite_training_states.dart';
+import 'package:women_fitness_flutter/shared/model/section.dart';
+import 'package:women_fitness_flutter/shared/model/work_out.dart';
 
 class FavoriteTrainingBloc
     extends Bloc<FavoriteTrainingEvent, FavoriteTrainingState> {
   TrainingRepo _trainingRepo;
+  Section section;
+  List<WorkOut> listWorkOuts;
 
   FavoriteTrainingBloc({@required TrainingRepo trainingRepo})
       : _trainingRepo = trainingRepo,
@@ -15,11 +19,13 @@ class FavoriteTrainingBloc
   @override
   Stream<FavoriteTrainingState> mapEventToState(
       FavoriteTrainingEvent favoriteTrainingEvent) async* {
-    print('bloc ${favoriteTrainingEvent.runtimeType}');
+    print(favoriteTrainingEvent.runtimeType);
     switch (favoriteTrainingEvent.runtimeType) {
       case FavoriteTrainingGetWorkOutBySectionEvent:
         var getWorkOutEvent =
             favoriteTrainingEvent as FavoriteTrainingGetWorkOutBySectionEvent;
+        section = getWorkOutEvent.section;
+        listWorkOuts = getWorkOutEvent.listWorkOuts;
         var list = await _trainingRepo.getListWorkOutBySection(
             getWorkOutEvent.listWorkOuts, getWorkOutEvent.section);
         yield FavoriteTrainingStateGetWorkOutBySectionDone(
@@ -31,6 +37,11 @@ class FavoriteTrainingBloc
         var workOutReset =
             await _trainingRepo.getWorkOutByReset(resetWorkOut.workOut);
         yield FavoriteTrainingStateResetWorkOut(workOut: workOutReset);
+        break;
+      case FavoriteTrainingResetListWorkOutEvent:
+        var list =
+            await _trainingRepo.getListWorkOutBySection(listWorkOuts, section);
+        yield FavoriteTrainingStateResetListDone(listWorkOutReset: list);
         break;
     }
   }

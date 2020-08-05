@@ -19,6 +19,37 @@ class WorkOut {
   TitleLanguage titleLanguage;
   DescriptionLanguage descriptionLanguage;
 
+  WorkOut(
+      this.id,
+      this.title,
+      this.description,
+      this.timeDefault,
+      this.countDefault,
+      this.video,
+      this.anim,
+      this.type,
+      this.isTwoSides,
+      this.calories,
+      this.group,
+      this.titleLanguage,
+      this.descriptionLanguage);
+
+  WorkOut.copyModel(WorkOut workOut) {
+    id = workOut.id;
+    title = workOut.title;
+    description = workOut.description;
+    timeDefault = workOut.timeDefault;
+    countDefault = workOut.countDefault;
+    anim = workOut.anim;
+    video = workOut.video;
+    type = workOut.type;
+    isTwoSides = workOut.isTwoSides;
+    calories = workOut.calories;
+    group = workOut.group;
+    titleLanguage = workOut.titleLanguage;
+    descriptionLanguage = workOut.descriptionLanguage;
+  }
+
   WorkOut.fromData(Map<String, dynamic> map) {
     id = map['id'];
     title = map['title'];
@@ -31,8 +62,9 @@ class WorkOut {
     isTwoSides = map['isTwoSides'];
     calories = map['calories'];
     group = map['group'];
-    titleLanguage = TitleLanguage.fromJson(json.decode(map['title_language'].toString().replaceAll("\n","\\n")));
-    descriptionLanguage =
-        DescriptionLanguage.fromJson(json.decode(map['description_language'].toString().replaceAll("\n","\\n")));
+    titleLanguage = TitleLanguage.fromJson(
+        json.decode(map['title_language'].toString().replaceAll("\n", "\\n")));
+    descriptionLanguage = DescriptionLanguage.fromJson(json.decode(
+        map['description_language'].toString().replaceAll("\n", "\\n")));
   }
 }

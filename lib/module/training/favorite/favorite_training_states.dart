@@ -18,3 +18,14 @@ class FavoriteTrainingStateResetWorkOut extends FavoriteTrainingState{
 
   FavoriteTrainingStateResetWorkOut({this.workOut});
 }
+
+class FavoriteTrainingStateEdit extends FavoriteTrainingState{
+
+}
+
+class FavoriteTrainingStateResetListDone extends FavoriteTrainingState{
+  final List<WorkOut> listWorkOutReset;
+
+  FavoriteTrainingStateResetListDone(
+      {@required this.listWorkOutReset});
+}
