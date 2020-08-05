@@ -98,7 +98,9 @@ class _FavoriteTrainingPageState extends State<FavoriteTrainingPage> {
                                     .toList();
                                 pushNewScreenWithRouteSettings(
                                   context,
-                                  screen: FavoriteTrainingEditPage(),
+                                  screen: FavoriteTrainingEditPage(
+                                    section: widget.section,
+                                  ),
                                   settings: RouteSettings(
                                       name: '/training/favorite/edit',
                                       arguments: {'data': listWorkOutCurrent}),

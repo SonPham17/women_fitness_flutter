@@ -9,8 +9,6 @@ import 'package:women_fitness_flutter/shared/model/work_out.dart';
 class FavoriteTrainingBloc
     extends Bloc<FavoriteTrainingEvent, FavoriteTrainingState> {
   TrainingRepo _trainingRepo;
-  Section section;
-  List<WorkOut> listWorkOuts;
 
   FavoriteTrainingBloc({@required TrainingRepo trainingRepo})
       : _trainingRepo = trainingRepo,
@@ -24,8 +22,6 @@ class FavoriteTrainingBloc
       case FavoriteTrainingGetWorkOutBySectionEvent:
         var getWorkOutEvent =
             favoriteTrainingEvent as FavoriteTrainingGetWorkOutBySectionEvent;
-        section = getWorkOutEvent.section;
-        listWorkOuts = getWorkOutEvent.listWorkOuts;
         var list = await _trainingRepo.getListWorkOutBySection(
             getWorkOutEvent.listWorkOuts, getWorkOutEvent.section);
         yield FavoriteTrainingStateGetWorkOutBySectionDone(
@@ -39,8 +35,9 @@ class FavoriteTrainingBloc
         yield FavoriteTrainingStateResetWorkOut(workOut: workOutReset);
         break;
       case FavoriteTrainingResetListWorkOutEvent:
-        var list =
-            await _trainingRepo.getListWorkOutBySection(listWorkOuts, section);
+        var getResetList =
+            favoriteTrainingEvent as FavoriteTrainingResetListWorkOutEvent;
+        var list = await _trainingRepo.getListResetWorkOut(getResetList.section);
         yield FavoriteTrainingStateResetListDone(listWorkOutReset: list);
         break;
     }

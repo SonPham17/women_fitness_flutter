@@ -5,11 +5,16 @@ import 'package:women_fitness_flutter/module/training/favorite/favorite_training
 import 'package:women_fitness_flutter/module/training/favorite/favorite_training_events.dart';
 import 'package:women_fitness_flutter/module/training/favorite/favorite_training_states.dart';
 import 'package:women_fitness_flutter/shared/app_color.dart';
+import 'package:women_fitness_flutter/shared/model/section.dart';
 import 'package:women_fitness_flutter/shared/model/work_out.dart';
 import 'package:women_fitness_flutter/shared/widget/dialog_item_workout.dart';
 import 'package:women_fitness_flutter/shared/widget/text_app.dart';
 
 class FavoriteTrainingEditPage extends StatefulWidget {
+  final Section section;
+
+  FavoriteTrainingEditPage({@required this.section});
+
   @override
   _FavoriteTrainingEditPageState createState() =>
       _FavoriteTrainingEditPageState();
@@ -50,7 +55,9 @@ class _FavoriteTrainingEditPageState extends State<FavoriteTrainingEditPage> {
                 PopupMenuButton<String>(
                   onSelected: (value) {
                     _favoriteTrainingBloc
-                        .add(FavoriteTrainingResetListWorkOutEvent());
+                        .add(FavoriteTrainingResetListWorkOutEvent(
+                      section: widget.section,
+                    ));
                   },
                   itemBuilder: (context) {
                     return {'RESET'}
@@ -107,7 +114,7 @@ class _FavoriteTrainingEditPageState extends State<FavoriteTrainingEditPage> {
           );
         },
         listener: (context, state) {
-          if(state is FavoriteTrainingStateResetListDone){
+          if (state is FavoriteTrainingStateResetListDone) {
             setState(() {
               listWorkOutBySection = state.listWorkOutReset;
             });

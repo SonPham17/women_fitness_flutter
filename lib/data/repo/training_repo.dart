@@ -23,6 +23,16 @@ class TrainingRepo {
     return listWorkOutBySection;
   }
 
+  Future<List<WorkOut>> getListResetWorkOut(Section section) async {
+    var listWorkOutReset = await _workOutRepo.getDataMainWorkOut();
+    var listWorkOutBySection = List<WorkOut>();
+    section.workoutsId.forEach((workOutId) {
+      listWorkOutBySection.add(listWorkOutReset
+          .firstWhere((element) => element.id == int.parse(workOutId)));
+    });
+    return listWorkOutBySection;
+  }
+
   Future<WorkOut> getWorkOutByReset(WorkOut workOut) async {
     return _workOutRepo.getWorkOutByReset(workOut);
   }
