@@ -37,7 +37,8 @@ class FavoriteTrainingBloc
       case FavoriteTrainingResetListWorkOutEvent:
         var getResetList =
             favoriteTrainingEvent as FavoriteTrainingResetListWorkOutEvent;
-        var list = await _trainingRepo.getListResetWorkOut(getResetList.section);
+        var list =
+            await _trainingRepo.getListResetWorkOut(getResetList.section);
         yield FavoriteTrainingStateResetListDone(listWorkOutReset: list);
         break;
     }

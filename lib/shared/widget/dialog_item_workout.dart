@@ -80,11 +80,16 @@ class _DialogItemWorkOutState extends State<DialogItemWorkOut> {
                             size: 18,
                           ),
                         ),
-                        Icon(
-                          Icons.videocam,
-                          color: AppColor.main,
-                          size: 30,
-                        ),
+                        IconButton(
+                          icon: Icon(
+                            Icons.videocam,
+                            color: AppColor.main,
+                            size: 30,
+                          ),
+                          onPressed: (){
+                            print('video');
+                          },
+                        )
                       ],
                     ),
                   ),

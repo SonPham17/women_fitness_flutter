@@ -16,6 +16,7 @@ class _$Injector extends Injector {
     container.registerSingleton((c) => HomeBloc());
     container
         .registerFactory((c) => WorkOutBloc(workOutRepo: c<WorkOutRepo>()));
+    container.registerFactory((c) => ReportBloc());
     container.registerFactory(
         (c) => FavoriteTrainingBloc(trainingRepo: c<TrainingRepo>()));
     container.registerFactory((c) => SplashBloc(workOutRepo: c<WorkOutRepo>()));

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:women_fitness_flutter/injector/injector.dart';
+import 'package:women_fitness_flutter/module/run/run_page.dart';
 import 'package:women_fitness_flutter/module/training/favorite/edit/favorite_training_edit_page.dart';
 import 'package:women_fitness_flutter/module/training/favorite/favorite_training_bloc.dart';
 import 'package:women_fitness_flutter/module/training/favorite/favorite_training_states.dart';
@@ -111,8 +112,17 @@ class _FavoriteTrainingPageState extends State<FavoriteTrainingPage> {
                                   print(listWorkOutBySection[0].timeDefault);
                                   if (value != null) {
                                     setState(() {
-                                      listWorkOutBySection.clear();
-                                      listWorkOutBySection.addAll(value);
+                                      var listReset = value as List<WorkOut>;
+                                      listWorkOutBySection.forEach((element) {
+                                        element.timeDefault = listReset[
+                                                listWorkOutBySection
+                                                    .indexOf(element)]
+                                            .timeDefault;
+                                        element.countDefault = listReset[
+                                                listWorkOutBySection
+                                                    .indexOf(element)]
+                                            .countDefault;
+                                      });
                                     });
                                   }
                                 });
@@ -141,7 +151,13 @@ class _FavoriteTrainingPageState extends State<FavoriteTrainingPage> {
                         ),
                         color: AppColor.main,
                         onPressed: () {
-//                  Navigator.of(context).pop(weeklyTraining);
+                          pushNewScreen(
+                            context,
+                            screen: RunPage(),
+                            pageTransitionAnimation:
+                                PageTransitionAnimation.cupertino,
+                            withNavBar: false,
+                          );
                         },
                         child: Center(
                           child: TextApp(
