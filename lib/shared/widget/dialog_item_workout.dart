@@ -6,6 +6,7 @@ import 'package:women_fitness_flutter/module/training/favorite/favorite_training
 import 'package:women_fitness_flutter/module/training/favorite/favorite_training_states.dart';
 import 'package:women_fitness_flutter/shared/app_color.dart';
 import 'package:women_fitness_flutter/shared/model/work_out.dart';
+import 'package:women_fitness_flutter/shared/utils.dart';
 import 'package:women_fitness_flutter/shared/widget/text_app.dart';
 
 class DialogItemWorkOut extends StatefulWidget {
@@ -150,7 +151,7 @@ class _DialogItemWorkOutState extends State<DialogItemWorkOut> {
                         child: TextApp(
                           content: widget.workOut.type == 1
                               ? '${widget.workOut.countDefault}'
-                              : convertSecondToTime(widget.workOut.timeDefault),
+                              : Utils.convertSecondToTime(widget.workOut.timeDefault),
                           fontWeight: FontWeight.bold,
                           size: 20,
                         ),
@@ -258,20 +259,7 @@ class _DialogItemWorkOutState extends State<DialogItemWorkOut> {
     );
   }
 
-  String convertSecondToTime(int second) {
-    if (second < 60) {
-      if (second < 10) {
-        return '00:0$second';
-      }
-      return '00:$second';
-    }
-    int minute = second ~/ 60;
-    int s = second - minute * 60;
-    if (s < 10) {
-      return '$minute:0$s';
-    }
-    return '$minute:$s';
-  }
+
 
   @override
   void dispose() {

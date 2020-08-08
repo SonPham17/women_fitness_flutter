@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:women_fitness_flutter/injector/injector.dart';
-import 'package:women_fitness_flutter/module/run/run_page.dart';
+import 'package:women_fitness_flutter/module/run/splash/run_splash_page.dart';
 import 'package:women_fitness_flutter/module/training/favorite/edit/favorite_training_edit_page.dart';
 import 'package:women_fitness_flutter/module/training/favorite/favorite_training_bloc.dart';
 import 'package:women_fitness_flutter/module/training/favorite/favorite_training_states.dart';
@@ -10,6 +10,7 @@ import 'package:women_fitness_flutter/shared/app_color.dart';
 import 'package:women_fitness_flutter/shared/model/section.dart';
 import 'package:women_fitness_flutter/shared/model/work_out.dart';
 import 'package:women_fitness_flutter/shared/size_config.dart';
+import 'package:women_fitness_flutter/shared/utils.dart';
 import 'package:women_fitness_flutter/shared/widget/dialog_item_workout.dart';
 import 'package:women_fitness_flutter/shared/widget/text_app.dart';
 
@@ -114,14 +115,9 @@ class _FavoriteTrainingPageState extends State<FavoriteTrainingPage> {
                                     setState(() {
                                       var listReset = value as List<WorkOut>;
                                       listWorkOutBySection.forEach((element) {
-                                        element.timeDefault = listReset[
-                                                listWorkOutBySection
-                                                    .indexOf(element)]
-                                            .timeDefault;
-                                        element.countDefault = listReset[
-                                                listWorkOutBySection
-                                                    .indexOf(element)]
-                                            .countDefault;
+                                        element.updateDataModel(listReset[
+                                            listWorkOutBySection
+                                                .indexOf(element)]);
                                       });
                                     });
                                   }
@@ -153,7 +149,9 @@ class _FavoriteTrainingPageState extends State<FavoriteTrainingPage> {
                         onPressed: () {
                           pushNewScreen(
                             context,
-                            screen: RunPage(),
+                            screen: RunSplashPage(
+                              listWorkOutBySection: listWorkOutBySection,
+                            ),
                             pageTransitionAnimation:
                                 PageTransitionAnimation.cupertino,
                             withNavBar: false,
@@ -220,9 +218,9 @@ class _FavoriteTrainingPageState extends State<FavoriteTrainingPage> {
                           textOverflow: TextOverflow.ellipsis,
                         ),
                         TextApp(
-                          content: workOut.timeDefault == 0
+                          content: workOut.type == 1
                               ? 'x${workOut.countDefault}'
-                              : '00:${workOut.timeDefault}',
+                              : Utils.convertSecondToTime(workOut.timeDefault),
                           textColor: AppColor.main,
                           size: 17,
                         )

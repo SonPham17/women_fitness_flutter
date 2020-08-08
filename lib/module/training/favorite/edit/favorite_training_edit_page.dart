@@ -7,6 +7,7 @@ import 'package:women_fitness_flutter/module/training/favorite/favorite_training
 import 'package:women_fitness_flutter/shared/app_color.dart';
 import 'package:women_fitness_flutter/shared/model/section.dart';
 import 'package:women_fitness_flutter/shared/model/work_out.dart';
+import 'package:women_fitness_flutter/shared/utils.dart';
 import 'package:women_fitness_flutter/shared/widget/dialog_item_workout.dart';
 import 'package:women_fitness_flutter/shared/widget/text_app.dart';
 
@@ -181,9 +182,9 @@ class _FavoriteTrainingEditPageState extends State<FavoriteTrainingEditPage> {
                           textOverflow: TextOverflow.ellipsis,
                         ),
                         TextApp(
-                          content: workOut.timeDefault == 0
+                          content: workOut.type == 1
                               ? 'x${workOut.countDefault}'
-                              : '00:${workOut.timeDefault}',
+                              : Utils.convertSecondToTime(workOut.timeDefault),
                           textColor: AppColor.main,
                           size: 17,
                         )

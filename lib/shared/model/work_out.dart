@@ -34,6 +34,22 @@ class WorkOut {
       this.titleLanguage,
       this.descriptionLanguage);
 
+  void updateDataModel(WorkOut workOut){
+    this.id = workOut.id;
+    this.title = workOut.title;
+    this.description = workOut.description;
+    this.timeDefault = workOut.timeDefault;
+    this.countDefault = workOut.countDefault;
+    this.video = workOut.video;
+    this.anim = workOut.anim;
+    this.type = workOut.type;
+    this.isTwoSides = workOut.isTwoSides;
+    this.calories = workOut.calories;
+    this.group = workOut.group;
+    this.titleLanguage = workOut.titleLanguage;
+    this.descriptionLanguage = workOut.descriptionLanguage;
+  }
+
   WorkOut.copyModel(WorkOut workOut) {
     id = workOut.id;
     title = workOut.title;

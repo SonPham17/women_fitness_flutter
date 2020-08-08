@@ -5,6 +5,7 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:women_fitness_flutter/db/women_fitness_database.dart';
 import 'package:women_fitness_flutter/injector/injector.dart';
 import 'package:women_fitness_flutter/module/home/home_page.dart';
+import 'package:women_fitness_flutter/module/run/workout/run_workout_page.dart';
 import 'package:women_fitness_flutter/module/splash/splash_page.dart';
 import 'package:women_fitness_flutter/shared/app_color.dart';
 import 'package:women_fitness_flutter/shared/supervisor_bloc.dart';
@@ -37,6 +38,7 @@ class MyApp extends StatelessWidget {
       routes: <String, WidgetBuilder>{
         '/': (context) => SplashPage(),
         '/home': (context) => HomePage(),
+        '/run/workout' : (context) => RunWorkOutPage(),
       },
     );
   }
