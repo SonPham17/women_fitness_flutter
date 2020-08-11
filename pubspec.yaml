@@ -43,6 +43,8 @@ dependencies:
   like_button: ^1.0.1
   shared_preferences: ^0.5.8
   fl_chart: ^0.11.0
+  assets_audio_player: ^2.0.9
+  flutter_tts: ^1.2.6
 
 dev_dependencies:
   flutter_test:
@@ -68,6 +70,7 @@ flutter:
   assets:
     - assets/images/
     - assets/svg/
+    - assets/audio/
     - assets/data/
     - assets/WorkOut.db
     - assets/images/sections/

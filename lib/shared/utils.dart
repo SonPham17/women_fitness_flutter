@@ -1,4 +1,6 @@
 class Utils {
+  static final String keyIndex = 'index_run';
+
   static double calculatorBMI(double f, double f2) {
     return f2 / ((f * f) / 10000.0);
   }

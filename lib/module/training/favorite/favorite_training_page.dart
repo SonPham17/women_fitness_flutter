@@ -151,6 +151,7 @@ class _FavoriteTrainingPageState extends State<FavoriteTrainingPage> {
                             context,
                             screen: RunSplashPage(
                               listWorkOutBySection: listWorkOutBySection,
+                              index: 0,
                             ),
                             pageTransitionAnimation:
                                 PageTransitionAnimation.cupertino,
