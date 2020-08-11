@@ -50,6 +50,8 @@ class _ReportPageState extends State<ReportPage> {
   @override
   void initState() {
     super.initState();
+    print("startDate= $startDate");
+    print("endDate= $endDate");
     _reportBloc = Injector.resolve<ReportBloc>();
   }
 
@@ -302,6 +304,7 @@ class _ReportPageState extends State<ReportPage> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         TextApp(
+                          maxLines: 1,
                           content: '$calculatorBMI',
                           textColor: Colors.black,
                         ),

@@ -4,8 +4,9 @@ import 'package:women_fitness_flutter/shared/widget/text_app.dart';
 
 class BarChartFitness extends StatefulWidget {
   final String title;
+  final String month;
 
-  BarChartFitness({@required this.title});
+  BarChartFitness({@required this.title,@required this.month});
 
   @override
   _BarChartFitnessState createState() => _BarChartFitnessState();
