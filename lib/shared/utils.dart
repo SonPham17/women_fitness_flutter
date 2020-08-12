@@ -1,5 +1,24 @@
+import 'package:intl/intl.dart';
+
 class Utils {
   static final String keyIndex = 'index_run';
+
+  static List<String> getDaysOfWeek(String locale, int controlWeek) {
+    final now = DateTime.now();
+    final firstDayOfWeek =
+        now.subtract(Duration(days: now.weekday - 1 + controlWeek));
+    return List.generate(7, (index) => index)
+        .map((value) =>
+            '${DateFormat(DateFormat.DAY, locale).format(firstDayOfWeek.add(Duration(days: value)))}/${DateFormat(DateFormat.NUM_MONTH, locale).format(firstDayOfWeek.add(Duration(days: value)))}')
+        .toList();
+  }
+
+  static int getYearFromControl(int controlWeek) {
+    final now = DateTime.now();
+    final firstDayOfWeek =
+        now.subtract(Duration(days: now.weekday - 1 + controlWeek));
+    return firstDayOfWeek.year;
+  }
 
   static double calculatorBMI(double f, double f2) {
     return f2 / ((f * f) / 10000.0);

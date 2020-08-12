@@ -38,10 +38,13 @@ class _CalendarWeekGoalPageState extends State<CalendarWeekGoalPage>
     _firstDayOfTheWeek = DateTimeFormat.format(
         getDate(today.subtract(Duration(days: today.weekday - 1))),
         format: 'M j');
+    print(getDate(today.subtract(Duration(days: today.weekday - 1))));
     _endDayOfTheWeek = DateTimeFormat.format(
         getDate(
             today.add(Duration(days: DateTime.daysPerWeek - today.weekday))),
         format: 'M j');
+    print(getDate(
+        today.add(Duration(days: DateTime.daysPerWeek - today.weekday))));
   }
 
   DateTime getDate(DateTime d) => DateTime(d.year, d.month, d.day);

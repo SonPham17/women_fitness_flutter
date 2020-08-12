@@ -25,7 +25,7 @@ class _ReportPageState extends State<ReportPage> {
   String weekTraining = '4';
   double calculatorBMI;
   String statusWeight;
-  String currentHeight = '195';
+  String currentHeight = '195 CM';
 
   DateTime startDate = DateTime.now().subtract(Duration(days: 2));
   DateTime endDate = DateTime.now().add(Duration(days: 2));
@@ -170,16 +170,25 @@ class _ReportPageState extends State<ReportPage> {
                     ).then((value) {
                       if (value != null) {
                         setState(() {
-                          calculatorBMI = double.parse(Utils.calculatorBMI(
-                                  double.parse(value[1]),
-                                  double.parse(value[0]))
-                              .toStringAsFixed(1));
-                          currentHeight = value[1];
+                          double weight = double.parse(value[0]);
+                          double height = double.parse(value[1]);
+                          if (!value[2]) {
+                            weight = Utils.convertLbsToKg(weight);
+                            height = Utils.convertFtToCm(height);
+                            currentHeight = '$height FT';
+                          } else {
+                            currentHeight = '$height CM';
+                          }
+                          calculatorBMI = double.parse(
+                              Utils.calculatorBMI(height, weight)
+                                  .toStringAsFixed(1));
                           if (calculatorBMI < 18.5) {
                             statusWeight = 'Underweight';
-                          } else if (calculatorBMI >= 18.5 && calculatorBMI < 25.0) {
+                          } else if (calculatorBMI >= 18.5 &&
+                              calculatorBMI < 25.0) {
                             statusWeight = 'Normal weight';
-                          } else if (calculatorBMI < 25.0 || calculatorBMI >= 30.0) {
+                          } else if (calculatorBMI < 25.0 ||
+                              calculatorBMI >= 30.0) {
                             statusWeight = 'Obesity';
                           } else {
                             statusWeight = 'Overweight';
@@ -203,7 +212,7 @@ class _ReportPageState extends State<ReportPage> {
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: TextApp(
-                      content: '${currentHeight}CM',
+                      content: '$currentHeight',
                       textColor: Colors.black26,
                       size: 17,
                     ),
@@ -257,16 +266,25 @@ class _ReportPageState extends State<ReportPage> {
                     ).then((value) {
                       if (value != null) {
                         setState(() {
-                          calculatorBMI = double.parse(Utils.calculatorBMI(
-                                  double.parse(value[1]),
-                                  double.parse(value[0]))
-                              .toStringAsFixed(1));
-                          currentHeight = value[1];
+                          double weight = double.parse(value[0]);
+                          double height = double.parse(value[1]);
+                          if (!value[2]) {
+                            weight = Utils.convertLbsToKg(weight);
+                            height = Utils.convertFtToCm(height);
+                            currentHeight = '$height FT';
+                          } else {
+                            currentHeight = '$height CM';
+                          }
+                          calculatorBMI = double.parse(
+                              Utils.calculatorBMI(height, weight)
+                                  .toStringAsFixed(1));
                           if (calculatorBMI < 18.5) {
                             statusWeight = 'Underweight';
-                          } else if (calculatorBMI >= 18.5 && calculatorBMI < 25.0) {
+                          } else if (calculatorBMI >= 18.5 &&
+                              calculatorBMI < 25.0) {
                             statusWeight = 'Normal weight';
-                          } else if (calculatorBMI < 25.0 || calculatorBMI >= 30.0) {
+                          } else if (calculatorBMI < 25.0 ||
+                              calculatorBMI >= 30.0) {
                             statusWeight = 'Obesity';
                           } else {
                             statusWeight = 'Overweight';

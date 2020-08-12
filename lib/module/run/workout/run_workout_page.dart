@@ -46,12 +46,10 @@ class _RunWorkOutPageState extends State<RunWorkOutPage>
     if (state == AppLifecycleState.resumed) {
       assetsAudioPlayer.play();
       isPaused = false;
-//      flutterTts.startHandler();
     } else if (state == AppLifecycleState.paused) {
       // user is about quit our app temporally
       assetsAudioPlayer.pause();
       isPaused = true;
-//      flutterTts.pauseHandler();
       print('paused');
     }
   }
@@ -82,7 +80,7 @@ class _RunWorkOutPageState extends State<RunWorkOutPage>
           if (!isPaused) {
             setState(() {
               time--;
-              _progressValue += 1 / 30;
+              _progressValue += 1 / workOut.timeDefault;
               if (time == 10) {
                 flutterTts.speak('Ten seconds left');
               }

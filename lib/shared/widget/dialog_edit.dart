@@ -74,21 +74,25 @@ class _DialogEditState extends State<DialogEdit> {
                           ),
                           child: InkWell(
                             onTap: () {
-                              setState(() {
-                                var weight = textWeightController.text;
-                                var height = textHeightController.text;
-                                if (weight.isNotEmpty) {
-                                  textWeightController.text =
-                                      Utils.convertLbsToKg(double.parse(weight))
-                                          .toStringAsFixed(0);
-                                }
-                                if (height.isNotEmpty) {
-                                  textHeightController.text =
-                                      Utils.convertFtToCm(double.parse(height))
-                                          .toStringAsFixed(0);
-                                }
-                                isChooseKg = true;
-                              });
+                              if (!isChooseKg) {
+                                setState(() {
+                                  var weight = textWeightController.text;
+                                  var height = textHeightController.text;
+                                  if (weight.isNotEmpty) {
+                                    textWeightController.text =
+                                        Utils.convertLbsToKg(
+                                                double.parse(weight))
+                                            .toStringAsFixed(0);
+                                  }
+                                  if (height.isNotEmpty) {
+                                    textHeightController.text =
+                                        Utils.convertFtToCm(
+                                                double.parse(height))
+                                            .toStringAsFixed(0);
+                                  }
+                                  isChooseKg = true;
+                                });
+                              }
                             },
                             child: Container(
                               width: 35,
@@ -121,21 +125,25 @@ class _DialogEditState extends State<DialogEdit> {
                           ),
                           child: InkWell(
                             onTap: () {
-                              setState(() {
-                                var weight = textWeightController.text;
-                                var height = textHeightController.text;
-                                if (weight.isNotEmpty) {
-                                  textWeightController.text =
-                                      Utils.convertKgToLbs(double.parse(weight))
-                                          .toStringAsFixed(1);
-                                }
-                                if (height.isNotEmpty) {
-                                  textHeightController.text =
-                                      Utils.convertCmToFt(double.parse(height))
-                                          .toStringAsFixed(1);
-                                }
-                                isChooseKg = false;
-                              });
+                              if (isChooseKg) {
+                                setState(() {
+                                  var weight = textWeightController.text;
+                                  var height = textHeightController.text;
+                                  if (weight.isNotEmpty) {
+                                    textWeightController.text =
+                                        Utils.convertKgToLbs(
+                                                double.parse(weight))
+                                            .toStringAsFixed(1);
+                                  }
+                                  if (height.isNotEmpty) {
+                                    textHeightController.text =
+                                        Utils.convertCmToFt(
+                                                double.parse(height))
+                                            .toStringAsFixed(1);
+                                  }
+                                  isChooseKg = false;
+                                });
+                              }
                             },
                             child: Container(
                               width: 35,
@@ -185,9 +193,25 @@ class _DialogEditState extends State<DialogEdit> {
                           ),
                           child: InkWell(
                             onTap: () {
-                              setState(() {
-                                isChooseKg = true;
-                              });
+                              if (!isChooseKg) {
+                                setState(() {
+                                  var weight = textWeightController.text;
+                                  var height = textHeightController.text;
+                                  if (weight.isNotEmpty) {
+                                    textWeightController.text =
+                                        Utils.convertLbsToKg(
+                                                double.parse(weight))
+                                            .toStringAsFixed(0);
+                                  }
+                                  if (height.isNotEmpty) {
+                                    textHeightController.text =
+                                        Utils.convertFtToCm(
+                                                double.parse(height))
+                                            .toStringAsFixed(0);
+                                  }
+                                  isChooseKg = true;
+                                });
+                              }
                             },
                             child: Container(
                               width: 35,
@@ -220,9 +244,25 @@ class _DialogEditState extends State<DialogEdit> {
                           ),
                           child: InkWell(
                             onTap: () {
-                              setState(() {
-                                isChooseKg = false;
-                              });
+                              if (isChooseKg) {
+                                setState(() {
+                                  var weight = textWeightController.text;
+                                  var height = textHeightController.text;
+                                  if (weight.isNotEmpty) {
+                                    textWeightController.text =
+                                        Utils.convertKgToLbs(
+                                                double.parse(weight))
+                                            .toStringAsFixed(1);
+                                  }
+                                  if (height.isNotEmpty) {
+                                    textHeightController.text =
+                                        Utils.convertCmToFt(
+                                                double.parse(height))
+                                            .toStringAsFixed(1);
+                                  }
+                                  isChooseKg = false;
+                                });
+                              }
                             },
                             child: Container(
                               width: 35,
@@ -261,7 +301,8 @@ class _DialogEditState extends State<DialogEdit> {
                           var weight = textWeightController.text;
                           var height = textHeightController.text;
                           if (weight.isNotEmpty && height.isNotEmpty) {
-                            Navigator.of(context).pop([weight, height]);
+                            Navigator.of(context)
+                                .pop([weight, height, isChooseKg]);
                           } else {
                             widget.reportBloc.add(ReportSaveEmptyEvent());
                           }

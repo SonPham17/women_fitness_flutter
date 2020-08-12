@@ -1,18 +1,29 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:women_fitness_flutter/shared/utils.dart';
 import 'package:women_fitness_flutter/shared/widget/text_app.dart';
 
 class BarChartFitness extends StatefulWidget {
   final String title;
   final String month;
 
-  BarChartFitness({@required this.title,@required this.month});
+  BarChartFitness({@required this.title, @required this.month});
 
   @override
   _BarChartFitnessState createState() => _BarChartFitnessState();
 }
 
 class _BarChartFitnessState extends State<BarChartFitness> {
+  List<String> dayOfWeek;
+  int controlWeek;
+
+  @override
+  void initState() {
+    super.initState();
+    dayOfWeek = Utils.getDaysOfWeek('en', 0);
+    controlWeek = 0;
+  }
+
   @override
   Widget build(BuildContext context) {
     return AspectRatio(
@@ -35,13 +46,45 @@ class _BarChartFitnessState extends State<BarChartFitness> {
                       textColor: Colors.white,
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 85, top: 10),
-                    child: TextApp(
-                      content: 'thg 7, 2020',
-                      textColor: Colors.white,
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 85, top: 10),
+                      child: TextApp(
+                        content: '${Utils.getYearFromControl(controlWeek)}',
+                        textColor: Colors.white,
+                      ),
                     ),
                   ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 10, right: 5),
+                    child: InkWell(
+                      child: Icon(
+                        Icons.chevron_left,
+                        color: Colors.white,
+                      ),
+                      onTap: () {
+                        setState(() {
+                          controlWeek += 7;
+                          dayOfWeek = Utils.getDaysOfWeek('en', controlWeek);
+                        });
+                      },
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(top: 10, right: 10),
+                    child: InkWell(
+                      child: Icon(
+                        Icons.chevron_right,
+                        color: Colors.white,
+                      ),
+                      onTap: () {
+                        setState(() {
+                          controlWeek -= 7;
+                          dayOfWeek = Utils.getDaysOfWeek('en', controlWeek);
+                        });
+                      },
+                    ),
+                  )
                 ],
               ),
               Expanded(
@@ -89,19 +132,19 @@ class _BarChartFitnessState extends State<BarChartFitness> {
                           getTitles: (double value) {
                             switch (value.toInt()) {
                               case 0:
-                                return 'Monday';
+                                return dayOfWeek[0];
                               case 1:
-                                return 'Te';
+                                return dayOfWeek[1];
                               case 2:
-                                return 'Wd';
+                                return dayOfWeek[2];
                               case 3:
-                                return 'Tu';
+                                return dayOfWeek[3];
                               case 4:
-                                return 'Fr';
+                                return dayOfWeek[4];
                               case 5:
-                                return 'St';
+                                return dayOfWeek[5];
                               case 6:
-                                return 'Sn';
+                                return dayOfWeek[6];
                               default:
                                 return '';
                             }
@@ -195,7 +238,7 @@ class _BarChartFitnessState extends State<BarChartFitness> {
                         ]),
                         BarChartGroupData(x: 6, barRods: [
                           BarChartRodData(
-                              y: 1, color: Colors.lightBlueAccent, width: 15)
+                              y: 300, color: Colors.lightBlueAccent, width: 15)
                         ], showingTooltipIndicators: [
                           0
                         ]),
