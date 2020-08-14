@@ -50,8 +50,6 @@ class _ReportPageState extends State<ReportPage> {
   @override
   void initState() {
     super.initState();
-    print("startDate= $startDate");
-    print("endDate= $endDate");
     _reportBloc = Injector.resolve<ReportBloc>();
   }
 
@@ -80,7 +78,6 @@ class _ReportPageState extends State<ReportPage> {
           create: (_) => _reportBloc,
           child: BlocConsumer<ReportBloc, ReportState>(
             listener: (context, state) {
-              print(state.runtimeType);
               if (state is ReportStateSaveEmpty) {
                 Scaffold.of(context).showSnackBar(
                   SnackBar(

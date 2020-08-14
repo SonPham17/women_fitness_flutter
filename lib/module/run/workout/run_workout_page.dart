@@ -144,234 +144,268 @@ class _RunWorkOutPageState extends State<RunWorkOutPage>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        leading: IconButton(
-          icon: Icon(
-            Icons.chevron_left,
-            color: Colors.black,
-          ),
-          onPressed: () {
-            Navigator.of(context)
-                .popUntil((route) => route.settings.name == '/home');
-          },
-        ),
-        actions: [
-          IconButton(
-            icon: Icon(
-              Icons.volume_up,
-              color: Colors.black,
-            ),
-            onPressed: () {},
-          ),
-          AnimatedBuilder(
-            animation: _animationController,
-            builder: (context, child) => Transform.rotate(
-              angle: _animationController.value * 2.0 * pi,
-              child: child,
-            ),
-            child: IconButton(
-              icon: Icon(
-                Icons.music_note,
-                color: AppColor.main,
-              ),
-              onPressed: () {},
-            ),
-          ),
-        ],
-      ),
-      body: Container(
-        height: double.infinity,
-        child: Stack(
+    return SafeArea(
+      child: Scaffold(
+        body: Column(
           children: [
-            Padding(
-              padding: const EdgeInsets.only(top: 30),
-              child: Image.asset(
-                'assets/data/${workOut.anim}_0.gif',
-                fit: BoxFit.fill,
-                width: double.infinity,
-                height: 220,
+            Container(
+              height: 10,
+              width: MediaQuery.of(context).size.width,
+              child: Row(
+                children: widget.listWorkOutBySection
+                    .map((e) => Expanded(
+                          child: Container(
+                            margin: widget.listWorkOutBySection.length - 1 ==
+                                    widget.listWorkOutBySection.indexOf(e)
+                                ? EdgeInsets.only(left: 2)
+                                : EdgeInsets.only(right: 2),
+                            color: widget.listWorkOutBySection.indexOf(e) < widget.index ? AppColor.main : AppColor.main[200],
+                          ),
+                        ))
+                    .toList(),
               ),
             ),
-            Positioned(
-              bottom: 0,
-              left: 0,
-              right: 0,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
+            Container(
+              height: kToolbarHeight,
+              child: Row(
                 children: [
-                  workOut.type == 0
-                      ? Padding(
-                          padding: const EdgeInsets.only(left: 10, right: 10),
-                          child: RichText(
-                            text: TextSpan(
-                              style: TextStyle(
-                                  fontFamily: 'OpenSans',
-                                  color: Colors.black,
-                                  fontSize: 50,
-                                  fontWeight: FontWeight.bold),
-                              children: [
-                                TextSpan(
-                                  text: '$time"',
-                                  style: TextStyle(
-                                    color: AppColor.main,
-                                  ),
-                                ),
-                                TextSpan(text: '/${workOut.timeDefault}"'),
-                              ],
-                            ),
-                          ),
-                        )
-                      : SizedBox(),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 10, right: 10),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Expanded(
-                          child: TextApp(
-                            content: '${workOut.title}'.toUpperCase(),
-                            textColor: Colors.black,
-                            fontWeight: FontWeight.bold,
-                            size: 25,
-                            maxLines: 2,
-                            textOverflow: TextOverflow.ellipsis,
-                          ),
-                        ),
-                        workOut.type == 1
-                            ? TextApp(
-                                content: 'X${workOut.countDefault}',
-                                textColor: AppColor.main,
-                                size: 25,
-                              )
-                            : SizedBox(),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        Container(
-                          padding: EdgeInsets.all(5),
-                          decoration: BoxDecoration(
-                              shape: BoxShape.circle, color: Colors.lightBlue),
-                          child: Icon(
-                            Icons.videocam,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ],
-                      mainAxisSize: MainAxisSize.max,
+                  IconButton(
+                    icon: Icon(
+                      Icons.chevron_left,
+                      color: Colors.black,
+                    ),
+                    onPressed: () {
+                      Navigator.of(context)
+                          .popUntil((route) => route.settings.name == '/home');
+                    },
+                  ),
+                  Spacer(),
+                  IconButton(
+                    icon: Icon(
+                      Icons.volume_up,
+                      color: Colors.black,
+                    ),
+                    onPressed: () {},
+                  ),
+                  AnimatedBuilder(
+                    animation: _animationController,
+                    builder: (context, child) => Transform.rotate(
+                      angle: _animationController.value * 2.0 * pi,
+                      child: child,
+                    ),
+                    child: IconButton(
+                      icon: Icon(
+                        Icons.music_note,
+                        color: AppColor.main,
+                      ),
+                      onPressed: () {},
                     ),
                   ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  workOut.type == 1
-                      ? Padding(
-                          padding: EdgeInsets.only(bottom: 10),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              Icon(
-                                Icons.chevron_left,
-                                size: 50,
-                              ),
-                              GestureDetector(
-                                onTap: () {
-                                  pushNewScreen(
-                                    context,
-                                    screen: RunSplashPage(
-                                      listWorkOutBySection:
-                                          widget.listWorkOutBySection,
-                                      index: widget.index + 1,
+                ],
+              ),
+            ),
+            Expanded(
+              child: Container(
+                height: double.infinity,
+                child: Stack(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(top: 30),
+                      child: Image.asset(
+                        'assets/data/${workOut.anim}_0.gif',
+                        fit: BoxFit.fill,
+                        width: double.infinity,
+                        height: 220,
+                      ),
+                    ),
+                    Positioned(
+                      bottom: 0,
+                      left: 0,
+                      right: 0,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          workOut.type == 0
+                              ? Padding(
+                                  padding: const EdgeInsets.only(
+                                      left: 10, right: 10),
+                                  child: RichText(
+                                    text: TextSpan(
+                                      style: TextStyle(
+                                          fontFamily: 'OpenSans',
+                                          color: Colors.black,
+                                          fontSize: 50,
+                                          fontWeight: FontWeight.bold),
+                                      children: [
+                                        TextSpan(
+                                          text: '$time"',
+                                          style: TextStyle(
+                                            color: AppColor.main,
+                                          ),
+                                        ),
+                                        TextSpan(
+                                            text: '/${workOut.timeDefault}"'),
+                                      ],
                                     ),
-                                    pageTransitionAnimation:
-                                        PageTransitionAnimation.cupertino,
-                                    withNavBar: false,
-                                  );
-                                  deactivate();
-                                },
-                                child: Container(
-                                  width: 70,
-                                  height: 70,
-                                  padding: EdgeInsets.all(10),
+                                  ),
+                                )
+                              : SizedBox(),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 10, right: 10),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Expanded(
+                                  child: TextApp(
+                                    content: '${workOut.title}'.toUpperCase(),
+                                    textColor: Colors.black,
+                                    fontWeight: FontWeight.bold,
+                                    size: 25,
+                                    maxLines: 2,
+                                    textOverflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                                workOut.type == 1
+                                    ? TextApp(
+                                        content: 'X${workOut.countDefault}',
+                                        textColor: AppColor.main,
+                                        size: 25,
+                                      )
+                                    : SizedBox(),
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                Container(
+                                  padding: EdgeInsets.all(5),
                                   decoration: BoxDecoration(
                                       shape: BoxShape.circle,
-                                      color: AppColor.main),
+                                      color: Colors.lightBlue),
                                   child: Icon(
-                                    Icons.check,
+                                    Icons.videocam,
                                     color: Colors.white,
-                                    size: 40,
                                   ),
                                 ),
-                              ),
-                              GestureDetector(
-                                onTap: () {
-                                  pushNewScreen(
-                                    context,
-                                    screen: RunSplashPage(
-                                      listWorkOutBySection:
-                                          widget.listWorkOutBySection,
-                                      index: widget.index + 1,
-                                    ),
-                                    pageTransitionAnimation:
-                                        PageTransitionAnimation.cupertino,
-                                    withNavBar: false,
-                                  );
-                                  deactivate();
-                                },
-                                child: Icon(
-                                  Icons.chevron_right,
-                                  size: 50,
-                                ),
-                              ),
-                            ],
-                          ),
-                        )
-                      : Stack(
-                          children: [
-                            LinearProgressIndicator(
-                              value: _progressValue,
-                              minHeight: 70,
-                              backgroundColor: Colors.transparent,
-                              valueColor:
-                                  AlwaysStoppedAnimation<Color>(AppColor.main),
+                              ],
+                              mainAxisSize: MainAxisSize.max,
                             ),
-                            Container(
-                              height: 70,
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                children: [
-                                  Opacity(
-                                    opacity: widget.index == 0 ? 0 : 1,
-                                    child: Icon(
-                                      Icons.chevron_left,
-                                      size: 50,
-                                      color: Colors.black45,
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          workOut.type == 1
+                              ? Padding(
+                                  padding: EdgeInsets.only(bottom: 10),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceAround,
+                                    children: [
+                                      Icon(
+                                        Icons.chevron_left,
+                                        size: 50,
+                                      ),
+                                      GestureDetector(
+                                        onTap: () {
+                                          pushNewScreen(
+                                            context,
+                                            screen: RunSplashPage(
+                                              listWorkOutBySection:
+                                                  widget.listWorkOutBySection,
+                                              index: widget.index + 1,
+                                            ),
+                                            pageTransitionAnimation:
+                                                PageTransitionAnimation
+                                                    .cupertino,
+                                            withNavBar: false,
+                                          );
+                                          deactivate();
+                                        },
+                                        child: Container(
+                                          width: 70,
+                                          height: 70,
+                                          padding: EdgeInsets.all(10),
+                                          decoration: BoxDecoration(
+                                              shape: BoxShape.circle,
+                                              color: AppColor.main),
+                                          child: Icon(
+                                            Icons.check,
+                                            color: Colors.white,
+                                            size: 40,
+                                          ),
+                                        ),
+                                      ),
+                                      GestureDetector(
+                                        onTap: () {
+                                          pushNewScreen(
+                                            context,
+                                            screen: RunSplashPage(
+                                              listWorkOutBySection:
+                                                  widget.listWorkOutBySection,
+                                              index: widget.index + 1,
+                                            ),
+                                            pageTransitionAnimation:
+                                                PageTransitionAnimation
+                                                    .cupertino,
+                                            withNavBar: false,
+                                          );
+                                          deactivate();
+                                        },
+                                        child: Icon(
+                                          Icons.chevron_right,
+                                          size: 50,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                )
+                              : Stack(
+                                  children: [
+                                    LinearProgressIndicator(
+                                      value: _progressValue,
+                                      minHeight: 70,
+                                      backgroundColor: Colors.transparent,
+                                      valueColor: AlwaysStoppedAnimation<Color>(
+                                          AppColor.main),
                                     ),
-                                  ),
-                                  Icon(
-                                    Icons.pause,
-                                    size: 50,
-                                    color: Colors.black45,
-                                  ),
-                                  Opacity(
-                                    opacity: 0,
-                                    child: Icon(
-                                      Icons.chevron_right,
-                                      size: 50,
-                                      color: Colors.black45,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            )
-                          ],
-                        ),
-                ],
+                                    Container(
+                                      height: 70,
+                                      child: Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceAround,
+                                        children: [
+                                          Opacity(
+                                            opacity: widget.index == 0 ? 0 : 1,
+                                            child: Icon(
+                                              Icons.chevron_left,
+                                              size: 50,
+                                              color: Colors.black45,
+                                            ),
+                                          ),
+                                          Icon(
+                                            Icons.pause,
+                                            size: 50,
+                                            color: Colors.black45,
+                                          ),
+                                          Opacity(
+                                            opacity: 0,
+                                            child: Icon(
+                                              Icons.chevron_right,
+                                              size: 50,
+                                              color: Colors.black45,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    )
+                                  ],
+                                ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ],
@@ -383,7 +417,7 @@ class _RunWorkOutPageState extends State<RunWorkOutPage>
   @override
   void deactivate() {
     super.deactivate();
-    if(_timerProgress!=null){
+    if (_timerProgress != null) {
       _timerProgress.cancel();
     }
     assetsAudioPlayer.dispose();
