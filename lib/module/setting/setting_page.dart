@@ -12,6 +12,7 @@ class _SettingPageState extends State<SettingPage> {
   @override
   Widget build(BuildContext context) {
     return Container(
+      margin: EdgeInsets.only(bottom: 20),
       child: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: Column(
@@ -19,60 +20,128 @@ class _SettingPageState extends State<SettingPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             ItemSettingWidget(
-              title: 'Thông tin của tôi',
+              title: 'My profile',
               iconData: Icons.edit,
             ),
-            Padding(
-              padding: const EdgeInsets.only(left: 10,top: 5,bottom: 5),
-              child: TextApp(
-                content: 'Chương trình'.toUpperCase(),
-                textColor: AppColor.main,
+            Container(
+              height: 50,
+              padding: EdgeInsets.only(left: 20),
+              color: Colors.grey[200],
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: TextApp(
+                  content: 'workout'.toUpperCase(),
+                  textColor: AppColor.main,
+                ),
               ),
             ),
-            Divider(),
+            Container(
+              height: 1,
+              color: Colors.grey[400],
+            ),
             ItemSettingWidget(
-              title: 'Đặt thời gian nghỉ',
+              title: 'Rest set',
               iconData: Icons.local_cafe,
             ),
             ItemSettingWidget(
-              title: 'Thời gian đếm ngược',
+              title: 'Countdown Time',
               iconData: Icons.timer,
             ),
             ItemSettingWidget(
-              title: 'Âm thanh',
+              title: 'Sound',
               iconData: Icons.volume_up,
             ),
-            Padding(
-              padding: const EdgeInsets.only(left: 10,top: 5,bottom: 5),
-              child: TextApp(
-                content: 'Lựa chọn voice (tts)'.toUpperCase(),
-                textColor: AppColor.main,
+            Container(
+              height: 50,
+              padding: EdgeInsets.only(left: 20),
+              color: Colors.grey[200],
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: TextApp(
+                  content: 'voice options (tts)'.toUpperCase(),
+                  textColor: AppColor.main,
+                ),
               ),
             ),
-            Divider(),
-            ItemSettingWidget(
-              title: 'Âm thanh',
-              iconData: Icons.volume_up,
+            Container(
+              height: 1,
+              color: Colors.grey[400],
             ),
             ItemSettingWidget(
-              title: 'Chọn Công cụ TTS',
-              iconData: Icons.volume_up,
+              title: 'Test Voice',
+              iconData: Icons.record_voice_over,
             ),
             ItemSettingWidget(
-              title: 'Tải xuống TTS Engine',
-              iconData: Icons.volume_up,
+              title: 'Select TTS Engine',
+              iconData: Icons.send,
             ),
             ItemSettingWidget(
-              title: 'Ngôn ngữ nói',
-              iconData: Icons.volume_up,
+              title: 'Download TTS Engine',
+              iconData: Icons.cloud_download,
             ),
             ItemSettingWidget(
-              title: 'Tải xuống thêm dữ liệu ngôn ngữ TTS',
-              iconData: Icons.volume_up,
+              title: 'Voice language',
+              iconData: Icons.keyboard_voice,
             ),
             ItemSettingWidget(
-              title: 'Cài đặt TTS thiết bị',
-              iconData: Icons.volume_up,
+              title: 'Download more TTS language data',
+              iconData: Icons.file_download,
+            ),
+            ItemSettingWidget(
+              title: 'Device TTS Setting',
+              iconData: Icons.tune,
+            ),
+            Container(
+              height: 50,
+              padding: EdgeInsets.only(left: 20),
+              color: Colors.grey[200],
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: TextApp(
+                  content: 'general'.toUpperCase(),
+                  textColor: AppColor.main,
+                ),
+              ),
+            ),
+            Container(
+              height: 1,
+              color: Colors.grey[400],
+            ),
+            ItemSettingWidget(
+              title: 'Language',
+              iconData: Icons.translate,
+            ),
+            ItemSettingWidget(
+              title: 'Restart Progress',
+              iconData: Icons.refresh,
+            ),
+            ItemSettingWidget(
+              title: 'Share with friends',
+              iconData: Icons.share,
+            ),
+            Container(
+              height: 50,
+              padding: EdgeInsets.only(left: 20),
+              color: Colors.grey[200],
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: TextApp(
+                  content: 'support'.toUpperCase(),
+                  textColor: AppColor.main,
+                ),
+              ),
+            ),
+            Container(
+              height: 1,
+              color: Colors.grey[400],
+            ),
+            ItemSettingWidget(
+              title: 'Rate us 5',
+              iconData: Icons.star,
+            ),
+            ItemSettingWidget(
+              title: 'Feedback',
+              iconData: Icons.feedback,
             ),
           ],
         ),

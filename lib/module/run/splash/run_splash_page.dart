@@ -33,6 +33,7 @@ class _RunSplashPageState extends State<RunSplashPage>
 
   bool isPaused = false;
   double timerProgress = 0.0;
+  double rate = 0.5;
   int timeSecond;
   Timer _timer;
 
@@ -112,6 +113,7 @@ class _RunSplashPageState extends State<RunSplashPage>
 
     if (!kIsWeb) {
       if (Platform.isAndroid) {
+        rate = 0.9;
         var engines = await flutterTts.getEngines;
         if (engines != null) {
           for (dynamic engine in engines) {
@@ -124,7 +126,7 @@ class _RunSplashPageState extends State<RunSplashPage>
 
   Future<void> _speak() async {
     await flutterTts.setVolume(1.0);
-    await flutterTts.setSpeechRate(0.9);
+    await flutterTts.setSpeechRate(rate);
     await flutterTts.setPitch(1.0);
 
     flutterTts.speak('Ready to go. Start with ${workOut.title}.');
@@ -233,11 +235,11 @@ class _RunSplashPageState extends State<RunSplashPage>
                                   context,
                                   screen: RunWorkOutPage(
                                     listWorkOutBySection:
-                                    widget.listWorkOutBySection,
-                                    index: widget.index,
+                                        widget.listWorkOutBySection,
+                                    index: widget.index - 1,
                                   ),
                                   pageTransitionAnimation:
-                                  PageTransitionAnimation.cupertino,
+                                      PageTransitionAnimation.cupertino,
                                   withNavBar: false,
                                 );
                               },
@@ -309,7 +311,7 @@ class _RunSplashPageState extends State<RunSplashPage>
   @override
   void dispose() {
     super.dispose();
-    if(_timer !=null){
+    if (_timer != null) {
       _timer.cancel();
     }
   }

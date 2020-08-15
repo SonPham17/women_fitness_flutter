@@ -375,7 +375,10 @@ class _TrainingPageState extends State<TrainingPage> {
               onTap: () {
                 pushNewScreenWithRouteSettings(
                   context,
-                  screen: ChallengeTrainingPage(),
+                  screen: ChallengeTrainingPage(
+                    listSections : widget.listSections,
+                    listWorkOuts: widget.listWorkOuts,
+                  ),
                   settings: RouteSettings(
                     name: '/training/challenge',
                     arguments: {

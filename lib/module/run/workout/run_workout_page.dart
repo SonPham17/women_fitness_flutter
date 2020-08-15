@@ -39,7 +39,8 @@ class _RunWorkOutPageState extends State<RunWorkOutPage>
   String language;
   double volume = 1;
   double pitch = 1.0;
-  double rate = 0.9;
+  double rate = 0.5;
+  List<int> listInt;
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
@@ -58,6 +59,8 @@ class _RunWorkOutPageState extends State<RunWorkOutPage>
   void initState() {
     super.initState();
     workOut = widget.listWorkOutBySection[widget.index];
+    listInt = List<int>.generate(
+        widget.listWorkOutBySection.length, (index) => index);
 
     WidgetsBinding.instance.addObserver(this);
 
@@ -123,6 +126,7 @@ class _RunWorkOutPageState extends State<RunWorkOutPage>
 
     if (!kIsWeb) {
       if (Platform.isAndroid) {
+        rate = 0.9;
         var engines = await flutterTts.getEngines;
         if (engines != null) {
           for (dynamic engine in engines) {
@@ -152,14 +156,16 @@ class _RunWorkOutPageState extends State<RunWorkOutPage>
               height: 10,
               width: MediaQuery.of(context).size.width,
               child: Row(
-                children: widget.listWorkOutBySection
+                children: listInt
                     .map((e) => Expanded(
                           child: Container(
                             margin: widget.listWorkOutBySection.length - 1 ==
-                                    widget.listWorkOutBySection.indexOf(e)
+                                    listInt.indexOf(e)
                                 ? EdgeInsets.only(left: 2)
                                 : EdgeInsets.only(right: 2),
-                            color: widget.listWorkOutBySection.indexOf(e) < widget.index ? AppColor.main : AppColor.main[200],
+                            color: listInt.indexOf(e) < widget.index
+                                ? AppColor.main
+                                : AppColor.main[200],
                           ),
                         ))
                     .toList(),
@@ -300,9 +306,25 @@ class _RunWorkOutPageState extends State<RunWorkOutPage>
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceAround,
                                     children: [
-                                      Icon(
-                                        Icons.chevron_left,
-                                        size: 50,
+                                      GestureDetector(
+                                        child: Icon(
+                                          Icons.chevron_left,
+                                          size: 50,
+                                        ),
+                                        onTap: (){
+                                          pushNewScreen(
+                                            context,
+                                            screen: RunWorkOutPage(
+                                              listWorkOutBySection:
+                                              widget.listWorkOutBySection,
+                                              index: widget.index - 1,
+                                            ),
+                                            pageTransitionAnimation:
+                                            PageTransitionAnimation.cupertino,
+                                            withNavBar: false,
+                                          );
+                                          deactivate();
+                                        },
                                       ),
                                       GestureDetector(
                                         onTap: () {
@@ -377,10 +399,26 @@ class _RunWorkOutPageState extends State<RunWorkOutPage>
                                         children: [
                                           Opacity(
                                             opacity: widget.index == 0 ? 0 : 1,
-                                            child: Icon(
-                                              Icons.chevron_left,
-                                              size: 50,
-                                              color: Colors.black45,
+                                            child: GestureDetector(
+                                              child: Icon(
+                                                Icons.chevron_left,
+                                                size: 50,
+                                                color: Colors.black45,
+                                              ),
+                                              onTap: (){
+                                                pushNewScreen(
+                                                  context,
+                                                  screen: RunWorkOutPage(
+                                                    listWorkOutBySection:
+                                                    widget.listWorkOutBySection,
+                                                    index: widget.index - 1,
+                                                  ),
+                                                  pageTransitionAnimation:
+                                                  PageTransitionAnimation.cupertino,
+                                                  withNavBar: false,
+                                                );
+                                                deactivate();
+                                              },
                                             ),
                                           ),
                                           Icon(

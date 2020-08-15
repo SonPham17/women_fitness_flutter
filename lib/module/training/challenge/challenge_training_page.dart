@@ -1,11 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:women_fitness_flutter/shared/app_color.dart';
+import 'package:women_fitness_flutter/shared/model/section.dart';
+import 'package:women_fitness_flutter/shared/model/work_out.dart';
 import 'package:women_fitness_flutter/shared/size_config.dart';
+import 'package:women_fitness_flutter/shared/widget/challenge_week_widget.dart';
 import 'package:women_fitness_flutter/shared/widget/text_app.dart';
 
 class ChallengeTrainingPage extends StatefulWidget {
+  final List<WorkOut> listWorkOuts;
+  final List<Section> listSections;
+
+  ChallengeTrainingPage(
+      {@required this.listWorkOuts, @required this.listSections});
+
   @override
   _ChallengeTrainingPageState createState() => _ChallengeTrainingPageState();
 }
@@ -24,10 +32,30 @@ class _ChallengeTrainingPageState extends State<ChallengeTrainingPage> {
                     padding: EdgeInsets.all(10),
                     sliver: SliverList(
                       delegate: SliverChildListDelegate([
-                        _buildWeek(),
-                        _buildWeek(),
-                        _buildWeek(),
-                        _buildWeek(),
+                        ChallengeWeekWidget(
+                          listWorkOuts: widget.listWorkOuts,
+                          week: 1,
+                          listSections: widget.listSections.sublist(18,25),
+                          isWeekSelected: true,
+                        ),
+                        ChallengeWeekWidget(
+                          listWorkOuts: widget.listWorkOuts,
+                          week: 2,
+                          listSections: widget.listSections.sublist(25,32),
+                          isWeekSelected: false,
+                        ),
+                        ChallengeWeekWidget(
+                          listWorkOuts: widget.listWorkOuts,
+                          week: 3,
+                          listSections: widget.listSections.sublist(32,39),
+                          isWeekSelected: false,
+                        ),
+                        ChallengeWeekWidget(
+                          listWorkOuts: widget.listWorkOuts,
+                          week: 4,
+                          listSections: widget.listSections.sublist(39,46),
+                          isWeekSelected: false,
+                        ),
                         SizedBox(
                           height: 60,
                         ),
@@ -89,215 +117,6 @@ class _ChallengeTrainingPageState extends State<ChallengeTrainingPage> {
       ),
     );
   }
-
-  Widget _buildWeek() => Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Row(
-            children: <Widget>[
-              Icon(
-                Icons.check_circle,
-                color: AppColor.main,
-              ),
-              SizedBox(
-                width: 5,
-              ),
-              TextApp(
-                content: 'WEEK 1',
-                textColor: AppColor.main,
-              ),
-              Spacer(),
-              RichText(
-                text: TextSpan(
-                  style: TextStyle(
-                    fontFamily: 'OpenSans',
-                    color: Colors.black,
-                  ),
-                  children: [
-                    TextSpan(
-                      text: '2',
-                      style: TextStyle(
-                        color: AppColor.main,
-                      ),
-                    ),
-                    TextSpan(text: '/7'),
-                  ],
-                ),
-              ),
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Container(
-                margin: EdgeInsets.only(left: 12, top: 0),
-                width: 1,
-                height: 150,
-                color: AppColor.main,
-              ),
-              Expanded(
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: Colors.green[50],
-                  ),
-                  padding: EdgeInsets.only(
-                      top: SizeConfig.defaultSize * 1.5,
-                      left: SizeConfig.defaultSize,
-                      right: SizeConfig.defaultSize,
-                      bottom: SizeConfig.defaultSize * 1.5),
-                  margin: EdgeInsets.only(
-                    left: SizeConfig.defaultSize * 2,
-                    top: SizeConfig.defaultSize,
-                  ),
-                  child: Column(
-                    children: <Widget>[
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: <Widget>[
-                          Container(
-                            width: 45,
-                            height: 45,
-                            decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                border: Border.all(
-                                  width: 1,
-                                  color: Colors.black54,
-                                )),
-                            child: Center(
-                              child: TextApp(
-                                content: '1',
-                                size: 18,
-                              ),
-                            ),
-                          ),
-                          Icon(Icons.keyboard_arrow_right),
-                          Container(
-                            width: 45,
-                            height: 45,
-                            decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                border: Border.all(
-                                  width: 1,
-                                  color: Colors.black54,
-                                )),
-                            child: Center(
-                              child: TextApp(
-                                content: '2',
-                                size: 18,
-                              ),
-                            ),
-                          ),
-                          Icon(Icons.keyboard_arrow_right),
-                          Container(
-                            width: 45,
-                            height: 45,
-                            decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                border: Border.all(
-                                  width: 1,
-                                  color: Colors.black54,
-                                )),
-                            child: Center(
-                              child: TextApp(
-                                content: '3',
-                                size: 18,
-                              ),
-                            ),
-                          ),
-                          Icon(Icons.keyboard_arrow_right),
-                          Container(
-                            width: 45,
-                            height: 45,
-                            decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                border: Border.all(
-                                  width: 1,
-                                  color: Colors.black54,
-                                )),
-                            child: Center(
-                              child: TextApp(
-                                content: '4',
-                                size: 18,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(
-                        height: SizeConfig.defaultSize * 1.5,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: <Widget>[
-                          Container(
-                            width: 45,
-                            height: 45,
-                            decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                border: Border.all(
-                                  width: 1,
-                                  color: Colors.black54,
-                                )),
-                            child: Center(
-                              child: TextApp(
-                                content: '5',
-                                size: 18,
-                              ),
-                            ),
-                          ),
-                          Icon(Icons.keyboard_arrow_right),
-                          Container(
-                            width: 45,
-                            height: 45,
-                            decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                border: Border.all(
-                                  width: 1,
-                                  color: Colors.black54,
-                                )),
-                            child: Center(
-                              child: TextApp(
-                                content: '6',
-                                size: 18,
-                              ),
-                            ),
-                          ),
-                          Icon(Icons.keyboard_arrow_right),
-                          Container(
-                            width: 45,
-                            height: 45,
-                            decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                border: Border.all(
-                                  width: 1,
-                                  color: Colors.black54,
-                                )),
-                            child: Center(
-                              child: TextApp(
-                                content: '7',
-                                size: 18,
-                              ),
-                            ),
-                          ),
-                          Icon(Icons.keyboard_arrow_right),
-                          SvgPicture.asset(
-                            'assets/svg/trophy.svg',
-                            width: 45,
-                            height: 45,
-                          )
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-              )
-            ],
-          ),
-        ],
-      );
 
   Widget _buildFlexible() => FlexibleSpaceBar(
         collapseMode: CollapseMode.pin,
