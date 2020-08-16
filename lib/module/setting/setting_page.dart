@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
+import 'package:women_fitness_flutter/module/setting/profile/profile_page.dart';
 import 'package:women_fitness_flutter/shared/app_color.dart';
 import 'package:women_fitness_flutter/shared/widget/item_setting_widget.dart';
 import 'package:women_fitness_flutter/shared/widget/text_app.dart';
@@ -20,6 +22,14 @@ class _SettingPageState extends State<SettingPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             ItemSettingWidget(
+              function: () {
+                pushNewScreen(
+                  context,
+                  screen: ProfilePage(),
+                  pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                  withNavBar: false,
+                );
+              },
               title: 'My profile',
               iconData: Icons.edit,
             ),

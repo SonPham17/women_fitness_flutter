@@ -4,8 +4,10 @@ import 'package:women_fitness_flutter/shared/widget/text_app.dart';
 class ItemSettingWidget extends StatefulWidget {
   final String title;
   final IconData iconData;
+  final Function function;
 
-  ItemSettingWidget({@required this.title, @required this.iconData});
+  ItemSettingWidget(
+      {@required this.title, @required this.iconData, this.function});
 
   @override
   _ItemSettingWidgetState createState() => _ItemSettingWidgetState();
@@ -15,9 +17,7 @@ class _ItemSettingWidgetState extends State<ItemSettingWidget> {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: (){
-        print('');
-      },
+      onTap: widget.function,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
