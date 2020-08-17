@@ -2,6 +2,9 @@ import 'package:intl/intl.dart';
 
 class Utils {
   static final String keyIndex = 'index_run';
+  static final String sPrefWeight = 'sp_weight';
+  static final String sPrefHeight = 'sp_height';
+  static final String sPrefIsKgCm = 'sp_is_kg_cm';
 
   static List<String> getDaysOfWeek(String locale, int controlWeek) {
     final now = DateTime.now();

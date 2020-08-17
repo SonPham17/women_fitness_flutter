@@ -2,6 +2,7 @@ import 'package:calendar_strip/calendar_strip.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
+import 'package:women_fitness_flutter/data/spref/spref.dart';
 import 'package:women_fitness_flutter/injector/injector.dart';
 import 'package:women_fitness_flutter/module/report/report_bloc.dart';
 import 'package:women_fitness_flutter/module/report/report_states.dart';
@@ -25,7 +26,8 @@ class _ReportPageState extends State<ReportPage> {
   String weekTraining = '4';
   double calculatorBMI;
   String statusWeight;
-  String currentHeight = '195 CM';
+  double currentHeight;
+  double weight;
 
   DateTime startDate = DateTime.now().subtract(Duration(days: 2));
   DateTime endDate = DateTime.now().add(Duration(days: 2));
@@ -44,6 +46,9 @@ class _ReportPageState extends State<ReportPage> {
     }
     double f = (calculatorBMI - 13.5) / 27.0;
     var a = ((SizeConfig.screenWidth - 48) * f).toInt() - 2;
+    if (a <= 0) {
+      a = 0;
+    }
     return a.toDouble();
   }
 
@@ -51,22 +56,12 @@ class _ReportPageState extends State<ReportPage> {
   void initState() {
     super.initState();
     _reportBloc = Injector.resolve<ReportBloc>();
-  }
 
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    calculatorBMI =
-        double.parse(Utils.calculatorBMI(195, 90).toStringAsFixed(1));
-    if (calculatorBMI < 18.5) {
-      statusWeight = 'Underweight';
-    } else if (calculatorBMI >= 18.5 && calculatorBMI < 25.0) {
-      statusWeight = 'Normal weight';
-    } else if (calculatorBMI < 25.0 || calculatorBMI >= 30.0) {
-      statusWeight = 'Obesity';
-    } else {
-      statusWeight = 'Overweight';
-    }
+    SPref.instance
+        .getDouble(Utils.sPrefHeight)
+        .then((value) => currentHeight = value);
+
+    SPref.instance.getDouble(Utils.sPrefWeight).then((value) => weight = value);
   }
 
   @override
@@ -90,6 +85,15 @@ class _ReportPageState extends State<ReportPage> {
                 );
                 Future.delayed(Duration(seconds: 2), () {
                   Scaffold.of(context).hideCurrentSnackBar();
+                });
+              } else if (state is ReportStateRefresh) {
+                setState(() {
+                  SPref.instance
+                      .getDouble(Utils.sPrefWeight)
+                      .then((value) => currentHeight = value);
+                  SPref.instance
+                      .getDouble(Utils.sPrefHeight)
+                      .then((value) => weight = value);
                 });
               }
             },
@@ -169,12 +173,10 @@ class _ReportPageState extends State<ReportPage> {
                         setState(() {
                           double weight = double.parse(value[0]);
                           double height = double.parse(value[1]);
+                          currentHeight = height;
                           if (!value[2]) {
                             weight = Utils.convertLbsToKg(weight);
                             height = Utils.convertFtToCm(height);
-                            currentHeight = '$height FT';
-                          } else {
-                            currentHeight = '$height CM';
                           }
                           calculatorBMI = double.parse(
                               Utils.calculatorBMI(height, weight)
@@ -197,28 +199,39 @@ class _ReportPageState extends State<ReportPage> {
                 ),
               ],
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                TextApp(
-                  content: 'Current',
-                  textColor: AppColor.main,
-                  size: 17,
-                ),
-                InkWell(
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: TextApp(
-                      content: '$currentHeight',
-                      textColor: Colors.black26,
-                      size: 17,
-                    ),
-                  ),
-                  onTap: () {
-                    print('edit');
-                  },
-                ),
-              ],
+            FutureBuilder<bool>(
+              future: SPref.instance.getBool(Utils.sPrefIsKgCm),
+              builder: (_, snapshot) {
+                if (snapshot.hasData) {
+                  bool isKg = snapshot.data;
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      TextApp(
+                        content: 'Current',
+                        textColor: AppColor.main,
+                        size: 17,
+                      ),
+                      InkWell(
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: TextApp(
+                            content: isKg
+                                ? '$currentHeight CM'
+                                : '$currentHeight FT',
+                            textColor: Colors.black26,
+                            size: 17,
+                          ),
+                        ),
+                        onTap: () {
+                          print('edit');
+                        },
+                      ),
+                    ],
+                  );
+                }
+                return SizedBox();
+              },
             ),
           ],
         ),
@@ -226,165 +239,192 @@ class _ReportPageState extends State<ReportPage> {
 
   Widget _buildBMI() => Container(
         margin: EdgeInsets.only(left: 14, right: 14),
-        child: Column(
-          children: [
-            Row(
-              children: [
-                TextApp(
-                  content: 'BMI(kg/m2):',
-                  size: 18,
-                ),
-                SizedBox(
-                  width: 10,
-                ),
-                Expanded(
-                  child: TextApp(
-                    content: '$calculatorBMI',
-                    textColor: Colors.black,
-                    fontWeight: FontWeight.bold,
-                    size: 20,
-                  ),
-                ),
-                InkWell(
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: TextApp(
-                      content: 'EDIT',
-                      textColor: AppColor.main,
-                      size: 17,
-                    ),
-                  ),
-                  onTap: () {
-                    showDialog(
-                      context: context,
-                      builder: (context) => DialogEdit(
-                        reportBloc: _reportBloc,
-                      ),
-                    ).then((value) {
-                      if (value != null) {
-                        setState(() {
-                          double weight = double.parse(value[0]);
-                          double height = double.parse(value[1]);
-                          if (!value[2]) {
-                            weight = Utils.convertLbsToKg(weight);
-                            height = Utils.convertFtToCm(height);
-                            currentHeight = '$height FT';
-                          } else {
-                            currentHeight = '$height CM';
-                          }
-                          calculatorBMI = double.parse(
-                              Utils.calculatorBMI(height, weight)
-                                  .toStringAsFixed(1));
-                          if (calculatorBMI < 18.5) {
-                            statusWeight = 'Underweight';
-                          } else if (calculatorBMI >= 18.5 &&
-                              calculatorBMI < 25.0) {
-                            statusWeight = 'Normal weight';
-                          } else if (calculatorBMI < 25.0 ||
-                              calculatorBMI >= 30.0) {
-                            statusWeight = 'Obesity';
-                          } else {
-                            statusWeight = 'Overweight';
-                          }
-                        });
-                      }
-                    });
-                  },
-                )
-              ],
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            Container(
-              height: 100,
-              width: double.infinity,
-              child: Stack(
+        child: FutureBuilder<bool>(
+          future: SPref.instance.getBool(Utils.sPrefIsKgCm),
+          builder: (_, snapshot) {
+            if (snapshot.hasData) {
+              bool isKg = snapshot.data;
+              if (isKg) {
+                calculatorBMI = double.parse(
+                    Utils.calculatorBMI(currentHeight, weight)
+                        .toStringAsFixed(1));
+              } else {
+                calculatorBMI = double.parse(Utils.calculatorBMI(
+                        Utils.convertFtToCm(currentHeight), weight)
+                    .toStringAsFixed(1));
+              }
+
+              if (calculatorBMI < 18.5) {
+                statusWeight = 'Underweight';
+              } else if (calculatorBMI >= 18.5 && calculatorBMI < 25.0) {
+                statusWeight = 'Normal weight';
+              } else if (calculatorBMI < 25.0 || calculatorBMI >= 30.0) {
+                statusWeight = 'Obesity';
+              } else {
+                statusWeight = 'Overweight';
+              }
+
+              return Column(
                 children: [
-                  Positioned(
-                    child: Image.asset(
-                      'assets/images/bmi.png',
-                      height: 50,
-                      fit: BoxFit.cover,
-                    ),
-                    bottom: 20,
-                    left: 0,
-                    right: 0,
-                    top: 35,
-                  ),
-                  Container(
-                    margin: EdgeInsets.only(left: calBMI()),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        TextApp(
-                          maxLines: 1,
+                  Row(
+                    children: [
+                      TextApp(
+                        content: 'BMI(kg/m2):',
+                        size: 18,
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Expanded(
+                        child: TextApp(
                           content: '$calculatorBMI',
                           textColor: Colors.black,
+                          fontWeight: FontWeight.bold,
+                          size: 20,
                         ),
-                        SizedBox(
-                          height: 10,
+                      ),
+                      InkWell(
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: TextApp(
+                            content: 'EDIT',
+                            textColor: AppColor.main,
+                            size: 17,
+                          ),
                         ),
-                        Expanded(
-                          child: Container(
-                            margin: EdgeInsets.only(bottom: 14),
-                            width: 4,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              color: Colors.black,
+                        onTap: () {
+                          showDialog(
+                            context: context,
+                            builder: (context) => DialogEdit(
+                              reportBloc: _reportBloc,
                             ),
+                          ).then((value) {
+                            if (value != null) {
+                              setState(() {
+                                double weight = double.parse(value[0]);
+                                double height = double.parse(value[1]);
+                                if (!value[2]) {
+                                  weight = Utils.convertLbsToKg(weight);
+                                  height = Utils.convertFtToCm(height);
+                                }
+                                currentHeight = height;
+                                calculatorBMI = double.parse(
+                                    Utils.calculatorBMI(height, weight)
+                                        .toStringAsFixed(1));
+                                if (calculatorBMI < 18.5) {
+                                  statusWeight = 'Underweight';
+                                } else if (calculatorBMI >= 18.5 &&
+                                    calculatorBMI < 25.0) {
+                                  statusWeight = 'Normal weight';
+                                } else if (calculatorBMI < 25.0 ||
+                                    calculatorBMI >= 30.0) {
+                                  statusWeight = 'Obesity';
+                                } else {
+                                  statusWeight = 'Overweight';
+                                }
+                              });
+                            }
+                          });
+                        },
+                      )
+                    ],
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Container(
+                    height: 100,
+                    width: double.infinity,
+                    child: Stack(
+                      children: [
+                        Positioned(
+                          child: Image.asset(
+                            'assets/images/bmi.png',
+                            height: 50,
+                            fit: BoxFit.cover,
+                          ),
+                          bottom: 20,
+                          left: 0,
+                          right: 0,
+                          top: 35,
+                        ),
+                        Container(
+                          margin: EdgeInsets.only(left: calBMI()),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              TextApp(
+                                maxLines: 1,
+                                content: '$calculatorBMI',
+                                textColor: Colors.black,
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Expanded(
+                                child: Container(
+                                  margin: EdgeInsets.only(bottom: 14),
+                                  width: 4,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              )
+                            ],
                           ),
                         )
                       ],
                     ),
-                  )
+                  ),
+                  Container(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        TextApp(
+                          content: '15',
+                        ),
+                        TextApp(
+                          content: '18',
+                        ),
+                        TextApp(
+                          content: '21',
+                        ),
+                        TextApp(
+                          content: '24',
+                        ),
+                        TextApp(
+                          content: '27',
+                        ),
+                        TextApp(
+                          content: '30',
+                        ),
+                        TextApp(
+                          content: '33',
+                        ),
+                        TextApp(
+                          content: '36',
+                        ),
+                        TextApp(
+                          content: '39',
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  TextApp(
+                    content: statusWeight,
+                    textColor: AppColor.main,
+                    size: 13,
+                  ),
                 ],
-              ),
-            ),
-            Container(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  TextApp(
-                    content: '15',
-                  ),
-                  TextApp(
-                    content: '18',
-                  ),
-                  TextApp(
-                    content: '21',
-                  ),
-                  TextApp(
-                    content: '24',
-                  ),
-                  TextApp(
-                    content: '27',
-                  ),
-                  TextApp(
-                    content: '30',
-                  ),
-                  TextApp(
-                    content: '33',
-                  ),
-                  TextApp(
-                    content: '36',
-                  ),
-                  TextApp(
-                    content: '39',
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            TextApp(
-              content: statusWeight,
-              textColor: AppColor.main,
-              size: 13,
-            ),
-          ],
+              );
+            }
+            return SizedBox();
+          },
         ),
       );
 

@@ -20,6 +20,16 @@ class SPref {
     await prefs.setInt(key, value);
   }
 
+  Future<void> setDouble(String key, double value) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setDouble(key, value);
+  }
+
+  Future<double> getDouble(String key) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getDouble(key);
+  }
+
   Future<bool> getBool(String key) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.getBool(key);

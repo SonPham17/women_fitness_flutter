@@ -11,6 +11,10 @@ class ReportBloc extends Bloc<ReportEvent, ReportState> {
       case ReportSaveEmptyEvent:
         yield ReportStateSaveEmpty();
         break;
+      case ReportRefreshEvent:
+        print('refresh report');
+        yield ReportStateRefresh();
+        break;
     }
   }
 }
