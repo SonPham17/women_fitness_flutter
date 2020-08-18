@@ -13,10 +13,15 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
         super(ProfileStateInitial());
 
   @override
-  Stream<ProfileState> mapEventToState(ProfileEvent profileEvent) async*{
-    switch(profileEvent.runtimeType){
+  Stream<ProfileState> mapEventToState(ProfileEvent profileEvent) async* {
+    switch (profileEvent.runtimeType) {
       case ProfileRefreshEvent:
-        _reportBloc.add(ReportRefreshEvent());
+        ProfileRefreshEvent refreshEvent = profileEvent as ProfileRefreshEvent;
+        _reportBloc.add(ReportRefreshEvent(
+          height: refreshEvent.height,
+          weight: refreshEvent.weight,
+          isKg: refreshEvent.isKg,
+        ));
         break;
     }
   }

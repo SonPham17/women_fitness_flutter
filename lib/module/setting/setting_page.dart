@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
+import 'package:women_fitness_flutter/module/run/finish/run_finish_page.dart';
 import 'package:women_fitness_flutter/module/setting/profile/profile_page.dart';
 import 'package:women_fitness_flutter/shared/app_color.dart';
 import 'package:women_fitness_flutter/shared/widget/item_setting_widget.dart';
@@ -50,6 +51,14 @@ class _SettingPageState extends State<SettingPage> {
               color: Colors.grey[400],
             ),
             ItemSettingWidget(
+              function: (){
+                pushNewScreen(
+                  context,
+                  screen: RunFinishPage(),
+                  pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                  withNavBar: false,
+                );
+              },
               title: 'Rest set',
               iconData: Icons.local_cafe,
             ),

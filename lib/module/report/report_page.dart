@@ -87,14 +87,13 @@ class _ReportPageState extends State<ReportPage> {
                   Scaffold.of(context).hideCurrentSnackBar();
                 });
               } else if (state is ReportStateRefresh) {
-                setState(() {
-                  SPref.instance
-                      .getDouble(Utils.sPrefWeight)
-                      .then((value) => currentHeight = value);
-                  SPref.instance
-                      .getDouble(Utils.sPrefHeight)
-                      .then((value) => weight = value);
-                });
+                print('run finish refresh');
+//                double heightRefresh = state.height;
+//                double weightRefresh = state.weight;
+//                setState(() {
+//                  currentHeight = heightRefresh;
+//                  weight = weightRefresh;
+//                });
               }
             },
             builder: (context, state) => Column(
@@ -167,31 +166,13 @@ class _ReportPageState extends State<ReportPage> {
                       context: context,
                       builder: (context) => DialogEdit(
                         reportBloc: _reportBloc,
+                        isStartReportPage: true,
                       ),
                     ).then((value) {
                       if (value != null) {
                         setState(() {
-                          double weight = double.parse(value[0]);
-                          double height = double.parse(value[1]);
-                          currentHeight = height;
-                          if (!value[2]) {
-                            weight = Utils.convertLbsToKg(weight);
-                            height = Utils.convertFtToCm(height);
-                          }
-                          calculatorBMI = double.parse(
-                              Utils.calculatorBMI(height, weight)
-                                  .toStringAsFixed(1));
-                          if (calculatorBMI < 18.5) {
-                            statusWeight = 'Underweight';
-                          } else if (calculatorBMI >= 18.5 &&
-                              calculatorBMI < 25.0) {
-                            statusWeight = 'Normal weight';
-                          } else if (calculatorBMI < 25.0 ||
-                              calculatorBMI >= 30.0) {
-                            statusWeight = 'Obesity';
-                          } else {
-                            statusWeight = 'Overweight';
-                          }
+                          weight = double.parse(value[0]);
+                          currentHeight = double.parse(value[1]);
                         });
                       }
                     });
@@ -250,7 +231,7 @@ class _ReportPageState extends State<ReportPage> {
                         .toStringAsFixed(1));
               } else {
                 calculatorBMI = double.parse(Utils.calculatorBMI(
-                        Utils.convertFtToCm(currentHeight), weight)
+                        Utils.convertFtToCm(currentHeight), Utils.convertLbsToKg(weight))
                     .toStringAsFixed(1));
               }
 
@@ -297,31 +278,13 @@ class _ReportPageState extends State<ReportPage> {
                             context: context,
                             builder: (context) => DialogEdit(
                               reportBloc: _reportBloc,
+                              isStartReportPage: true,
                             ),
                           ).then((value) {
                             if (value != null) {
                               setState(() {
-                                double weight = double.parse(value[0]);
-                                double height = double.parse(value[1]);
-                                if (!value[2]) {
-                                  weight = Utils.convertLbsToKg(weight);
-                                  height = Utils.convertFtToCm(height);
-                                }
-                                currentHeight = height;
-                                calculatorBMI = double.parse(
-                                    Utils.calculatorBMI(height, weight)
-                                        .toStringAsFixed(1));
-                                if (calculatorBMI < 18.5) {
-                                  statusWeight = 'Underweight';
-                                } else if (calculatorBMI >= 18.5 &&
-                                    calculatorBMI < 25.0) {
-                                  statusWeight = 'Normal weight';
-                                } else if (calculatorBMI < 25.0 ||
-                                    calculatorBMI >= 30.0) {
-                                  statusWeight = 'Obesity';
-                                } else {
-                                  statusWeight = 'Overweight';
-                                }
+                                weight = double.parse(value[0]);
+                                currentHeight = double.parse(value[1]);
                               });
                             }
                           });

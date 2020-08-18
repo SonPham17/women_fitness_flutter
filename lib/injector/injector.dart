@@ -4,6 +4,7 @@ import 'package:women_fitness_flutter/data/repo/workout_repo.dart';
 import 'package:women_fitness_flutter/db/work_out_provider.dart';
 import 'package:women_fitness_flutter/module/home/home_bloc.dart';
 import 'package:women_fitness_flutter/module/report/report_bloc.dart';
+import 'package:women_fitness_flutter/module/run/finish/run_finish_bloc.dart';
 import 'package:women_fitness_flutter/module/setting/profile/profile_bloc.dart';
 import 'package:women_fitness_flutter/module/splash/splash_bloc.dart';
 import 'package:women_fitness_flutter/module/training/favorite/favorite_training_bloc.dart';
@@ -36,6 +37,7 @@ abstract class Injector {
   @Register.singleton(HomeBloc)
   @Register.factory(WorkOutBloc)
   @Register.factory(ProfileBloc)
+  @Register.factory(RunFinishBloc)
   @Register.singleton(ReportBloc)
   @Register.factory(FavoriteTrainingBloc)
   @Register.factory(SplashBloc)

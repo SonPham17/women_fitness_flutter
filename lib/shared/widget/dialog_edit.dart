@@ -8,8 +8,9 @@ import 'package:women_fitness_flutter/shared/widget/text_app.dart';
 
 class DialogEdit extends StatefulWidget {
   final ReportBloc reportBloc;
+  final bool isStartReportPage;
 
-  DialogEdit({@required this.reportBloc});
+  DialogEdit({this.reportBloc, @required this.isStartReportPage});
 
   @override
   _DialogEditState createState() => _DialogEditState();
@@ -35,7 +36,7 @@ class _DialogEditState extends State<DialogEdit> {
   Widget build(BuildContext context) {
     return FutureBuilder<bool>(
       future: SPref.instance.getBool(Utils.sPrefIsKgCm),
-      builder: (context1,snapshot){
+      builder: (context1, snapshot) {
         isChooseKg = snapshot.data ?? true;
         return Dialog(
           shape: RoundedRectangleBorder(
@@ -97,7 +98,8 @@ class _DialogEditState extends State<DialogEdit> {
                                           .toStringAsFixed(0);
                                 }
                                 isChooseKg = true;
-                                SPref.instance.setBool(Utils.sPrefIsKgCm, isChooseKg);
+                                SPref.instance
+                                    .setBool(Utils.sPrefIsKgCm, isChooseKg);
                               });
                             }
                           },
@@ -107,7 +109,8 @@ class _DialogEditState extends State<DialogEdit> {
                             child: Center(
                               child: TextApp(
                                 content: 'KG',
-                                textColor: isChooseKg ? Colors.white : Colors.black,
+                                textColor:
+                                    isChooseKg ? Colors.white : Colors.black,
                               ),
                             ),
                           ),
@@ -146,7 +149,8 @@ class _DialogEditState extends State<DialogEdit> {
                                           .toStringAsFixed(1);
                                 }
                                 isChooseKg = false;
-                                SPref.instance.setBool(Utils.sPrefIsKgCm, isChooseKg);
+                                SPref.instance
+                                    .setBool(Utils.sPrefIsKgCm, isChooseKg);
                               });
                             }
                           },
@@ -156,7 +160,8 @@ class _DialogEditState extends State<DialogEdit> {
                             child: Center(
                               child: TextApp(
                                 content: 'LB',
-                                textColor: isChooseKg ? Colors.black : Colors.white,
+                                textColor:
+                                    isChooseKg ? Colors.black : Colors.white,
                               ),
                             ),
                           ),
@@ -211,7 +216,8 @@ class _DialogEditState extends State<DialogEdit> {
                                           .toStringAsFixed(0);
                                 }
                                 isChooseKg = true;
-                                SPref.instance.setBool(Utils.sPrefIsKgCm, isChooseKg);
+                                SPref.instance
+                                    .setBool(Utils.sPrefIsKgCm, isChooseKg);
                               });
                             }
                           },
@@ -221,7 +227,8 @@ class _DialogEditState extends State<DialogEdit> {
                             child: Center(
                               child: TextApp(
                                 content: 'CM',
-                                textColor: isChooseKg ? Colors.white : Colors.black,
+                                textColor:
+                                    isChooseKg ? Colors.white : Colors.black,
                               ),
                             ),
                           ),
@@ -260,7 +267,8 @@ class _DialogEditState extends State<DialogEdit> {
                                           .toStringAsFixed(1);
                                 }
                                 isChooseKg = false;
-                                SPref.instance.setBool(Utils.sPrefIsKgCm, isChooseKg);
+                                SPref.instance
+                                    .setBool(Utils.sPrefIsKgCm, isChooseKg);
                               });
                             }
                           },
@@ -270,7 +278,8 @@ class _DialogEditState extends State<DialogEdit> {
                             child: Center(
                               child: TextApp(
                                 content: 'FT',
-                                textColor: isChooseKg ? Colors.black : Colors.white,
+                                textColor:
+                                    isChooseKg ? Colors.black : Colors.white,
                               ),
                             ),
                           ),
@@ -300,13 +309,16 @@ class _DialogEditState extends State<DialogEdit> {
                         var weight = textWeightController.text;
                         var height = textHeightController.text;
                         if (weight.isNotEmpty && height.isNotEmpty) {
-                          SPref.instance
-                              .setDouble(Utils.sPrefWeight, double.parse(weight));
-                          SPref.instance
-                              .setDouble(Utils.sPrefHeight, double.parse(height));
+                          SPref.instance.setDouble(
+                              Utils.sPrefWeight, double.parse(weight));
+                          SPref.instance.setDouble(
+                              Utils.sPrefHeight, double.parse(height));
                           SPref.instance.setBool(Utils.sPrefIsKgCm, isChooseKg);
-                          Navigator.of(context).pop([weight, height, isChooseKg]);
-                        } else {
+                          Navigator.of(context)
+                              .pop([weight, height, isChooseKg]);
+                        }
+
+                        if (widget.isStartReportPage) {
                           widget.reportBloc.add(ReportSaveEmptyEvent());
                         }
                       },

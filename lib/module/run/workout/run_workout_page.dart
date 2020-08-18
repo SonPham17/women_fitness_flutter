@@ -7,6 +7,7 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
+import 'package:women_fitness_flutter/module/run/finish/run_finish_page.dart';
 import 'package:women_fitness_flutter/module/run/splash/run_splash_page.dart';
 import 'package:women_fitness_flutter/shared/app_color.dart';
 import 'package:women_fitness_flutter/shared/model/work_out.dart';
@@ -77,7 +78,15 @@ class _RunWorkOutPageState extends State<RunWorkOutPage>
     Future.delayed(Duration(seconds: 1), () {
       assetsAudioPlayer.open(
         Audio('assets/audio/play_background.mp3'),
+        respectSilentMode: true,
       );
+      assetsAudioPlayer.toggleLoop();
+      assetsAudioPlayer.loopMode.listen((loopMode) {
+        if (loopMode == LoopMode.none) {
+          assetsAudioPlayer.setLoopMode(LoopMode.single);
+        }
+      });
+
       if (workOut.type == 0) {
         _timerProgress = Timer.periodic(Duration(seconds: 1), (timer) {
           if (!isPaused) {
@@ -98,15 +107,24 @@ class _RunWorkOutPageState extends State<RunWorkOutPage>
               }
               if (time < 1) {
                 timer.cancel();
-                pushNewScreen(
-                  context,
-                  screen: RunSplashPage(
-                    listWorkOutBySection: widget.listWorkOutBySection,
-                    index: widget.index + 1,
-                  ),
-                  pageTransitionAnimation: PageTransitionAnimation.cupertino,
-                  withNavBar: false,
-                );
+                if (widget.index == widget.listWorkOutBySection.length - 1) {
+                  pushNewScreen(
+                    context,
+                    screen: RunFinishPage(),
+                    pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                    withNavBar: false,
+                  );
+                } else {
+                  pushNewScreen(
+                    context,
+                    screen: RunSplashPage(
+                      listWorkOutBySection: widget.listWorkOutBySection,
+                      index: widget.index + 1,
+                    ),
+                    pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                    withNavBar: false,
+                  );
+                }
                 deactivate();
               }
             });
@@ -311,16 +329,17 @@ class _RunWorkOutPageState extends State<RunWorkOutPage>
                                           Icons.chevron_left,
                                           size: 50,
                                         ),
-                                        onTap: (){
+                                        onTap: () {
                                           pushNewScreen(
                                             context,
                                             screen: RunWorkOutPage(
                                               listWorkOutBySection:
-                                              widget.listWorkOutBySection,
+                                                  widget.listWorkOutBySection,
                                               index: widget.index - 1,
                                             ),
                                             pageTransitionAnimation:
-                                            PageTransitionAnimation.cupertino,
+                                                PageTransitionAnimation
+                                                    .cupertino,
                                             withNavBar: false,
                                           );
                                           deactivate();
@@ -405,16 +424,17 @@ class _RunWorkOutPageState extends State<RunWorkOutPage>
                                                 size: 50,
                                                 color: Colors.black45,
                                               ),
-                                              onTap: (){
+                                              onTap: () {
                                                 pushNewScreen(
                                                   context,
                                                   screen: RunWorkOutPage(
-                                                    listWorkOutBySection:
-                                                    widget.listWorkOutBySection,
+                                                    listWorkOutBySection: widget
+                                                        .listWorkOutBySection,
                                                     index: widget.index - 1,
                                                   ),
                                                   pageTransitionAnimation:
-                                                  PageTransitionAnimation.cupertino,
+                                                      PageTransitionAnimation
+                                                          .cupertino,
                                                   withNavBar: false,
                                                 );
                                                 deactivate();

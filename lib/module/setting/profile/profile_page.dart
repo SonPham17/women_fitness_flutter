@@ -84,7 +84,8 @@ class _ProfilePageState extends State<ProfilePage> {
                                 ),
                                 leading: Radio(
                                   value: TypeUnits.kgCm,
-                                  groupValue: isKg ? TypeUnits.kgCm : TypeUnits.lbFt,
+                                  groupValue:
+                                      isKg ? TypeUnits.kgCm : TypeUnits.lbFt,
                                   onChanged: (value) {
                                     setState(() {
                                       SPref.instance
@@ -95,11 +96,15 @@ class _ProfilePageState extends State<ProfilePage> {
                                       height = double.parse(
                                           Utils.convertFtToCm(height)
                                               .toStringAsFixed(0));
-                                      SPref.instance.setDouble(
-                                          Utils.sPrefWeight, weight);
-                                      SPref.instance.setDouble(
-                                          Utils.sPrefHeight, height);
-                                      _profileBloc.add(ProfileRefreshEvent());
+                                      SPref.instance
+                                          .setDouble(Utils.sPrefWeight, weight);
+                                      SPref.instance
+                                          .setDouble(Utils.sPrefHeight, height);
+                                      _profileBloc.add(ProfileRefreshEvent(
+                                        height: height,
+                                        weight: weight,
+                                        isKg: true,
+                                      ));
                                     });
                                   },
                                 ),
@@ -112,7 +117,8 @@ class _ProfilePageState extends State<ProfilePage> {
                                 ),
                                 leading: Radio(
                                   value: TypeUnits.lbFt,
-                                  groupValue: isKg ? TypeUnits.kgCm : TypeUnits.lbFt,
+                                  groupValue:
+                                      isKg ? TypeUnits.kgCm : TypeUnits.lbFt,
                                   onChanged: (value) {
                                     setState(() {
                                       SPref.instance
@@ -123,11 +129,15 @@ class _ProfilePageState extends State<ProfilePage> {
                                       height = double.parse(
                                           Utils.convertCmToFt(height)
                                               .toStringAsFixed(0));
-                                      SPref.instance.setDouble(
-                                          Utils.sPrefWeight, weight);
-                                      SPref.instance.setDouble(
-                                          Utils.sPrefHeight, height);
-                                      _profileBloc.add(ProfileRefreshEvent());
+                                      SPref.instance
+                                          .setDouble(Utils.sPrefWeight, weight);
+                                      SPref.instance
+                                          .setDouble(Utils.sPrefHeight, height);
+                                      _profileBloc.add(ProfileRefreshEvent(
+                                        height: height,
+                                        weight: weight,
+                                        isKg: false,
+                                      ));
                                     });
                                   },
                                 ),
@@ -141,7 +151,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         ),
                         InkWell(
                           onTap: () {
-                          _profileBloc.add(ProfileRefreshEvent());
+                            _profileBloc.add(ProfileRefreshEvent());
 //                showDialog(
 //                  context: context,
 //                  builder: (_) => DialogPicker(

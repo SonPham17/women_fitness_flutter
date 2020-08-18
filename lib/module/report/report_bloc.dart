@@ -1,6 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:women_fitness_flutter/module/report/report_events.dart';
 import 'package:women_fitness_flutter/module/report/report_states.dart';
+import 'package:women_fitness_flutter/shared/utils.dart';
 
 class ReportBloc extends Bloc<ReportEvent, ReportState> {
   ReportBloc() : super(ReportStateInitial());
@@ -12,8 +13,13 @@ class ReportBloc extends Bloc<ReportEvent, ReportState> {
         yield ReportStateSaveEmpty();
         break;
       case ReportRefreshEvent:
-        print('refresh report');
-        yield ReportStateRefresh();
+        ReportRefreshEvent refreshEvent = reportEvent as ReportRefreshEvent;
+        double height = refreshEvent.height;
+        double weight = refreshEvent.weight;
+        yield ReportStateRefresh(
+          height: height,
+          weight: weight,
+        );
         break;
     }
   }
