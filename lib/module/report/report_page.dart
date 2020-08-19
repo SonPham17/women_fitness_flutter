@@ -88,12 +88,12 @@ class _ReportPageState extends State<ReportPage> {
                 });
               } else if (state is ReportStateRefresh) {
                 print('run finish refresh');
-//                double heightRefresh = state.height;
-//                double weightRefresh = state.weight;
-//                setState(() {
-//                  currentHeight = heightRefresh;
-//                  weight = weightRefresh;
-//                });
+                double heightRefresh = state.height;
+                double weightRefresh = state.weight;
+                setState(() {
+                  currentHeight = heightRefresh;
+                  weight = weightRefresh;
+                });
               }
             },
             builder: (context, state) => Column(

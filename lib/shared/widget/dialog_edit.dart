@@ -316,10 +316,10 @@ class _DialogEditState extends State<DialogEdit> {
                           SPref.instance.setBool(Utils.sPrefIsKgCm, isChooseKg);
                           Navigator.of(context)
                               .pop([weight, height, isChooseKg]);
-                        }
-
-                        if (widget.isStartReportPage) {
-                          widget.reportBloc.add(ReportSaveEmptyEvent());
+                        }else{
+                          if (widget.isStartReportPage) {
+                            widget.reportBloc.add(ReportSaveEmptyEvent());
+                          }
                         }
                       },
                       child: TextApp(

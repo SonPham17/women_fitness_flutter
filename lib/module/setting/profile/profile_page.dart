@@ -2,16 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:women_fitness_flutter/data/spref/spref.dart';
 import 'package:women_fitness_flutter/injector/injector.dart';
-import 'package:women_fitness_flutter/module/report/report_bloc.dart';
-import 'package:women_fitness_flutter/module/report/report_events.dart';
-import 'package:women_fitness_flutter/module/report/report_states.dart';
 import 'package:women_fitness_flutter/module/setting/profile/profile_bloc.dart';
 import 'package:women_fitness_flutter/module/setting/profile/profile_events.dart';
 import 'package:women_fitness_flutter/module/setting/profile/profile_states.dart';
 import 'package:women_fitness_flutter/shared/app_color.dart';
 import 'package:women_fitness_flutter/shared/size_config.dart';
 import 'package:women_fitness_flutter/shared/utils.dart';
-import 'package:women_fitness_flutter/shared/widget/dialog_edit.dart';
 import 'package:women_fitness_flutter/shared/widget/text_app.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -22,7 +18,6 @@ class ProfilePage extends StatefulWidget {
 enum TypeUnits { kgCm, lbFt }
 
 class _ProfilePageState extends State<ProfilePage> {
-  TypeUnits _type;
   double weight;
   double height;
   ProfileBloc _profileBloc;
