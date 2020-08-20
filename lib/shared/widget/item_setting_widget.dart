@@ -5,9 +5,16 @@ class ItemSettingWidget extends StatefulWidget {
   final String title;
   final IconData iconData;
   final Function function;
+  final bool isShowTime;
+  final String selection;
 
-  ItemSettingWidget(
-      {@required this.title, @required this.iconData, this.function});
+  ItemSettingWidget({
+    @required this.title,
+    @required this.iconData,
+    this.function,
+    this.isShowTime = false,
+    this.selection = '',
+  });
 
   @override
   _ItemSettingWidgetState createState() => _ItemSettingWidgetState();
@@ -40,9 +47,9 @@ class _ItemSettingWidgetState extends State<ItemSettingWidget> {
                   ),
                 ),
                 Opacity(
-                  opacity: 0,
+                  opacity: widget.isShowTime ? 1 : 0,
                   child: TextApp(
-                    content: '30 secs',
+                    content: widget.selection,
                   ),
                 )
               ],

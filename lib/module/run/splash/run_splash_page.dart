@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
+import 'package:women_fitness_flutter/data/spref/spref.dart';
 import 'package:women_fitness_flutter/module/run/workout/run_workout_page.dart';
 import 'package:women_fitness_flutter/shared/app_color.dart';
 import 'package:women_fitness_flutter/shared/model/work_out.dart';
@@ -34,7 +35,8 @@ class _RunSplashPageState extends State<RunSplashPage>
   bool isPaused = false;
   double timerProgress = 0.0;
   double rate = 0.5;
-  int timeSecond;
+  int timeSecond = 30;
+  int currentTime = 30;
   Timer _timer;
 
   @override
@@ -59,9 +61,19 @@ class _RunSplashPageState extends State<RunSplashPage>
     workOut = widget.listWorkOutBySection[widget.index];
 
     if (widget.index == 0) {
-      timeSecond = 15;
+      SPref.instance.getInt(Utils.sPrefCountdownTime).then((value) {
+        setState(() {
+          timeSecond = value ?? 15;
+          currentTime = timeSecond;
+        });
+      });
     } else {
-      timeSecond = 30;
+      SPref.instance.getInt(Utils.sPrefTimeSet).then((value) {
+        setState(() {
+          timeSecond = value ?? 30;
+          currentTime = timeSecond;
+        });
+      });
     }
 
     initTts();
@@ -73,17 +85,17 @@ class _RunSplashPageState extends State<RunSplashPage>
     _timer = Timer.periodic(Duration(seconds: 1), (timer) {
       if (!isPaused) {
         setState(() {
-          if (timeSecond == 3) {
+          if (currentTime == 3) {
             flutterTts.speak('Three');
           }
-          if (timeSecond == 2) {
+          if (currentTime == 2) {
             flutterTts.speak('Two');
           }
-          if (timeSecond == 1) {
+          if (currentTime == 1) {
             flutterTts.speak('One');
           }
 
-          if (timeSecond < 1) {
+          if (currentTime < 1) {
             deactivate();
             pushNewScreen(
               context,
@@ -95,8 +107,8 @@ class _RunSplashPageState extends State<RunSplashPage>
               withNavBar: false,
             );
           } else {
-            timeSecond--;
-            timerProgress = timerProgress + 1 / (widget.index == 0 ? 15 : 30);
+            currentTime--;
+            timerProgress = timerProgress + 1 / timeSecond;
           }
         });
       }
@@ -256,7 +268,7 @@ class _RunSplashPageState extends State<RunSplashPage>
                         animateFromLastPercent: true,
                         percent: timerProgress,
                         center: TextApp(
-                          content: '$timeSecond',
+                          content: '$currentTime',
                           textColor: Colors.white,
                           size: 30,
                           fontWeight: FontWeight.bold,

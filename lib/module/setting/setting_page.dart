@@ -1,8 +1,16 @@
+import 'dart:io';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_tts/flutter_tts.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
-import 'package:women_fitness_flutter/module/run/finish/run_finish_page.dart';
+import 'package:women_fitness_flutter/data/spref/spref.dart';
 import 'package:women_fitness_flutter/module/setting/profile/profile_page.dart';
 import 'package:women_fitness_flutter/shared/app_color.dart';
+import 'package:women_fitness_flutter/shared/utils.dart';
+import 'package:women_fitness_flutter/shared/widget/dialog_setting_time.dart';
+import 'package:women_fitness_flutter/shared/widget/dialog_sound_option.dart';
+import 'package:women_fitness_flutter/shared/widget/dialog_voice_language.dart';
 import 'package:women_fitness_flutter/shared/widget/item_setting_widget.dart';
 import 'package:women_fitness_flutter/shared/widget/text_app.dart';
 
@@ -12,6 +20,55 @@ class SettingPage extends StatefulWidget {
 }
 
 class _SettingPageState extends State<SettingPage> {
+  FlutterTts flutterTts;
+  dynamic languages;
+  double rate = 0.5;
+
+  int timeSet = 30;
+  int countDownTime = 15;
+
+  @override
+  void initState() {
+    super.initState();
+
+    initTts();
+
+    SPref.instance.getInt(Utils.sPrefTimeSet).then((value) {
+      setState(() {
+        timeSet = value ?? 30;
+      });
+    });
+
+    SPref.instance.getInt(Utils.sPrefCountdownTime).then((value) {
+      setState(() {
+        countDownTime = value ?? 15;
+      });
+    });
+  }
+
+  Future<void> initTts() async {
+    flutterTts = FlutterTts();
+//    flutterTts.setLanguage('vi-VN');
+
+    languages = await flutterTts.getLanguages;
+
+    if (!kIsWeb) {
+      if (Platform.isAndroid) {
+        rate = 0.9;
+        var engines = await flutterTts.getEngines;
+        if (engines != null) {
+          for (dynamic engine in engines) {
+            print(engine);
+          }
+        }
+      }
+    }
+
+    await flutterTts.setVolume(1.0);
+    await flutterTts.setSpeechRate(rate);
+    await flutterTts.setPitch(1.0);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -51,24 +108,58 @@ class _SettingPageState extends State<SettingPage> {
               color: Colors.grey[400],
             ),
             ItemSettingWidget(
-              function: (){
-                pushNewScreen(
-                  context,
-                  screen: RunFinishPage(),
-                  pageTransitionAnimation: PageTransitionAnimation.cupertino,
-                  withNavBar: false,
-                );
+              function: () {
+                showDialog(
+                  context: context,
+                  builder: (context) => DialogSettingTime(
+                    isRestSet: true,
+                    time: timeSet,
+                  ),
+                ).then((value) {
+                  if (value != null) {
+                    setState(() {
+                      SPref.instance.setInt(Utils.sPrefTimeSet, value);
+                      timeSet = value;
+                    });
+                  }
+                });
               },
+              isShowTime: true,
               title: 'Rest set',
+              selection: '$timeSet secs',
               iconData: Icons.local_cafe,
             ),
             ItemSettingWidget(
+              isShowTime: true,
+              selection: '$countDownTime secs',
               title: 'Countdown Time',
               iconData: Icons.timer,
+              function: () {
+                showDialog(
+                  context: context,
+                  builder: (context) => DialogSettingTime(
+                    isRestSet: false,
+                    time: countDownTime,
+                  ),
+                ).then((value) {
+                  if (value != null) {
+                    setState(() {
+                      SPref.instance.setInt(Utils.sPrefCountdownTime, value);
+                      countDownTime = value;
+                    });
+                  }
+                });
+              },
             ),
             ItemSettingWidget(
               title: 'Sound',
               iconData: Icons.volume_up,
+              function: () {
+                showDialog(
+                  context: context,
+                  builder: (context) => DialogSoundOption(),
+                );
+              },
             ),
             Container(
               height: 50,
@@ -89,17 +180,20 @@ class _SettingPageState extends State<SettingPage> {
             ItemSettingWidget(
               title: 'Test Voice',
               iconData: Icons.record_voice_over,
+              function: () {
+                flutterTts.speak('Did you hear the test voice?');
+              },
             ),
             ItemSettingWidget(
-              title: 'Select TTS Engine',
-              iconData: Icons.send,
-            ),
-            ItemSettingWidget(
-              title: 'Download TTS Engine',
-              iconData: Icons.cloud_download,
-            ),
-            ItemSettingWidget(
+              selection: 'Tiếng Anh',
               title: 'Voice language',
+              function: () {
+                showDialog(
+                  context: context,
+                  builder: (context) => DialogVoiceLanguage(),
+                );
+              },
+              isShowTime: true,
               iconData: Icons.keyboard_voice,
             ),
             ItemSettingWidget(
@@ -127,6 +221,8 @@ class _SettingPageState extends State<SettingPage> {
               color: Colors.grey[400],
             ),
             ItemSettingWidget(
+              isShowTime: true,
+              selection: 'English',
               title: 'Language',
               iconData: Icons.translate,
             ),
@@ -166,5 +262,11 @@ class _SettingPageState extends State<SettingPage> {
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    flutterTts.stop();
   }
 }

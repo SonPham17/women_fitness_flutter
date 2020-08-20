@@ -46,6 +46,7 @@ dependencies:
   assets_audio_player: ^2.0.9
   flutter_tts: ^1.2.6
   intl: ^0.16.1
+  grouped_buttons: ^1.0.4
 
 dev_dependencies:
   flutter_test:

@@ -5,6 +5,12 @@ class Utils {
   static final String sPrefWeight = 'sp_weight';
   static final String sPrefHeight = 'sp_height';
   static final String sPrefIsKgCm = 'sp_is_kg_cm';
+  static final String sPrefTimeSet = 'sp_time_set';
+  static final String sPrefCountdownTime = 'sp_cd_time';
+
+  static final String sPrefSoundMute = 'sp_sound_mute';
+  static final String sPrefSoundVoiceGuide = 'sp_sound_voice';
+  static final String sPrefSoundCoachTips = 'sp_sound_coach';
 
   static List<String> getDaysOfWeek(String locale, int controlWeek) {
     final now = DateTime.now();
