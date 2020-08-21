@@ -1,6 +1,8 @@
 import 'package:date_time_format/date_time_format.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
+import 'package:women_fitness_flutter/generated/l10n.dart';
 import 'package:women_fitness_flutter/shared/app_color.dart';
 import 'package:women_fitness_flutter/shared/size_config.dart';
 import 'package:women_fitness_flutter/shared/widget/text_app.dart';
@@ -50,7 +52,7 @@ class _CalendarWeekGoalPageState extends State<CalendarWeekGoalPage>
     return Scaffold(
       appBar: AppBar(
         title: TextApp(
-          content: 'HISTORY',
+          content: S.current.history.toUpperCase(),
         ),
         centerTitle: false,
       ),
@@ -59,7 +61,7 @@ class _CalendarWeekGoalPageState extends State<CalendarWeekGoalPage>
           children: <Widget>[
             TableCalendar(
               calendarController: _calendarController,
-              locale: 'en_EN',
+              locale: Intl.getCurrentLocale(),
               initialCalendarFormat: CalendarFormat.month,
               formatAnimation: FormatAnimation.slide,
               startingDayOfWeek: StartingDayOfWeek.monday,

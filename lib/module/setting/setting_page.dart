@@ -22,7 +22,9 @@ class SettingPage extends StatefulWidget {
 class _SettingPageState extends State<SettingPage> {
   FlutterTts flutterTts;
   dynamic languages;
+  int indexVoiceLanguage = 1;
   double rate = 0.5;
+  String voiceLanguageSelection = '';
 
   int timeSet = 30;
   int countDownTime = 15;
@@ -31,7 +33,13 @@ class _SettingPageState extends State<SettingPage> {
   void initState() {
     super.initState();
 
-    initTts();
+    SPref.instance.getInt(Utils.sPrefIndexVoiceLanguage).then((value) {
+      setState(() {
+        indexVoiceLanguage = value ?? 1;
+        voiceLanguageSelection = Utils.listLanguage[indexVoiceLanguage];
+      });
+      initTts();
+    });
 
     SPref.instance.getInt(Utils.sPrefTimeSet).then((value) {
       setState(() {
@@ -48,7 +56,8 @@ class _SettingPageState extends State<SettingPage> {
 
   Future<void> initTts() async {
     flutterTts = FlutterTts();
-//    flutterTts.setLanguage('vi-VN');
+
+    flutterTts.setLanguage(Utils.listCodeLanguage[indexVoiceLanguage]);
 
     languages = await flutterTts.getLanguages;
 
@@ -185,24 +194,27 @@ class _SettingPageState extends State<SettingPage> {
               },
             ),
             ItemSettingWidget(
-              selection: 'Tiếng Anh',
+              selection: voiceLanguageSelection,
               title: 'Voice language',
               function: () {
                 showDialog(
                   context: context,
-                  builder: (context) => DialogVoiceLanguage(),
-                );
+                  builder: (context) => DialogVoiceLanguage(
+                    indexVoice: indexVoiceLanguage,
+                  ),
+                ).then((value) {
+                  if (value != null) {
+                    setState(() {
+                      indexVoiceLanguage = value;
+                      flutterTts.setLanguage(
+                          Utils.listCodeLanguage[indexVoiceLanguage]);
+                      voiceLanguageSelection = Utils.listLanguage[value];
+                    });
+                  }
+                });
               },
               isShowTime: true,
               iconData: Icons.keyboard_voice,
-            ),
-            ItemSettingWidget(
-              title: 'Download more TTS language data',
-              iconData: Icons.file_download,
-            ),
-            ItemSettingWidget(
-              title: 'Device TTS Setting',
-              iconData: Icons.tune,
             ),
             Container(
               height: 50,

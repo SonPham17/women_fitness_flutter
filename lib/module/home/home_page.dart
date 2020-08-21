@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
+import 'package:women_fitness_flutter/generated/l10n.dart';
 import 'package:women_fitness_flutter/injector/injector.dart';
 import 'package:women_fitness_flutter/module/home/home_bloc.dart';
 import 'package:women_fitness_flutter/module/home/home_states.dart';
@@ -99,25 +100,25 @@ class _HomePageState extends State<HomePage> {
     return [
       PersistentBottomNavBarItem(
         icon: Icon(Icons.home),
-        title: ("Training"),
+        title: (S.current.nav_training),
         activeColor: AppColor.main,
         inactiveColor: CupertinoColors.systemGrey,
       ),
       PersistentBottomNavBarItem(
         icon: Icon(Icons.assistant_photo),
-        title: ("Workouts"),
+        title: (S.current.nav_workouts),
         activeColor: AppColor.main,
         inactiveColor: CupertinoColors.systemGrey,
       ),
       PersistentBottomNavBarItem(
         icon: Icon(Icons.show_chart),
-        title: ("Report"),
+        title: (S.current.nav_report),
         activeColor: AppColor.main,
         inactiveColor: CupertinoColors.systemGrey,
       ),
       PersistentBottomNavBarItem(
         icon: Icon(Icons.settings),
-        title: ("Settings"),
+        title: (S.current.nav_settings),
         activeColor: AppColor.main,
         inactiveColor: CupertinoColors.systemGrey,
       ),

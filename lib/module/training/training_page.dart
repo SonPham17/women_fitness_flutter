@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:like_button/like_button.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
+import 'package:women_fitness_flutter/data/spref/spref.dart';
+import 'package:women_fitness_flutter/generated/l10n.dart';
 import 'package:women_fitness_flutter/injector/injector.dart';
 import 'package:women_fitness_flutter/module/home/home_bloc.dart';
 import 'package:women_fitness_flutter/module/home/home_events.dart';
@@ -21,6 +23,7 @@ import 'package:women_fitness_flutter/shared/app_color.dart';
 import 'package:women_fitness_flutter/shared/model/section.dart';
 import 'package:women_fitness_flutter/shared/model/work_out.dart';
 import 'package:women_fitness_flutter/shared/size_config.dart';
+import 'package:women_fitness_flutter/shared/utils.dart';
 import 'package:women_fitness_flutter/shared/widget/text_app.dart';
 
 class TrainingPage extends StatefulWidget {
@@ -39,7 +42,7 @@ class _TrainingPageState extends State<TrainingPage> {
   WorkOutRoutinesBloc _workOutRoutinesBloc;
   HomeBloc _homeBloc;
 
-  String weekTraining = '4';
+  int weekTraining = 0;
 
   DateTime startDate = DateTime.now().subtract(Duration(days: 2));
   DateTime endDate = DateTime.now().add(Duration(days: 2));
@@ -59,6 +62,12 @@ class _TrainingPageState extends State<TrainingPage> {
     _workOutHomeBloc = Injector.resolve<WorkOutHomeBloc>();
     _workOutRoutinesBloc = Injector.resolve<WorkOutRoutinesBloc>();
     _homeBloc = Injector.resolve<HomeBloc>();
+
+    SPref.instance.getInt(Utils.sPrefWeekGoal).then((value) {
+      setState(() {
+        weekTraining = value ?? 2;
+      });
+    });
   }
 
   @override
@@ -103,7 +112,8 @@ class _TrainingPageState extends State<TrainingPage> {
                   if (listFavorite.length == 0) {
                     return _buildFavorite();
                   }
-                  return _buildWorkOut(listFavorite, 'FAVORITE');
+                  return _buildWorkOut(
+                      listFavorite, S.current.training_favorite);
                 },
                 listener: (context, state) {
                   if (state is TrainingStateGetFavoriteDone) {
@@ -240,7 +250,8 @@ class _TrainingPageState extends State<TrainingPage> {
                           ),
                           TextApp(
                             size: 13,
-                            content: '${section.workoutsId.length} workouts',
+                            content:
+                                '${section.workoutsId.length} ${S.current.training_workouts}',
                             textColor: Colors.white,
                           )
                         ],
@@ -274,7 +285,7 @@ class _TrainingPageState extends State<TrainingPage> {
               bottom: 10,
             ),
             child: TextApp(
-              content: 'FAVORITE',
+              content: S.current.training_favorite.toUpperCase(),
               size: 20,
               fontWeight: FontWeight.bold,
             ),
@@ -302,13 +313,13 @@ class _TrainingPageState extends State<TrainingPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       TextApp(
-                        content: 'START YOUR',
+                        content: S.current.training_start.toUpperCase(),
                         textColor: Colors.white,
                         size: defaultSize * 2.5,
                         fontWeight: FontWeight.bold,
                       ),
                       TextApp(
-                        content: 'WORKOUT',
+                        content: S.current.training_workout.toUpperCase(),
                         textColor: Colors.white,
                         size: defaultSize * 2.5,
                         fontWeight: FontWeight.bold,
@@ -325,7 +336,7 @@ class _TrainingPageState extends State<TrainingPage> {
                                 BorderRadius.circular(defaultSize * 2)),
                         child: Center(
                           child: TextApp(
-                            content: 'GO!',
+                            content: S.current.training_go.toUpperCase(),
                             size: defaultSize * 2,
                             textColor: Colors.white,
                           ),
@@ -342,7 +353,8 @@ class _TrainingPageState extends State<TrainingPage> {
           ),
           Center(
             child: TextApp(
-              content: 'Your favorite workouts will be shown here \u{1F49A}',
+              content: '${S.current.training_bottom} \u{1F49A}',
+              textAlign: TextAlign.center,
             ),
           )
         ],
@@ -364,7 +376,7 @@ class _TrainingPageState extends State<TrainingPage> {
               bottom: 10,
             ),
             child: TextApp(
-              content: '7X4 CHALLENGE',
+              content: S.current.training_7x4.toUpperCase(),
               size: 20,
               fontWeight: FontWeight.bold,
             ),
@@ -376,7 +388,7 @@ class _TrainingPageState extends State<TrainingPage> {
                 pushNewScreenWithRouteSettings(
                   context,
                   screen: ChallengeTrainingPage(
-                    listSections : widget.listSections,
+                    listSections: widget.listSections,
                     listWorkOuts: widget.listWorkOuts,
                   ),
                   settings: RouteSettings(
@@ -404,13 +416,13 @@ class _TrainingPageState extends State<TrainingPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       TextApp(
-                        content: 'FULL BODY',
+                        content: S.current.training_full_body.toUpperCase(),
                         textColor: Colors.white,
                         size: defaultSize * 2.5,
                         fontWeight: FontWeight.bold,
                       ),
                       TextApp(
-                        content: '7X4 CHALLENGE',
+                        content: S.current.training_7x4.toUpperCase(),
                         textColor: Colors.white,
                         size: defaultSize * 2.5,
                         fontWeight: FontWeight.bold,
@@ -427,7 +439,7 @@ class _TrainingPageState extends State<TrainingPage> {
                                 BorderRadius.circular(defaultSize * 2)),
                         child: Center(
                           child: TextApp(
-                            content: 'START',
+                            content: S.current.training_btn_start.toUpperCase(),
                             size: defaultSize * 2,
                             textColor: Colors.white,
                           ),
@@ -497,7 +509,7 @@ class _TrainingPageState extends State<TrainingPage> {
               child: Row(
                 children: <Widget>[
                   TextApp(
-                    content: 'WEEK GOAL',
+                    content: S.current.training_wg.toUpperCase(),
                     size: 20,
                     fontWeight: FontWeight.bold,
                   ),
@@ -509,7 +521,9 @@ class _TrainingPageState extends State<TrainingPage> {
                       onTap: () {
                         pushNewScreen(
                           context,
-                          screen: EditWeekGoalPage(),
+                          screen: EditWeekGoalPage(
+                            weeklyTraining: weekTraining,
+                          ),
                           pageTransitionAnimation:
                               PageTransitionAnimation.cupertino,
                           withNavBar: false,
@@ -517,6 +531,8 @@ class _TrainingPageState extends State<TrainingPage> {
                           if (value != null) {
                             setState(() {
                               weekTraining = value;
+                              SPref.instance
+                                  .setInt(Utils.sPrefWeekGoal, weekTraining);
                             });
                           }
                         });
@@ -606,7 +622,7 @@ class _TrainingPageState extends State<TrainingPage> {
                 bottom: 10,
               ),
               child: TextApp(
-                content: 'TOTAL',
+                content: S.current.training_total.toUpperCase(),
                 size: 20,
                 fontWeight: FontWeight.bold,
               ),
@@ -622,7 +638,7 @@ class _TrainingPageState extends State<TrainingPage> {
                       textColor: AppColor.main,
                     ),
                     TextApp(
-                      content: 'WORKOUTS',
+                      content: S.current.training_workouts.toUpperCase(),
                       size: 18,
                     )
                   ],
@@ -635,7 +651,7 @@ class _TrainingPageState extends State<TrainingPage> {
                       textColor: AppColor.main,
                     ),
                     TextApp(
-                      content: 'KCAL',
+                      content: S.current.training_kcal.toUpperCase(),
                       size: 18,
                     )
                   ],
@@ -648,7 +664,7 @@ class _TrainingPageState extends State<TrainingPage> {
                       textColor: AppColor.main,
                     ),
                     TextApp(
-                      content: 'MINUTES',
+                      content: S.current.training_minutes.toUpperCase(),
                       size: 18,
                     )
                   ],

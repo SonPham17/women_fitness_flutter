@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:women_fitness_flutter/generated/l10n.dart';
 import 'package:women_fitness_flutter/shared/app_color.dart';
 import 'package:women_fitness_flutter/shared/model/section.dart';
 import 'package:women_fitness_flutter/shared/model/work_out.dart';
@@ -37,7 +38,7 @@ class _ChallengeWeekWidgetState extends State<ChallengeWeekWidget> {
               width: 5,
             ),
             TextApp(
-              content: 'WEEK ${widget.week}',
+              content: '${S.current.challenge_week.toUpperCase()} ${widget.week}',
               textColor: widget.isWeekSelected ? AppColor.main : Colors.grey,
             ),
             Spacer(),

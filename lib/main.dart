@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:intl/intl.dart';
 import 'package:women_fitness_flutter/db/women_fitness_database.dart';
+import 'package:women_fitness_flutter/generated/l10n.dart';
 import 'package:women_fitness_flutter/injector/injector.dart';
 import 'package:women_fitness_flutter/module/home/home_page.dart';
 import 'package:women_fitness_flutter/module/run/workout/run_workout_page.dart';
@@ -17,7 +20,7 @@ Future<void> main() async {
   Bloc.observer = SupervisorBloc();
 
   WidgetsFlutterBinding.ensureInitialized();
-  await initializeDateFormatting();
+//  await initializeDateFormatting();
   await WomenFitnessDatabase.instance.init();
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
     statusBarColor: Colors.transparent,
@@ -35,11 +38,18 @@ class MyApp extends StatelessWidget {
         primarySwatch: AppColor.main,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
+      localizationsDelegates: [
+        S.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: S.delegate.supportedLocales,
       initialRoute: '/',
       routes: <String, WidgetBuilder>{
         '/': (context) => SplashPage(),
         '/home': (context) => HomePage(),
-        '/settings/profile' : (context) => ProfilePage(),
+        '/settings/profile': (context) => ProfilePage(),
       },
     );
   }

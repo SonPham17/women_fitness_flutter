@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
+import 'package:women_fitness_flutter/generated/l10n.dart';
 import 'package:women_fitness_flutter/shared/app_color.dart';
 import 'package:women_fitness_flutter/shared/model/section.dart';
 import 'package:women_fitness_flutter/shared/model/work_out.dart';
@@ -74,7 +75,7 @@ class _ChallengeTrainingPageState extends State<ChallengeTrainingPage> {
                     pinned: true,
                     centerTitle: false,
                     title: TextApp(
-                      content: '7X4 CHALLENGE',
+                      content: S.current.training_7x4,
                       fontWeight: FontWeight.bold,
                     ),
                     flexibleSpace: _buildFlexible(),
@@ -104,7 +105,7 @@ class _ChallengeTrainingPageState extends State<ChallengeTrainingPage> {
                   },
                   child: Center(
                     child: TextApp(
-                      content: 'GO!',
+                      content: S.current.training_go.toUpperCase(),
                       size: 20,
                       fontWeight: FontWeight.bold,
                     ),
@@ -137,7 +138,7 @@ class _ChallengeTrainingPageState extends State<ChallengeTrainingPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               TextApp(
-                content: 'Progress 90%',
+                content: '${S.current.challenge_progress} 90%',
                 textColor: Colors.white,
                 size: SizeConfig.defaultSize * 2,
               ),
@@ -145,7 +146,7 @@ class _ChallengeTrainingPageState extends State<ChallengeTrainingPage> {
                 height: 10,
               ),
               TextApp(
-                content: '28 Days left',
+                content: '28 ${S.current.challenge_day_left}',
                 textColor: Colors.white,
                 size: SizeConfig.defaultSize * 2,
               ),

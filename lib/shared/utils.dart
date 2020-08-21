@@ -12,6 +12,30 @@ class Utils {
   static final String sPrefSoundVoiceGuide = 'sp_sound_voice';
   static final String sPrefSoundCoachTips = 'sp_sound_coach';
 
+  static final String sPrefIndexVoiceLanguage = 'sp_index_voice';
+
+  static final String sPrefWeekGoal = 'sp_week_goal';
+
+  static final listLanguage = <String>[
+    'Vietnamese',
+    'English',
+    'French',
+    'Korean',
+    'Spanish',
+    'Portuguese',
+    'Russian',
+  ];
+
+  static final listCodeLanguage = [
+    'vi-VN',
+    'en-US',
+    'fr-FR',
+    'ko-KR',
+    'es-ES',
+    'pt-PT',
+    'ru-RU',
+  ];
+
   static List<String> getDaysOfWeek(String locale, int controlWeek) {
     final now = DateTime.now();
     final firstDayOfWeek =
