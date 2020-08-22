@@ -14,8 +14,11 @@ class ChallengeWeekWidget extends StatefulWidget {
   final List<WorkOut> listWorkOuts;
   final List<Section> listSections;
 
-  ChallengeWeekWidget({@required this.week,@required this.isWeekSelected,@required this.listWorkOuts,
-  @required this.listSections});
+  ChallengeWeekWidget(
+      {@required this.week,
+      @required this.isWeekSelected,
+      @required this.listWorkOuts,
+      @required this.listSections});
 
   @override
   _ChallengeWeekWidgetState createState() => _ChallengeWeekWidgetState();
@@ -38,7 +41,8 @@ class _ChallengeWeekWidgetState extends State<ChallengeWeekWidget> {
               width: 5,
             ),
             TextApp(
-              content: '${S.current.challenge_week.toUpperCase()} ${widget.week}',
+              content:
+                  '${S.current.challenge_week.toUpperCase()} ${widget.week}',
               textColor: widget.isWeekSelected ? AppColor.main : Colors.grey,
             ),
             Spacer(),
