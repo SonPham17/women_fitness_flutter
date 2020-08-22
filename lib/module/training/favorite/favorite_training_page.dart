@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
+import 'package:women_fitness_flutter/generated/l10n.dart';
 import 'package:women_fitness_flutter/injector/injector.dart';
 import 'package:women_fitness_flutter/module/run/splash/run_splash_page.dart';
 import 'package:women_fitness_flutter/module/training/favorite/edit/favorite_training_edit_page.dart';
@@ -160,7 +161,7 @@ class _FavoriteTrainingPageState extends State<FavoriteTrainingPage> {
                         },
                         child: Center(
                           child: TextApp(
-                            content: 'START',
+                            content: S.current.run_start.toUpperCase(),
                             size: 20,
                             fontWeight: FontWeight.bold,
                           ),
@@ -265,7 +266,7 @@ class _FavoriteTrainingPageState extends State<FavoriteTrainingPage> {
                     color: Colors.white,
                   ),
                   TextApp(
-                    content: '${widget.section.workoutsId.length} workouts',
+                    content: '${widget.section.workoutsId.length} ${S.current.training_workouts}',
                     textColor: Colors.white,
                     size: SizeConfig.defaultSize * 1.8,
                   ),

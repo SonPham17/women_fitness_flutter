@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:women_fitness_flutter/generated/l10n.dart';
 import 'package:women_fitness_flutter/injector/injector.dart';
 import 'package:women_fitness_flutter/module/workout/home/workout_home_page.dart';
 import 'package:women_fitness_flutter/module/workout/routines/workout_routines_page.dart';
 import 'package:women_fitness_flutter/module/workout/workout_bloc.dart';
-import 'package:women_fitness_flutter/module/workout/workout_events.dart';
 import 'package:women_fitness_flutter/module/workout/workout_states.dart';
 import 'package:women_fitness_flutter/shared/app_color.dart';
 import 'package:women_fitness_flutter/shared/model/section.dart';
@@ -96,7 +96,7 @@ class ItemTabBar {
   const ItemTabBar({this.title, this.iconData});
 }
 
-const List<ItemTabBar> listTab = [
-  ItemTabBar(title: 'WORKOUTS', iconData: Icons.fitness_center),
-  ItemTabBar(title: 'ROUTINES', iconData: Icons.add_alert),
+final List<ItemTabBar> listTab = [
+  ItemTabBar(title: S.current.workout_1.toUpperCase(), iconData: Icons.fitness_center),
+  ItemTabBar(title: S.current.workout_2.toUpperCase(), iconData: Icons.add_alert),
 ];

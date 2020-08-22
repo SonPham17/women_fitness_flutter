@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:women_fitness_flutter/generated/l10n.dart';
 import 'package:women_fitness_flutter/shared/app_color.dart';
 import 'package:women_fitness_flutter/shared/utils.dart';
 import 'package:women_fitness_flutter/shared/widget/text_app.dart';
@@ -38,8 +39,8 @@ class _DialogSettingTimeState extends State<DialogSettingTime> {
           children: [
             TextApp(
               content: widget.isRestSet
-                  ? 'Set duration (15 ~ 180 secs)'
-                  : 'Set duration (10 ~ 30 secs)',
+                  ? '${S.current.dialog_set_duration} (15 ~ 180 ${S.current.dialog_second})'
+                  : '${S.current.dialog_set_duration} (10 ~ 30 ${S.current.dialog_second})',
               size: 20,
             ),
             Expanded(
@@ -101,7 +102,7 @@ class _DialogSettingTimeState extends State<DialogSettingTime> {
                     ],
                   ),
                   TextApp(
-                    content: 'secs',
+                    content: S.current.dialog_second,
                   )
                 ],
               ),
@@ -114,7 +115,7 @@ class _DialogSettingTimeState extends State<DialogSettingTime> {
                     Navigator.of(context).pop();
                   },
                   child: TextApp(
-                    content: 'cancel'.toUpperCase(),
+                    content: S.current.dialog_picker_cancel.toUpperCase(),
                     textColor: AppColor.main,
                   ),
                 ),
@@ -123,7 +124,7 @@ class _DialogSettingTimeState extends State<DialogSettingTime> {
                     Navigator.of(context).pop(widget.time);
                   },
                   child: TextApp(
-                    content: 'set'.toUpperCase(),
+                    content: S.current.dialog_set.toUpperCase(),
                     textColor: AppColor.main,
                   ),
                 )

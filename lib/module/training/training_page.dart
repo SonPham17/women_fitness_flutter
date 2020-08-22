@@ -134,7 +134,7 @@ class _TrainingPageState extends State<TrainingPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             TextApp(
-              content: title,
+              content: title.toUpperCase(),
               textColor: Colors.black,
               size: 15,
               fontWeight: FontWeight.bold,

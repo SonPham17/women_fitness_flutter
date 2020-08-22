@@ -61,7 +61,6 @@ class ResponsiveDialog extends StatefulWidget
 }
 
 class _ResponsiveDialogState extends State<ResponsiveDialog> {
-  Color _headerColor;
   Color _backgroundColor;
   Color _buttonTextColor;
 
@@ -125,7 +124,6 @@ class _ResponsiveDialogState extends State<ResponsiveDialog> {
     assert(context != null);
 
     var theme = Theme.of(context);
-    _headerColor = widget.headerColor ?? theme.primaryColor;
     _buttonTextColor = widget.buttonTextColor ?? theme.textTheme.button.color;
     _backgroundColor = widget.backgroundColor ?? theme.dialogBackgroundColor;
 

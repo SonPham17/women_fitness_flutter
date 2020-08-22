@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:like_button/like_button.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
+import 'package:women_fitness_flutter/generated/l10n.dart';
 import 'package:women_fitness_flutter/injector/injector.dart';
 import 'package:women_fitness_flutter/module/training/favorite/favorite_training_page.dart';
 import 'package:women_fitness_flutter/module/workout/routines/workout_routines_bloc.dart';
@@ -17,7 +18,7 @@ class WorkOutRoutinesPage extends StatefulWidget {
   final List<Section> listSections;
   final List<WorkOut> listWorkOuts;
 
-  WorkOutRoutinesPage({this.listSections,this.listWorkOuts});
+  WorkOutRoutinesPage({this.listSections, this.listWorkOuts});
 
   @override
   _WorkOutRoutinesPageState createState() => _WorkOutRoutinesPageState();
@@ -54,14 +55,15 @@ class _WorkOutRoutinesPageState extends State<WorkOutRoutinesPage>
                   child: Center(
                     child: TextApp(
                       content:
-                          'Click \u{2665} to add workouts to the Training page.',
+                          '${S.current.workout_click_1} \u{2665} ${S.current.workout_click_2}',
                       size: SizeConfig.defaultSize * 1.7,
                       textAlign: TextAlign.center,
                     ),
                   ),
                 ),
                 Divider(),
-                _buildWorkOut(widget.listSections.sublist(10, 12), 'ROUTINE'),
+                _buildWorkOut(widget.listSections.sublist(10, 12),
+                    S.current.workout_2.toUpperCase()),
               ],
             ),
           );
@@ -96,7 +98,6 @@ class _WorkOutRoutinesPageState extends State<WorkOutRoutinesPage>
       );
 
   Widget _buildItemWorkOut(Section section) {
-    double defaultSize = SizeConfig.defaultSize;
     return Container(
       margin: EdgeInsets.only(bottom: 15),
       child: AspectRatio(
@@ -195,7 +196,8 @@ class _WorkOutRoutinesPageState extends State<WorkOutRoutinesPage>
                           ),
                           TextApp(
                             size: 13,
-                            content: '${section.workoutsId.length} workouts',
+                            content:
+                                '${section.workoutsId.length} ${S.current.training_workouts}',
                             textColor: Colors.white,
                           )
                         ],

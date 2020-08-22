@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:flutter/cupertino.dart';
 import 'package:women_fitness_flutter/shared/model/description_language.dart';
 import 'package:women_fitness_flutter/shared/model/title_language.dart';
 

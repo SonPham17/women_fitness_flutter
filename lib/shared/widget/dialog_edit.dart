@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:women_fitness_flutter/data/spref/spref.dart';
+import 'package:women_fitness_flutter/generated/l10n.dart';
 import 'package:women_fitness_flutter/module/report/report_bloc.dart';
 import 'package:women_fitness_flutter/module/report/report_events.dart';
 import 'package:women_fitness_flutter/shared/app_color.dart';
@@ -56,7 +57,7 @@ class _DialogEditState extends State<DialogEdit> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 TextApp(
-                  content: 'Weight',
+                  content: S.current.setting_weight,
                   size: 25,
                   textColor: Colors.black,
                   fontWeight: FontWeight.bold,
@@ -174,7 +175,7 @@ class _DialogEditState extends State<DialogEdit> {
                   height: 20,
                 ),
                 TextApp(
-                  content: 'Height',
+                  content: S.current.report_height,
                   size: 25,
                   textColor: Colors.black,
                   fontWeight: FontWeight.bold,
@@ -299,7 +300,7 @@ class _DialogEditState extends State<DialogEdit> {
                         Navigator.of(context).pop();
                       },
                       child: TextApp(
-                        content: 'CANCEL',
+                        content: S.current.dialog_picker_cancel.toUpperCase(),
                         textColor: AppColor.main,
                         size: 18,
                       ),
@@ -323,7 +324,7 @@ class _DialogEditState extends State<DialogEdit> {
                         }
                       },
                       child: TextApp(
-                        content: 'SAVE',
+                        content: S.current.edit_save.toUpperCase(),
                         textColor: AppColor.main,
                         size: 18,
                       ),

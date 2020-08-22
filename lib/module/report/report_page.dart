@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:women_fitness_flutter/data/spref/spref.dart';
+import 'package:women_fitness_flutter/generated/l10n.dart';
 import 'package:women_fitness_flutter/injector/injector.dart';
 import 'package:women_fitness_flutter/module/report/report_bloc.dart';
 import 'package:women_fitness_flutter/module/report/report_states.dart';
@@ -23,7 +24,8 @@ class ReportPage extends StatefulWidget {
 class _ReportPageState extends State<ReportPage> {
   ReportBloc _reportBloc;
 
-  String weekTraining = '4';
+  int weekTraining = 0;
+
   double calculatorBMI;
   String statusWeight;
   double currentHeight;
@@ -62,6 +64,12 @@ class _ReportPageState extends State<ReportPage> {
         .then((value) => currentHeight = value);
 
     SPref.instance.getDouble(Utils.sPrefWeight).then((value) => weight = value);
+
+    SPref.instance.getInt(Utils.sPrefWeekGoal).then((value) {
+      setState(() {
+        weekTraining = value ?? 2;
+      });
+    });
   }
 
   @override
@@ -77,7 +85,7 @@ class _ReportPageState extends State<ReportPage> {
                 Scaffold.of(context).showSnackBar(
                   SnackBar(
                     content: TextApp(
-                      content: 'Weight and Height is empty',
+                      content: S.current.report_empty,
                     ),
                     backgroundColor: AppColor.main,
                     duration: Duration(seconds: 1),
@@ -87,7 +95,6 @@ class _ReportPageState extends State<ReportPage> {
                   Scaffold.of(context).hideCurrentSnackBar();
                 });
               } else if (state is ReportStateRefresh) {
-                print('run finish refresh');
                 double heightRefresh = state.height;
                 double weightRefresh = state.weight;
                 setState(() {
@@ -108,9 +115,11 @@ class _ReportPageState extends State<ReportPage> {
                 Divider(),
                 _buildHeight(),
                 Divider(),
-                _buildChart('Calories burned, estimated', 'Calories'),
+                _buildChart(
+                    S.current.report_chart_1, S.current.report_chart_1_1),
                 Divider(),
-                _buildChart('Exercises', 'Number'),
+                _buildChart(
+                    S.current.report_chart_2, S.current.report_chart_2_1),
               ],
             ),
           ),
@@ -148,7 +157,7 @@ class _ReportPageState extends State<ReportPage> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 TextApp(
-                  content: 'Height',
+                  content: S.current.report_height,
                   textColor: Colors.black,
                   size: 17,
                 ),
@@ -156,7 +165,7 @@ class _ReportPageState extends State<ReportPage> {
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: TextApp(
-                      content: 'EDIT',
+                      content: S.current.report_edit.toUpperCase(),
                       textColor: AppColor.main,
                       size: 17,
                     ),
@@ -189,7 +198,7 @@ class _ReportPageState extends State<ReportPage> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       TextApp(
-                        content: 'Current',
+                        content: S.current.report_current,
                         textColor: AppColor.main,
                         size: 17,
                       ),
@@ -231,18 +240,19 @@ class _ReportPageState extends State<ReportPage> {
                         .toStringAsFixed(1));
               } else {
                 calculatorBMI = double.parse(Utils.calculatorBMI(
-                        Utils.convertFtToCm(currentHeight), Utils.convertLbsToKg(weight))
+                        Utils.convertFtToCm(currentHeight),
+                        Utils.convertLbsToKg(weight))
                     .toStringAsFixed(1));
               }
 
               if (calculatorBMI < 18.5) {
-                statusWeight = 'Underweight';
+                statusWeight = S.current.report_underweight;
               } else if (calculatorBMI >= 18.5 && calculatorBMI < 25.0) {
-                statusWeight = 'Normal weight';
+                statusWeight = S.current.report_normal_weight;
               } else if (calculatorBMI < 25.0 || calculatorBMI >= 30.0) {
-                statusWeight = 'Obesity';
+                statusWeight = S.current.report_obesity;
               } else {
-                statusWeight = 'Overweight';
+                statusWeight = S.current.report_overweight;
               }
 
               return Column(
@@ -268,7 +278,7 @@ class _ReportPageState extends State<ReportPage> {
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: TextApp(
-                            content: 'EDIT',
+                            content: S.current.report_edit.toUpperCase(),
                             textColor: AppColor.main,
                             size: 17,
                           ),
@@ -444,7 +454,7 @@ class _ReportPageState extends State<ReportPage> {
               child: Row(
                 children: <Widget>[
                   TextApp(
-                    content: 'WEEK GOAL',
+                    content: S.current.training_wg.toUpperCase(),
                     size: 20,
                     fontWeight: FontWeight.bold,
                   ),
@@ -456,7 +466,9 @@ class _ReportPageState extends State<ReportPage> {
                       onTap: () {
                         pushNewScreen(
                           context,
-                          screen: EditWeekGoalPage(),
+                          screen: EditWeekGoalPage(
+                            weeklyTraining: weekTraining,
+                          ),
                           pageTransitionAnimation:
                               PageTransitionAnimation.cupertino,
                           withNavBar: false,
@@ -464,6 +476,8 @@ class _ReportPageState extends State<ReportPage> {
                           if (value != null) {
                             setState(() {
                               weekTraining = value;
+                              SPref.instance
+                                  .setInt(Utils.sPrefWeekGoal, weekTraining);
                             });
                           }
                         });
@@ -553,7 +567,7 @@ class _ReportPageState extends State<ReportPage> {
                 bottom: 10,
               ),
               child: TextApp(
-                content: 'TOTAL',
+                content: S.current.training_total.toUpperCase(),
                 size: 20,
                 fontWeight: FontWeight.bold,
               ),
@@ -569,7 +583,7 @@ class _ReportPageState extends State<ReportPage> {
                       textColor: AppColor.main,
                     ),
                     TextApp(
-                      content: 'WORKOUTS',
+                      content: S.current.training_workouts.toUpperCase(),
                       size: 18,
                     )
                   ],
@@ -595,7 +609,7 @@ class _ReportPageState extends State<ReportPage> {
                       textColor: AppColor.main,
                     ),
                     TextApp(
-                      content: 'MINUTES',
+                      content: S.current.training_minutes.toUpperCase(),
                       size: 18,
                     )
                   ],

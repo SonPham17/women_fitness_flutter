@@ -2,13 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:intl/date_symbol_data_local.dart';
-import 'package:intl/intl.dart';
 import 'package:women_fitness_flutter/db/women_fitness_database.dart';
 import 'package:women_fitness_flutter/generated/l10n.dart';
 import 'package:women_fitness_flutter/injector/injector.dart';
+import 'package:women_fitness_flutter/module/first_install/first_install_next_page.dart';
+import 'package:women_fitness_flutter/module/first_install/first_install_page.dart';
 import 'package:women_fitness_flutter/module/home/home_page.dart';
-import 'package:women_fitness_flutter/module/run/workout/run_workout_page.dart';
 import 'package:women_fitness_flutter/module/setting/profile/profile_page.dart';
 import 'package:women_fitness_flutter/module/splash/splash_page.dart';
 import 'package:women_fitness_flutter/shared/app_color.dart';
@@ -48,6 +47,8 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       routes: <String, WidgetBuilder>{
         '/': (context) => SplashPage(),
+        '/first_install': (context) => FirstInstallPage(),
+        '/first_install_next': (context) => FirstInstallNextPage(),
         '/home': (context) => HomePage(),
         '/settings/profile': (context) => ProfilePage(),
       },

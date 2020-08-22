@@ -1,4 +1,3 @@
-import 'package:equatable/equatable.dart';
 import 'package:women_fitness_flutter/shared/model/section.dart';
 
 abstract class WorkOutHomeEvent{

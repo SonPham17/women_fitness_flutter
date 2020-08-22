@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:like_button/like_button.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
-import 'package:women_fitness_flutter/data/spref/spref.dart';
+import 'package:women_fitness_flutter/generated/l10n.dart';
 import 'package:women_fitness_flutter/injector/injector.dart';
 import 'package:women_fitness_flutter/module/training/favorite/favorite_training_page.dart';
 import 'package:women_fitness_flutter/module/workout/home/workout_home_bloc.dart';
@@ -59,22 +59,22 @@ class _WorkOutHomePageState extends State<WorkOutHomePage>
                   child: Center(
                     child: TextApp(
                       content:
-                          'Click \u{2665} to add workouts to the Training page.',
+                          '${S.current.workout_click_1} \u{2665} ${S.current.workout_click_2}',
                       size: SizeConfig.defaultSize * 1.7,
                       textAlign: TextAlign.center,
                     ),
                   ),
                 ),
                 Divider(),
-                _buildWorkOut(widget.listSections.sublist(0, 3), 'ABS WORKOUT'),
+                _buildWorkOut(widget.listSections.sublist(0, 3), S.current.workout_abs.toUpperCase()),
                 Divider(),
                 _buildWorkOut(
-                    widget.listSections.sublist(3, 6), 'BUTT WORKOUT'),
+                    widget.listSections.sublist(3, 6), S.current.workout_butt.toUpperCase()),
                 Divider(),
-                _buildWorkOut(widget.listSections.sublist(6, 7), 'ARM WORKOUT'),
+                _buildWorkOut(widget.listSections.sublist(6, 7), S.current.workout_arm.toUpperCase()),
                 Divider(),
                 _buildWorkOut(
-                    widget.listSections.sublist(7, 10), 'THIGH WORKOUT'),
+                    widget.listSections.sublist(7, 10), S.current.workout_thigh.toUpperCase()),
               ],
             ),
           );
@@ -108,7 +108,6 @@ class _WorkOutHomePageState extends State<WorkOutHomePage>
       );
 
   Widget _buildItemWorkOut(Section section) {
-    double defaultSize = SizeConfig.defaultSize;
     return Container(
       margin: EdgeInsets.only(bottom: 15),
       child: AspectRatio(
@@ -207,7 +206,7 @@ class _WorkOutHomePageState extends State<WorkOutHomePage>
                           ),
                           TextApp(
                             size: 13,
-                            content: '${section.workoutsId.length} workouts',
+                            content: '${section.workoutsId.length} ${S.current.training_workouts}',
                             textColor: Colors.white,
                           )
                         ],

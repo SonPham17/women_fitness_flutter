@@ -2,9 +2,12 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_share/flutter_share.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
+import 'package:rate_my_app/rate_my_app.dart';
 import 'package:women_fitness_flutter/data/spref/spref.dart';
+import 'package:women_fitness_flutter/generated/l10n.dart';
 import 'package:women_fitness_flutter/module/setting/profile/profile_page.dart';
 import 'package:women_fitness_flutter/shared/app_color.dart';
 import 'package:women_fitness_flutter/shared/utils.dart';
@@ -20,6 +23,16 @@ class SettingPage extends StatefulWidget {
 }
 
 class _SettingPageState extends State<SettingPage> {
+  RateMyApp _rateMyApp = RateMyApp(
+    preferencesPrefix: 'rateMyApp',
+    minDays: 3,
+    minLaunches: 7,
+    remindDays: 2,
+    remindLaunches: 5,
+//    appStoreIdentifier: '',
+//    googlePlayIdentifier: '',
+  );
+
   FlutterTts flutterTts;
   dynamic languages;
   int indexVoiceLanguage = 1;
@@ -97,7 +110,7 @@ class _SettingPageState extends State<SettingPage> {
                   withNavBar: false,
                 );
               },
-              title: 'My profile',
+              title: S.current.setting_profile,
               iconData: Icons.edit,
             ),
             Container(
@@ -107,7 +120,7 @@ class _SettingPageState extends State<SettingPage> {
               child: Align(
                 alignment: Alignment.centerLeft,
                 child: TextApp(
-                  content: 'workout'.toUpperCase(),
+                  content: S.current.setting_workout.toUpperCase(),
                   textColor: AppColor.main,
                 ),
               ),
@@ -134,14 +147,14 @@ class _SettingPageState extends State<SettingPage> {
                 });
               },
               isShowTime: true,
-              title: 'Rest set',
-              selection: '$timeSet secs',
+              title: S.current.setting_rest_set,
+              selection: '$timeSet ${S.current.dialog_second}',
               iconData: Icons.local_cafe,
             ),
             ItemSettingWidget(
               isShowTime: true,
-              selection: '$countDownTime secs',
-              title: 'Countdown Time',
+              selection: '$countDownTime ${S.current.dialog_second}',
+              title: S.current.setting_countdown_time,
               iconData: Icons.timer,
               function: () {
                 showDialog(
@@ -161,7 +174,7 @@ class _SettingPageState extends State<SettingPage> {
               },
             ),
             ItemSettingWidget(
-              title: 'Sound',
+              title: S.current.setting_sound,
               iconData: Icons.volume_up,
               function: () {
                 showDialog(
@@ -177,7 +190,7 @@ class _SettingPageState extends State<SettingPage> {
               child: Align(
                 alignment: Alignment.centerLeft,
                 child: TextApp(
-                  content: 'voice options (tts)'.toUpperCase(),
+                  content: S.current.setting_voice_option.toUpperCase(),
                   textColor: AppColor.main,
                 ),
               ),
@@ -187,15 +200,15 @@ class _SettingPageState extends State<SettingPage> {
               color: Colors.grey[400],
             ),
             ItemSettingWidget(
-              title: 'Test Voice',
+              title: S.current.setting_test_voice,
               iconData: Icons.record_voice_over,
               function: () {
-                flutterTts.speak('Did you hear the test voice?');
+                flutterTts.speak(S.current.setting_test_speak);
               },
             ),
             ItemSettingWidget(
               selection: voiceLanguageSelection,
-              title: 'Voice language',
+              title: S.current.setting_voice_language,
               function: () {
                 showDialog(
                   context: context,
@@ -223,7 +236,7 @@ class _SettingPageState extends State<SettingPage> {
               child: Align(
                 alignment: Alignment.centerLeft,
                 child: TextApp(
-                  content: 'general'.toUpperCase(),
+                  content: S.current.setting_general.toUpperCase(),
                   textColor: AppColor.main,
                 ),
               ),
@@ -232,19 +245,20 @@ class _SettingPageState extends State<SettingPage> {
               height: 1,
               color: Colors.grey[400],
             ),
+//            ItemSettingWidget(
+//              isShowTime: true,
+//              selection: 'English',
+//              title: S.current.setting_language,
+//              iconData: Icons.translate,
+//            ),
             ItemSettingWidget(
-              isShowTime: true,
-              selection: 'English',
-              title: 'Language',
-              iconData: Icons.translate,
-            ),
-            ItemSettingWidget(
-              title: 'Restart Progress',
+              title: S.current.setting_restart_progress,
               iconData: Icons.refresh,
             ),
             ItemSettingWidget(
-              title: 'Share with friends',
+              title: S.current.setting_share,
               iconData: Icons.share,
+              function: share,
             ),
             Container(
               height: 50,
@@ -253,7 +267,7 @@ class _SettingPageState extends State<SettingPage> {
               child: Align(
                 alignment: Alignment.centerLeft,
                 child: TextApp(
-                  content: 'support'.toUpperCase(),
+                  content: S.current.setting_support.toUpperCase(),
                   textColor: AppColor.main,
                 ),
               ),
@@ -263,17 +277,67 @@ class _SettingPageState extends State<SettingPage> {
               color: Colors.grey[400],
             ),
             ItemSettingWidget(
-              title: 'Rate us 5',
+              title: S.current.setting_rate,
               iconData: Icons.star,
+              function: clickRate,
             ),
             ItemSettingWidget(
-              title: 'Feedback',
+              title: S.current.setting_feedback,
               iconData: Icons.feedback,
+              function: feedback,
             ),
           ],
         ),
       ),
     );
+  }
+
+  Future<void> share() async {
+    await FlutterShare.share(
+        title: 'Example share',
+        text: 'Example share text',
+        linkUrl: 'https://flutter.dev/',
+        chooserTitle: 'Example Chooser Title');
+  }
+
+  void clickRate() {
+    _rateMyApp.init().then((value) {
+      _rateMyApp.showStarRateDialog(
+        context,
+        title: 'Women Fitness App',
+        message: 'Please leave a rating!',
+        actionsBuilder: (context, starts) {
+          return [
+            FlatButton(
+              child: Text('Ok'),
+              onPressed: () {
+                if (starts != null) {
+                  _rateMyApp
+                      .callEvent(RateMyAppEventType.rateButtonPressed)
+                      .then((_) => Navigator.pop<RateMyAppDialogButton>(
+                      context, RateMyAppDialogButton.rate));
+                }
+              },
+            )
+          ];
+        },
+        dialogStyle: DialogStyle(
+          titleAlign: TextAlign.center,
+          messageAlign: TextAlign.center,
+          messagePadding: EdgeInsets.only(bottom: 20.0),
+        ),
+        starRatingOptions: StarRatingOptions(),
+      );
+    });
+  }
+
+
+  Future<void> feedback() async {
+    await FlutterShare.share(
+        title: 'Phản hồi',
+        text: 'Liên hệ phản hồi: ',
+        linkUrl: 'womenfitness@gmail.com',
+        chooserTitle: 'Feedback Chooser Title');
   }
 
   @override

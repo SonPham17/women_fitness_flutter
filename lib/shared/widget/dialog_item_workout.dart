@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:women_fitness_flutter/generated/l10n.dart';
 import 'package:women_fitness_flutter/injector/injector.dart';
 import 'package:women_fitness_flutter/module/training/favorite/favorite_training_bloc.dart';
 import 'package:women_fitness_flutter/module/training/favorite/favorite_training_events.dart';
@@ -212,7 +213,7 @@ class _DialogItemWorkOutState extends State<DialogItemWorkOut> {
                             padding: EdgeInsets.all(10),
                             textColor: Colors.white,
                             child: TextApp(
-                              content: 'RESET',
+                              content: S.current.training_reset.toUpperCase(),
                               size: 20,
                             ),
                           ),
@@ -231,7 +232,7 @@ class _DialogItemWorkOutState extends State<DialogItemWorkOut> {
                             color: AppColor.main,
                             textColor: Colors.white,
                             child: TextApp(
-                              content: 'SAVE',
+                              content: S.current.edit_save.toUpperCase(),
                               size: 20,
                             ),
                           ),

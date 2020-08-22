@@ -158,7 +158,7 @@ class _EditWeekGoalPageState extends State<EditWeekGoalPage> {
                     ),
                   ),
                 ),
-              )
+              ),
             ],
           ),
         ),

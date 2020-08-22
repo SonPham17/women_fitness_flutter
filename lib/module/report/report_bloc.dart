@@ -1,7 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:women_fitness_flutter/module/report/report_events.dart';
 import 'package:women_fitness_flutter/module/report/report_states.dart';
-import 'package:women_fitness_flutter/shared/utils.dart';
 
 class ReportBloc extends Bloc<ReportEvent, ReportState> {
   ReportBloc() : super(ReportStateInitial());

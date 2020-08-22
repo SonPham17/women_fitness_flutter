@@ -3,8 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:women_fitness_flutter/data/repo/training_repo.dart';
 import 'package:women_fitness_flutter/module/training/favorite/favorite_training_events.dart';
 import 'package:women_fitness_flutter/module/training/favorite/favorite_training_states.dart';
-import 'package:women_fitness_flutter/shared/model/section.dart';
-import 'package:women_fitness_flutter/shared/model/work_out.dart';
 
 class FavoriteTrainingBloc
     extends Bloc<FavoriteTrainingEvent, FavoriteTrainingState> {

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:women_fitness_flutter/data/spref/spref.dart';
+import 'package:women_fitness_flutter/generated/l10n.dart';
 import 'package:women_fitness_flutter/shared/app_color.dart';
 import 'package:women_fitness_flutter/shared/utils.dart';
 import 'package:women_fitness_flutter/shared/widget/text_app.dart';
@@ -58,7 +59,7 @@ class _DialogSoundOptionState extends State<DialogSoundOption> {
               textColor: Colors.black,
               fontWeight: FontWeight.bold,
               size: 20,
-              content: 'Sound options',
+              content: S.current.dialog_sound_op,
             ),
             SizedBox(
               height: 10,
@@ -71,7 +72,7 @@ class _DialogSoundOptionState extends State<DialogSoundOption> {
                 ),
                 Expanded(
                   child: TextApp(
-                    content: 'Mute',
+                    content: S.current.dialog_sound_mute,
                   ),
                 ),
                 Switch(
@@ -80,6 +81,10 @@ class _DialogSoundOptionState extends State<DialogSoundOption> {
                   onChanged: (newValue) {
                     setState(() {
                       mute = newValue;
+                      if (mute) {
+                        voiceGuide = false;
+                        coachTips = false;
+                      }
                     });
                   },
                 )
@@ -93,16 +98,18 @@ class _DialogSoundOptionState extends State<DialogSoundOption> {
                 ),
                 Expanded(
                   child: TextApp(
-                    content: 'Voice guide',
+                    content: S.current.dialog_sound_voice_guide,
                   ),
                 ),
                 Switch(
                   value: voiceGuide,
                   activeColor: AppColor.main,
                   onChanged: (newValue) {
-                    setState(() {
-                      voiceGuide = newValue;
-                    });
+                    if (!mute) {
+                      setState(() {
+                        voiceGuide = newValue;
+                      });
+                    }
                   },
                 )
               ],
@@ -115,16 +122,18 @@ class _DialogSoundOptionState extends State<DialogSoundOption> {
                 ),
                 Expanded(
                   child: TextApp(
-                    content: 'Coach tips',
+                    content: S.current.dialog_sound_coach_tips,
                   ),
                 ),
                 Switch(
                   value: coachTips,
                   activeColor: AppColor.main,
                   onChanged: (newValue) {
-                    setState(() {
-                      coachTips = newValue;
-                    });
+                    if (!mute) {
+                      setState(() {
+                        coachTips = newValue;
+                      });
+                    }
                   },
                 )
               ],
@@ -134,7 +143,7 @@ class _DialogSoundOptionState extends State<DialogSoundOption> {
                 alignment: Alignment.bottomRight,
                 child: FlatButton(
                   child: TextApp(
-                    content: 'OK',
+                    content: S.current.dialog_picker_ok.toUpperCase(),
                     textColor: AppColor.main,
                   ),
                   onPressed: () {

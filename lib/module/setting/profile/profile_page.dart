@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:women_fitness_flutter/data/spref/spref.dart';
+import 'package:women_fitness_flutter/generated/l10n.dart';
 import 'package:women_fitness_flutter/injector/injector.dart';
 import 'package:women_fitness_flutter/module/setting/profile/profile_bloc.dart';
 import 'package:women_fitness_flutter/module/setting/profile/profile_events.dart';
@@ -8,6 +9,7 @@ import 'package:women_fitness_flutter/module/setting/profile/profile_states.dart
 import 'package:women_fitness_flutter/shared/app_color.dart';
 import 'package:women_fitness_flutter/shared/size_config.dart';
 import 'package:women_fitness_flutter/shared/utils.dart';
+import 'package:women_fitness_flutter/shared/widget/dialog_edit.dart';
 import 'package:women_fitness_flutter/shared/widget/text_app.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -50,7 +52,7 @@ class _ProfilePageState extends State<ProfilePage> {
           return Scaffold(
             appBar: AppBar(
               title: TextApp(
-                content: 'profile'.toUpperCase(),
+                content: S.current.setting_profile.toUpperCase(),
               ),
             ),
             body: FutureBuilder<bool>(
@@ -65,7 +67,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         TextApp(
-                          content: 'Units',
+                          content: S.current.setting_units,
                           size: 20,
                         ),
                         Row(
@@ -141,27 +143,24 @@ class _ProfilePageState extends State<ProfilePage> {
                           ],
                         ),
                         TextApp(
-                          content: 'Weight',
+                          content: S.current.setting_weight,
                           size: 20,
                         ),
                         InkWell(
                           onTap: () {
-                            _profileBloc.add(ProfileRefreshEvent());
-//                showDialog(
-//                  context: context,
-//                  builder: (_) => DialogPicker(
-//                    title: 'Weekly training days',
-//                    items: itemsWeekly,
-//                    initValue: weeklyTraining,
-//                  ),
-//                  barrierDismissible: true,
-//                ).then((value) {
-//                  if (value != null) {
-//                    setState(() {
-//                      weeklyTraining = value;
-//                    });
-//                  }
-//                });
+                            showDialog(
+                              context: context,
+                              builder: (context) => DialogEdit(
+                                isStartReportPage: false,
+                              ),
+                            ).then((value) {
+                              if (value != null) {
+                                setState(() {
+                                  weight = double.parse(value[0]);
+                                  height = double.parse(value[1]);
+                                });
+                              }
+                            });
                           },
                           child: Container(
                             width: MediaQuery.of(context).size.width,
@@ -190,16 +189,24 @@ class _ProfilePageState extends State<ProfilePage> {
                           height: 30,
                         ),
                         TextApp(
-                          content: 'Height',
+                          content: S.current.report_height,
                           size: 20,
                         ),
                         InkWell(
                           onTap: () {
-//                showDialog(
-//                  context: context,
-//                  builder: (context) => DialogEdit(
-//                  ),
-//                );
+                            showDialog(
+                              context: context,
+                              builder: (context) => DialogEdit(
+                                isStartReportPage: false,
+                              ),
+                            ).then((value) {
+                              if (value != null) {
+                                setState(() {
+                                  weight = double.parse(value[0]);
+                                  height = double.parse(value[1]);
+                                });
+                              }
+                            });
                           },
                           child: Container(
                             width: MediaQuery.of(context).size.width,
@@ -228,27 +235,11 @@ class _ProfilePageState extends State<ProfilePage> {
                           height: 30,
                         ),
                         TextApp(
-                          content: 'Year of Birth',
+                          content: S.current.setting_birth,
                           size: 20,
                         ),
                         InkWell(
-                          onTap: () {
-//                showDialog(
-//                  context: context,
-//                  builder: (_) => DialogPicker(
-//                    title: 'Weekly training days',
-//                    items: itemsWeekly,
-//                    initValue: weeklyTraining,
-//                  ),
-//                  barrierDismissible: true,
-//                ).then((value) {
-//                  if (value != null) {
-//                    setState(() {
-//                      weeklyTraining = value;
-//                    });
-//                  }
-//                });
-                          },
+                          onTap: () {},
                           child: Container(
                             width: MediaQuery.of(context).size.width,
                             margin: EdgeInsets.only(

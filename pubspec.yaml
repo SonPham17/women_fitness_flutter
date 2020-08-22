@@ -50,6 +50,9 @@ dependencies:
   flutter_tts: ^1.2.6
   intl: ^0.16.1
   grouped_buttons: ^1.0.4
+  flutter_share: ^1.0.2+1
+  rate_my_app: ^0.7.0
+  kenburns: ^1.0.3
 
 dev_dependencies:
   flutter_test:

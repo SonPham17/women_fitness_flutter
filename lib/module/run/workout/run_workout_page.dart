@@ -7,10 +7,14 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
+import 'package:women_fitness_flutter/data/spref/spref.dart';
+import 'package:women_fitness_flutter/generated/l10n.dart';
 import 'package:women_fitness_flutter/module/run/finish/run_finish_page.dart';
 import 'package:women_fitness_flutter/module/run/splash/run_splash_page.dart';
 import 'package:women_fitness_flutter/shared/app_color.dart';
 import 'package:women_fitness_flutter/shared/model/work_out.dart';
+import 'package:women_fitness_flutter/shared/utils.dart';
+import 'package:women_fitness_flutter/shared/widget/dialog_sound_option.dart';
 import 'package:women_fitness_flutter/shared/widget/text_app.dart';
 
 class RunWorkOutPage extends StatefulWidget {
@@ -31,6 +35,7 @@ class _RunWorkOutPageState extends State<RunWorkOutPage>
   FlutterTts flutterTts;
 
   AnimationController _animationController;
+  bool isPlayingAnimation = true;
   int time;
   double _progressValue;
   Timer _timerProgress;
@@ -42,6 +47,9 @@ class _RunWorkOutPageState extends State<RunWorkOutPage>
   double pitch = 1.0;
   double rate = 0.5;
   List<int> listInt;
+
+  bool mute;
+  bool voiceGuide;
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
@@ -67,6 +75,8 @@ class _RunWorkOutPageState extends State<RunWorkOutPage>
 
     initTts();
 
+    setSoundFromSetting();
+
     _animationController = AnimationController(
       duration: Duration(seconds: 2),
       vsync: this,
@@ -76,35 +86,27 @@ class _RunWorkOutPageState extends State<RunWorkOutPage>
     _progressValue = 0.0;
 
     Future.delayed(Duration(seconds: 1), () {
-      assetsAudioPlayer.open(
-        Audio('assets/audio/play_background.mp3'),
-        respectSilentMode: true,
-      );
-      assetsAudioPlayer.toggleLoop();
-      assetsAudioPlayer.loopMode.listen((loopMode) {
-        if (loopMode == LoopMode.none) {
-          assetsAudioPlayer.setLoopMode(LoopMode.single);
-        }
-      });
-
       if (workOut.type == 0) {
         _timerProgress = Timer.periodic(Duration(seconds: 1), (timer) {
           if (!isPaused) {
             setState(() {
               time--;
               _progressValue += 1 / workOut.timeDefault;
-              if (time == 10) {
-                flutterTts.speak('Ten seconds left');
+              if (!mute) {
+                if (time == 10) {
+                  flutterTts.speak(S.current.run_10);
+                }
+                if (time == 3) {
+                  flutterTts.speak(S.current.run_3);
+                }
+                if (time == 2) {
+                  flutterTts.speak(S.current.run_2);
+                }
+                if (time == 1) {
+                  flutterTts.speak(S.current.run_1);
+                }
               }
-              if (time == 3) {
-                flutterTts.speak('three');
-              }
-              if (time == 2) {
-                flutterTts.speak('two');
-              }
-              if (time == 1) {
-                flutterTts.speak('one');
-              }
+
               if (time < 1) {
                 timer.cancel();
                 if (widget.index == widget.listWorkOutBySection.length - 1) {
@@ -131,14 +133,43 @@ class _RunWorkOutPageState extends State<RunWorkOutPage>
           }
         });
       }
-
-      _speak();
     });
+  }
+
+  Future<void> setSoundFromSetting() async {
+    mute = await SPref.instance.getBool(Utils.sPrefSoundMute) ?? false;
+    voiceGuide =
+        await SPref.instance.getBool(Utils.sPrefSoundVoiceGuide) ?? true;
+
+    await flutterTts.setVolume(volume);
+    await flutterTts.setSpeechRate(rate);
+    await flutterTts.setPitch(pitch);
+
+    if (!mute) {
+      assetsAudioPlayer.open(
+        Audio('assets/audio/play_background.mp3'),
+      );
+      assetsAudioPlayer.toggleLoop();
+      assetsAudioPlayer.loopMode.listen((loopMode) {
+        if (loopMode == LoopMode.none) {
+          assetsAudioPlayer.setLoopMode(LoopMode.single);
+        }
+      });
+      if (voiceGuide) {
+        _speak();
+      } else {
+        flutterTts.stop();
+      }
+    }
   }
 
   Future<void> initTts() async {
     flutterTts = FlutterTts();
-//    flutterTts.setLanguage('vi-VN');
+
+    int indexVoiceLanguage =
+        await SPref.instance.getInt(Utils.sPrefIndexVoiceLanguage) ?? 1;
+
+    flutterTts.setLanguage(Utils.listCodeLanguage[indexVoiceLanguage]);
 
     languages = await flutterTts.getLanguages;
 
@@ -156,12 +187,9 @@ class _RunWorkOutPageState extends State<RunWorkOutPage>
   }
 
   Future<void> _speak() async {
-    await flutterTts.setVolume(volume);
-    await flutterTts.setSpeechRate(rate);
-    await flutterTts.setPitch(pitch);
-
-    flutterTts.speak('Start with ${workOut.title}. Start '
-        '${workOut.timeDefault} seconds ${workOut.title}');
+    flutterTts.speak(
+        '${S.current.run_start_with} ${workOut.title}. ${S.current.run_start} '
+        '${workOut.timeDefault} ${S.current.run_seconds} ${workOut.title}');
   }
 
   @override
@@ -209,7 +237,12 @@ class _RunWorkOutPageState extends State<RunWorkOutPage>
                       Icons.volume_up,
                       color: Colors.black,
                     ),
-                    onPressed: () {},
+                    onPressed: () {
+                      showDialog(
+                        context: context,
+                        builder: (context) => DialogSoundOption(),
+                      );
+                    },
                   ),
                   AnimatedBuilder(
                     animation: _animationController,
@@ -222,7 +255,16 @@ class _RunWorkOutPageState extends State<RunWorkOutPage>
                         Icons.music_note,
                         color: AppColor.main,
                       ),
-                      onPressed: () {},
+                      onPressed: () {
+                        if (isPlayingAnimation) {
+                          assetsAudioPlayer.pause();
+                          _animationController.reset();
+                        } else {
+                          assetsAudioPlayer.play();
+                          _animationController.repeat();
+                        }
+                        isPlayingAnimation = !isPlayingAnimation;
+                      },
                     ),
                   ),
                 ],

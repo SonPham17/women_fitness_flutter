@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:women_fitness_flutter/data/spref/spref.dart';
+import 'package:women_fitness_flutter/generated/l10n.dart';
 import 'package:women_fitness_flutter/injector/injector.dart';
-import 'package:women_fitness_flutter/module/report/report_events.dart';
 import 'package:women_fitness_flutter/module/run/finish/run_finish_bloc.dart';
 import 'package:women_fitness_flutter/module/run/finish/run_finish_events.dart';
 import 'package:women_fitness_flutter/module/run/finish/run_finish_states.dart';
@@ -115,7 +115,7 @@ class _RunFinishPageState extends State<RunFinishPage> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   TextApp(
-                    content: 'Height',
+                    content: S.current.report_height,
                     textColor: Colors.black,
                     size: 17,
                   ),
@@ -123,7 +123,7 @@ class _RunFinishPageState extends State<RunFinishPage> {
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: TextApp(
-                        content: 'EDIT',
+                        content: S.current.report_edit.toUpperCase(),
                         textColor: AppColor.main,
                         size: 17,
                       ),
@@ -159,7 +159,7 @@ class _RunFinishPageState extends State<RunFinishPage> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         TextApp(
-                          content: 'Current',
+                          content: S.current.report_current,
                           textColor: AppColor.main,
                           size: 17,
                         ),
@@ -209,13 +209,13 @@ class _RunFinishPageState extends State<RunFinishPage> {
                 }
 
                 if (calculatorBMI < 18.5) {
-                  statusWeight = 'Underweight';
+                  statusWeight = S.current.report_underweight;
                 } else if (calculatorBMI >= 18.5 && calculatorBMI < 25.0) {
-                  statusWeight = 'Normal weight';
+                  statusWeight = S.current.report_normal_weight;
                 } else if (calculatorBMI < 25.0 || calculatorBMI >= 30.0) {
-                  statusWeight = 'Obesity';
+                  statusWeight = S.current.report_obesity;
                 } else {
-                  statusWeight = 'Overweight';
+                  statusWeight = S.current.report_overweight;
                 }
 
                 return Column(
@@ -241,7 +241,7 @@ class _RunFinishPageState extends State<RunFinishPage> {
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: TextApp(
-                              content: 'EDIT',
+                              content: S.current.report_edit.toUpperCase(),
                               textColor: AppColor.main,
                               size: 17,
                             ),
@@ -377,7 +377,7 @@ class _RunFinishPageState extends State<RunFinishPage> {
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               TextApp(
-                content: 'you rock!'.toUpperCase(),
+                content: S.current.run_you_rock.toUpperCase(),
                 size: 45,
                 fontWeight: FontWeight.bold,
                 textColor: Colors.white,
@@ -401,7 +401,7 @@ class _RunFinishPageState extends State<RunFinishPage> {
                         textColor: Colors.white,
                       ),
                       TextApp(
-                        content: 'Exercises',
+                        content: S.current.report_chart_2,
                         textColor: Colors.white,
                       )
                     ],
@@ -419,7 +419,7 @@ class _RunFinishPageState extends State<RunFinishPage> {
                         textColor: Colors.white,
                       ),
                       TextApp(
-                        content: 'Calories',
+                        content: S.current.report_chart_1_1,
                         textColor: Colors.white,
                       )
                     ],
@@ -437,7 +437,7 @@ class _RunFinishPageState extends State<RunFinishPage> {
                         textColor: Colors.white,
                       ),
                       TextApp(
-                        content: 'Minutes',
+                        content: S.current.run_minute,
                         textColor: Colors.white,
                       )
                     ],
@@ -460,7 +460,7 @@ class _RunFinishPageState extends State<RunFinishPage> {
                         color: Colors.grey,
                         textColor: Colors.white,
                         child: TextApp(
-                          content: 'DO IT AGAIN',
+                          content: S.current.run_again.toUpperCase(),
                           size: 20,
                         ),
                       ),
@@ -479,7 +479,7 @@ class _RunFinishPageState extends State<RunFinishPage> {
                         color: Colors.white,
                         textColor: Colors.black,
                         child: TextApp(
-                          content: 'SHARE',
+                          content: S.current.run_share.toUpperCase(),
                           size: 20,
                         ),
                       ),

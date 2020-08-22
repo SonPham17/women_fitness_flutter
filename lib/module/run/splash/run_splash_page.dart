@@ -8,6 +8,7 @@ import 'package:flutter_tts/flutter_tts.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:women_fitness_flutter/data/spref/spref.dart';
+import 'package:women_fitness_flutter/generated/l10n.dart';
 import 'package:women_fitness_flutter/module/run/workout/run_workout_page.dart';
 import 'package:women_fitness_flutter/shared/app_color.dart';
 import 'package:women_fitness_flutter/shared/model/work_out.dart';
@@ -38,6 +39,9 @@ class _RunSplashPageState extends State<RunSplashPage>
   int timeSecond = 30;
   int currentTime = 30;
   Timer _timer;
+
+  bool mute;
+  bool voiceGuide;
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
@@ -78,21 +82,21 @@ class _RunSplashPageState extends State<RunSplashPage>
 
     initTts();
 
-    assetsAudioPlayer.open(
-      Audio('assets/audio/play_background.mp3'),
-    );
+    setSoundFromSetting();
 
     _timer = Timer.periodic(Duration(seconds: 1), (timer) {
       if (!isPaused) {
         setState(() {
-          if (currentTime == 3) {
-            flutterTts.speak('Three');
-          }
-          if (currentTime == 2) {
-            flutterTts.speak('Two');
-          }
-          if (currentTime == 1) {
-            flutterTts.speak('One');
+          if (!mute) {
+            if (currentTime == 3) {
+              flutterTts.speak(S.current.run_3);
+            }
+            if (currentTime == 2) {
+              flutterTts.speak(S.current.run_2);
+            }
+            if (currentTime == 1) {
+              flutterTts.speak(S.current.run_1);
+            }
           }
 
           if (currentTime < 1) {
@@ -113,13 +117,35 @@ class _RunSplashPageState extends State<RunSplashPage>
         });
       }
     });
+  }
 
-    _speak();
+  Future<void> setSoundFromSetting() async {
+    mute = await SPref.instance.getBool(Utils.sPrefSoundMute) ?? false;
+    voiceGuide = await SPref.instance.getBool(Utils.sPrefSoundVoiceGuide) ?? true;
+
+    await flutterTts.setVolume(1.0);
+    await flutterTts.setSpeechRate(rate);
+    await flutterTts.setPitch(1.0);
+
+    if (!mute) {
+      assetsAudioPlayer.open(
+        Audio('assets/audio/play_background.mp3'),
+      );
+      if (voiceGuide) {
+        _speak();
+      } else {
+        flutterTts.stop();
+      }
+    }
   }
 
   Future<void> initTts() async {
     flutterTts = FlutterTts();
-//    flutterTts.setLanguage('vi-VN');
+
+    int indexVoiceLanguage =
+        await SPref.instance.getInt(Utils.sPrefIndexVoiceLanguage) ?? 1;
+
+    flutterTts.setLanguage(Utils.listCodeLanguage[indexVoiceLanguage]);
 
     languages = await flutterTts.getLanguages;
 
@@ -137,11 +163,7 @@ class _RunSplashPageState extends State<RunSplashPage>
   }
 
   Future<void> _speak() async {
-    await flutterTts.setVolume(1.0);
-    await flutterTts.setSpeechRate(rate);
-    await flutterTts.setPitch(1.0);
-
-    flutterTts.speak('Ready to go. Start with ${workOut.title}.');
+    flutterTts.speak('${S.current.run_ready} ${workOut.title}.');
   }
 
   @override
@@ -183,7 +205,7 @@ class _RunSplashPageState extends State<RunSplashPage>
                         children: [
                           TextApp(
                             textColor: Colors.black45,
-                            content: 'NEXT',
+                            content: S.current.run_next.toUpperCase(),
                             size: 16,
                           ),
                           TextApp(
@@ -210,7 +232,7 @@ class _RunSplashPageState extends State<RunSplashPage>
                 children: [
                   Opacity(
                     child: TextApp(
-                      content: 'READY TO GO',
+                      content: S.current.run_ready_go.toUpperCase(),
                       textColor: Colors.white,
                       size: 30,
                       fontWeight: FontWeight.bold,
@@ -220,7 +242,7 @@ class _RunSplashPageState extends State<RunSplashPage>
                   Opacity(
                     opacity: widget.index == 0 ? 0 : 1,
                     child: TextApp(
-                      content: 'take a rest'.toUpperCase(),
+                      content: S.current.run_take_a_rest.toUpperCase(),
                       textColor: Colors.white,
                       size: 17,
                     ),

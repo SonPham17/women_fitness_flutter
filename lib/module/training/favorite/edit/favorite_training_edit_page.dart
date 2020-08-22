@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:women_fitness_flutter/generated/l10n.dart';
 import 'package:women_fitness_flutter/injector/injector.dart';
 import 'package:women_fitness_flutter/module/training/favorite/favorite_training_bloc.dart';
 import 'package:women_fitness_flutter/module/training/favorite/favorite_training_events.dart';
@@ -50,7 +51,7 @@ class _FavoriteTrainingEditPageState extends State<FavoriteTrainingEditPage> {
           return Scaffold(
             appBar: AppBar(
               title: TextApp(
-                content: 'EDIT PLAN',
+                content: S.current.training_edit_plan.toUpperCase(),
               ),
               actions: <Widget>[
                 PopupMenuButton<String>(
@@ -61,7 +62,7 @@ class _FavoriteTrainingEditPageState extends State<FavoriteTrainingEditPage> {
                     ));
                   },
                   itemBuilder: (context) {
-                    return {'RESET'}
+                    return {S.current.training_reset.toUpperCase()}
                         .map(
                           (choice) => PopupMenuItem<String>(
                             value: choice,
@@ -102,7 +103,7 @@ class _FavoriteTrainingEditPageState extends State<FavoriteTrainingEditPage> {
                       },
                       child: Center(
                         child: TextApp(
-                          content: 'SAVE',
+                          content: S.current.edit_save.toUpperCase(),
                           size: 20,
                           fontWeight: FontWeight.bold,
                         ),

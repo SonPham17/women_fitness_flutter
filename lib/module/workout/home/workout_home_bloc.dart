@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:women_fitness_flutter/data/repo/workout_repo.dart';
 import 'package:women_fitness_flutter/data/spref/spref.dart';
 import 'package:women_fitness_flutter/module/training/training_bloc.dart';
 import 'package:women_fitness_flutter/module/training/training_events.dart';
