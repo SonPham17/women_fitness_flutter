@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:hive/hive.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:women_fitness_flutter/db/hive/challenge_week.dart';
 import 'package:women_fitness_flutter/db/women_fitness_database.dart';
 import 'package:women_fitness_flutter/generated/l10n.dart';
 import 'package:women_fitness_flutter/injector/injector.dart';
@@ -19,15 +22,28 @@ Future<void> main() async {
   Bloc.observer = SupervisorBloc();
 
   WidgetsFlutterBinding.ensureInitialized();
-//  await initializeDateFormatting();
+
+  // init db
   await WomenFitnessDatabase.instance.init();
+
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
     statusBarColor: Colors.transparent,
   ));
+
+  //init hive
+  final appDocumentDirectory = await getApplicationDocumentsDirectory();
+  Hive.init(appDocumentDirectory.path);
+  Hive.registerAdapter(ChallengeWeekAdapter());
+
   runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -53,5 +69,11 @@ class MyApp extends StatelessWidget {
         '/settings/profile': (context) => ProfilePage(),
       },
     );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    Hive.close();
   }
 }

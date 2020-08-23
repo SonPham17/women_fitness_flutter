@@ -62,6 +62,8 @@ class _SplashPageState extends State<SplashPage> {
             return Stack(
               children: <Widget>[
                 KenBurns(
+                  minAnimationDuration: Duration(seconds: 5),
+                  maxAnimationDuration: Duration(seconds: 9),
                   maxScale: 1.5,
                   child: Image.asset(
                     'assets/images/splash_bg.jpg',
