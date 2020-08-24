@@ -40,7 +40,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "edit_training_day" : MessageLookupByLibrary.simpleMessage("Weekly training days"),
     "edit_wg_set" : MessageLookupByLibrary.simpleMessage("set your weekly goal"),
     "first_finish" : MessageLookupByLibrary.simpleMessage("finish"),
-    "first_target" : MessageLookupByLibrary.simpleMessage("Đặt mục tiêu luyện tập hàng tuần của bạn"),
+    "first_target" : MessageLookupByLibrary.simpleMessage("Set your weekly training goals"),
     "first_weight_height" : MessageLookupByLibrary.simpleMessage("Set weight and height"),
     "history" : MessageLookupByLibrary.simpleMessage("history"),
     "nav_report" : MessageLookupByLibrary.simpleMessage("Report"),

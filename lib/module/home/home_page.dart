@@ -1,7 +1,9 @@
+import 'package:firebase_admob/firebase_admob.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
+import 'package:women_fitness_flutter/ad/ad_manager.dart';
 import 'package:women_fitness_flutter/generated/l10n.dart';
 import 'package:women_fitness_flutter/injector/injector.dart';
 import 'package:women_fitness_flutter/module/home/home_bloc.dart';
@@ -32,6 +34,8 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     _homeBloc = Injector.resolve<HomeBloc>();
     _controller = PersistentTabController(initialIndex: 0);
+
+    _initAdMob();
   }
 
   @override
@@ -42,6 +46,10 @@ class _HomePageState extends State<HomePage> {
       listSections = args['list_section'];
       listWorkOuts = args['list_workout'];
     }
+  }
+
+  Future<void> _initAdMob() {
+    return FirebaseAdMob.instance.initialize(appId: AdManager.appId);
   }
 
   @override
@@ -58,32 +66,35 @@ class _HomePageState extends State<HomePage> {
         child: BlocProvider<HomeBloc>(
           create: (_) => _homeBloc,
           child: BlocConsumer<HomeBloc, HomeState>(
-            builder: (context, state) => PersistentTabView(
-              controller: _controller,
-              items: _navBarsItems(),
-              screens: _buildScreens(),
-              confineInSafeArea: false,
-              backgroundColor: Colors.white,
-              handleAndroidBackButtonPress: true,
-              resizeToAvoidBottomInset: true,
-              // This needs to be true if you want to move up the screen when keyboard appears.
-              hideNavigationBarWhenKeyboardShows: true,
-              stateManagement: true,
-              decoration: NavBarDecoration(
-                borderRadius: BorderRadius.circular(10.0),
-                colorBehindNavBar: Colors.white,
+            builder: (context, state) => Container(
+              margin: EdgeInsets.only(bottom: 50),
+              child: PersistentTabView(
+                controller: _controller,
+                items: _navBarsItems(),
+                screens: _buildScreens(),
+                confineInSafeArea: false,
+                backgroundColor: Colors.white,
+                handleAndroidBackButtonPress: true,
+                resizeToAvoidBottomInset: true,
+                // This needs to be true if you want to move up the screen when keyboard appears.
+                hideNavigationBarWhenKeyboardShows: true,
+                stateManagement: true,
+                decoration: NavBarDecoration(
+                  borderRadius: BorderRadius.circular(10.0),
+                  colorBehindNavBar: Colors.white,
+                ),
+                popAllScreensOnTapOfSelectedTab: true,
+                itemAnimationProperties: ItemAnimationProperties(
+                  duration: Duration(milliseconds: 200),
+                  curve: Curves.ease,
+                ),
+                screenTransitionAnimation: ScreenTransitionAnimation(
+                  animateTabTransition: true,
+                  curve: Curves.ease,
+                  duration: Duration(milliseconds: 200),
+                ),
+                navBarStyle: NavBarStyle.style3,
               ),
-              popAllScreensOnTapOfSelectedTab: true,
-              itemAnimationProperties: ItemAnimationProperties(
-                duration: Duration(milliseconds: 200),
-                curve: Curves.ease,
-              ),
-              screenTransitionAnimation: ScreenTransitionAnimation(
-                animateTabTransition: true,
-                curve: Curves.ease,
-                duration: Duration(milliseconds: 200),
-              ),
-              navBarStyle: NavBarStyle.style3,
             ),
             listener: (context, state) {
               if (state is HomeStateShowTabWorkOut) {

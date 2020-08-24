@@ -34,6 +34,7 @@ Future<void> main() async {
   final appDocumentDirectory = await getApplicationDocumentsDirectory();
   Hive.init(appDocumentDirectory.path);
   Hive.registerAdapter(ChallengeWeekAdapter());
+  await Hive.openBox('challenge_week');
 
   runApp(MyApp());
 }

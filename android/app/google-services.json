@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "300957816331",
+    "firebase_url": "https://women-fitness-bb634.firebaseio.com",
+    "project_id": "women-fitness-bb634",
+    "storage_bucket": "women-fitness-bb634.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:300957816331:android:5d962319c99f187448190e",
+        "android_client_info": {
+          "package_name": "com.femalefitness.loseweight"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "300957816331-0o8220nupr58c8qjl9f573mh66brbigh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCeivl7rhB88QvN_XbEAmD0tSvrrRZ7AEw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "300957816331-0o8220nupr58c8qjl9f573mh66brbigh.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

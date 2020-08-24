@@ -1,11 +1,13 @@
 import 'dart:io';
 
+import 'package:firebase_admob/firebase_admob.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_share/flutter_share.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:rate_my_app/rate_my_app.dart';
+import 'package:women_fitness_flutter/ad/ad_manager.dart';
 import 'package:women_fitness_flutter/data/spref/spref.dart';
 import 'package:women_fitness_flutter/generated/l10n.dart';
 import 'package:women_fitness_flutter/module/setting/profile/profile_page.dart';
@@ -22,7 +24,7 @@ class SettingPage extends StatefulWidget {
   _SettingPageState createState() => _SettingPageState();
 }
 
-class _SettingPageState extends State<SettingPage> {
+class _SettingPageState extends State<SettingPage> with WidgetsBindingObserver{
   RateMyApp _rateMyApp = RateMyApp(
     preferencesPrefix: 'rateMyApp',
     minDays: 3,
@@ -33,6 +35,24 @@ class _SettingPageState extends State<SettingPage> {
 //    googlePlayIdentifier: '',
   );
 
+  static const MobileAdTargetingInfo targetingInfo = MobileAdTargetingInfo(
+    keywords: <String>['foo', 'bar'],
+    contentUrl: 'http://foo.com/bar.html',
+    childDirected: true,
+    nonPersonalizedAds: true,
+  );
+
+  BannerAd createBannerAd() {
+    return BannerAd(
+      adUnitId: AdManager.bannerAdUnitId,
+      size: AdSize.banner,
+      targetingInfo: targetingInfo,
+      listener: (MobileAdEvent event) {
+        print("BannerAd event $event");
+      },
+    );
+  }
+
   FlutterTts flutterTts;
   dynamic languages;
   int indexVoiceLanguage = 1;
@@ -42,9 +62,19 @@ class _SettingPageState extends State<SettingPage> {
   int timeSet = 30;
   int countDownTime = 15;
 
+  BannerAd _bannerAd;
+
   @override
   void initState() {
     super.initState();
+
+    WidgetsBinding.instance.addObserver(this);
+
+    _bannerAd = createBannerAd()
+      ..load()
+      ..show(
+        anchorType: AnchorType.bottom,
+      );
 
     SPref.instance.getInt(Utils.sPrefIndexVoiceLanguage).then((value) {
       setState(() {
@@ -315,7 +345,7 @@ class _SettingPageState extends State<SettingPage> {
                   _rateMyApp
                       .callEvent(RateMyAppEventType.rateButtonPressed)
                       .then((_) => Navigator.pop<RateMyAppDialogButton>(
-                      context, RateMyAppDialogButton.rate));
+                          context, RateMyAppDialogButton.rate));
                 }
               },
             )
@@ -331,7 +361,6 @@ class _SettingPageState extends State<SettingPage> {
     });
   }
 
-
   Future<void> feedback() async {
     await FlutterShare.share(
         title: 'Phản hồi',
@@ -341,8 +370,16 @@ class _SettingPageState extends State<SettingPage> {
   }
 
   @override
+  void deactivate() {
+    super.deactivate();
+    _bannerAd.dispose();
+  }
+
+  @override
   void dispose() {
     super.dispose();
+    _bannerAd.dispose();
     flutterTts.stop();
+    WidgetsBinding.instance.removeObserver(this);
   }
 }

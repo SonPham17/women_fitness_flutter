@@ -110,6 +110,7 @@ class _RunWorkOutPageState extends State<RunWorkOutPage>
               if (time < 1) {
                 timer.cancel();
                 if (widget.index == widget.listWorkOutBySection.length - 1) {
+
                   pushNewScreen(
                     context,
                     screen: RunFinishPage(),

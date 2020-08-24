@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
+import 'package:women_fitness_flutter/db/hive/challenge_week.dart';
 import 'package:women_fitness_flutter/generated/l10n.dart';
 import 'package:women_fitness_flutter/shared/app_color.dart';
 import 'package:women_fitness_flutter/shared/model/section.dart';
@@ -21,6 +23,16 @@ class ChallengeTrainingPage extends StatefulWidget {
 
 class _ChallengeTrainingPageState extends State<ChallengeTrainingPage> {
   @override
+  void initState() {
+    super.initState();
+    var challengeBox = Hive.box('challenge_week');
+    if (challengeBox.length == 0) {
+      var challengeWeek = ChallengeWeek(idSection: 101, title: 'Day 1');
+      challengeBox.put(101, challengeWeek);
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
@@ -36,25 +48,25 @@ class _ChallengeTrainingPageState extends State<ChallengeTrainingPage> {
                         ChallengeWeekWidget(
                           listWorkOuts: widget.listWorkOuts,
                           week: 1,
-                          listSections: widget.listSections.sublist(18,25),
+                          listSections: widget.listSections.sublist(18, 25),
                           isWeekSelected: true,
                         ),
                         ChallengeWeekWidget(
                           listWorkOuts: widget.listWorkOuts,
                           week: 2,
-                          listSections: widget.listSections.sublist(25,32),
+                          listSections: widget.listSections.sublist(25, 32),
                           isWeekSelected: false,
                         ),
                         ChallengeWeekWidget(
                           listWorkOuts: widget.listWorkOuts,
                           week: 3,
-                          listSections: widget.listSections.sublist(32,39),
+                          listSections: widget.listSections.sublist(32, 39),
                           isWeekSelected: false,
                         ),
                         ChallengeWeekWidget(
                           listWorkOuts: widget.listWorkOuts,
                           week: 4,
-                          listSections: widget.listSections.sublist(39,46),
+                          listSections: widget.listSections.sublist(39, 46),
                           isWeekSelected: false,
                         ),
                         SizedBox(
@@ -138,7 +150,7 @@ class _ChallengeTrainingPageState extends State<ChallengeTrainingPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               TextApp(
-                content: '${S.current.challenge_progress} 90%',
+                content: '${S.current.challenge_progress} 0%',
                 textColor: Colors.white,
                 size: SizeConfig.defaultSize * 2,
               ),
@@ -158,9 +170,9 @@ class _ChallengeTrainingPageState extends State<ChallengeTrainingPage> {
                 animation: true,
                 lineHeight: 15,
                 animationDuration: 2000,
-                percent: 0.9,
+                percent: 0,
                 center: TextApp(
-                  content: '90%',
+                  content: '0%',
                   size: 10,
                 ),
                 linearStrokeCap: LinearStrokeCap.roundAll,

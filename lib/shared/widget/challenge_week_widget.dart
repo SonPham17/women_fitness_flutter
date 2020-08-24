@@ -56,7 +56,7 @@ class _ChallengeWeekWidgetState extends State<ChallengeWeekWidget> {
                   ),
                   children: [
                     TextSpan(
-                      text: '2',
+                      text: '0',
                       style: TextStyle(
                         color: AppColor.main,
                       ),

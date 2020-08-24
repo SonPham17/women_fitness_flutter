@@ -953,10 +953,10 @@ class S {
     );
   }
 
-  /// `Đặt mục tiêu luyện tập hàng tuần của bạn`
+  /// `Set your weekly training goals`
   String get first_target {
     return Intl.message(
-      'Đặt mục tiêu luyện tập hàng tuần của bạn',
+      'Set your weekly training goals',
       name: 'first_target',
       desc: '',
       args: [],

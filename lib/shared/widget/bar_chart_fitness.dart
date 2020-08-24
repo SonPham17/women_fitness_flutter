@@ -201,45 +201,45 @@ class _BarChartFitnessState extends State<BarChartFitness> {
                       barGroups: [
                         BarChartGroupData(x: 0, barRods: [
                           BarChartRodData(
-                              y: 8, color: Colors.lightBlueAccent, width: 15)
+                              y: 0, color: Colors.lightBlueAccent, width: 15)
                         ], showingTooltipIndicators: [
-                          0
+
                         ]),
                         BarChartGroupData(x: 1, barRods: [
                           BarChartRodData(
-                              y: 210, color: Colors.lightBlueAccent, width: 15)
+                              y: 0, color: Colors.lightBlueAccent, width: 15)
                         ], showingTooltipIndicators: [
-                          0
+
                         ]),
                         BarChartGroupData(x: 2, barRods: [
                           BarChartRodData(
-                              y: 114, color: Colors.lightBlueAccent, width: 15)
+                              y: 0, color: Colors.lightBlueAccent, width: 15)
                         ], showingTooltipIndicators: [
-                          0
+
                         ]),
                         BarChartGroupData(x: 3, barRods: [
                           BarChartRodData(
-                              y: 315, color: Colors.lightBlueAccent, width: 15)
+                              y: 0, color: Colors.lightBlueAccent, width: 15)
                         ], showingTooltipIndicators: [
-                          0
+
                         ]),
                         BarChartGroupData(x: 4, barRods: [
                           BarChartRodData(
-                              y: 413, color: Colors.lightBlueAccent, width: 15)
+                              y: 0, color: Colors.lightBlueAccent, width: 15)
                         ], showingTooltipIndicators: [
-                          0
+
                         ]),
                         BarChartGroupData(x: 5, barRods: [
                           BarChartRodData(
-                              y: 210, color: Colors.lightBlueAccent, width: 15)
+                              y: 0, color: Colors.lightBlueAccent, width: 15)
                         ], showingTooltipIndicators: [
-                          0
+
                         ]),
                         BarChartGroupData(x: 6, barRods: [
                           BarChartRodData(
-                              y: 300, color: Colors.lightBlueAccent, width: 15)
+                              y: 0, color: Colors.lightBlueAccent, width: 15)
                         ], showingTooltipIndicators: [
-                          0
+
                         ]),
                       ],
                     ),
