@@ -19,17 +19,20 @@ class ChallengeWeekAdapter extends TypeAdapter<ChallengeWeek> {
     return ChallengeWeek(
       idSection: fields[0] as int,
       title: fields[1] as String,
+      index: fields[2] as int,
     );
   }
 
   @override
   void write(BinaryWriter writer, ChallengeWeek obj) {
     writer
-      ..writeByte(2)
+      ..writeByte(3)
       ..writeByte(0)
       ..write(obj.idSection)
       ..writeByte(1)
-      ..write(obj.title);
+      ..write(obj.title)
+      ..writeByte(2)
+      ..write(obj.index);
   }
 
   @override

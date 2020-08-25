@@ -1,18 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hive/hive.dart';
 import 'package:women_fitness_flutter/data/spref/spref.dart';
+import 'package:women_fitness_flutter/db/hive/challenge_week.dart';
 import 'package:women_fitness_flutter/generated/l10n.dart';
 import 'package:women_fitness_flutter/injector/injector.dart';
 import 'package:women_fitness_flutter/module/run/finish/run_finish_bloc.dart';
 import 'package:women_fitness_flutter/module/run/finish/run_finish_events.dart';
 import 'package:women_fitness_flutter/module/run/finish/run_finish_states.dart';
 import 'package:women_fitness_flutter/shared/app_color.dart';
+import 'package:women_fitness_flutter/shared/model/section.dart';
 import 'package:women_fitness_flutter/shared/size_config.dart';
 import 'package:women_fitness_flutter/shared/utils.dart';
 import 'package:women_fitness_flutter/shared/widget/dialog_edit.dart';
 import 'package:women_fitness_flutter/shared/widget/text_app.dart';
 
 class RunFinishPage extends StatefulWidget {
+  final Section section;
+
+  RunFinishPage({@required this.section});
+
   @override
   _RunFinishPageState createState() => _RunFinishPageState();
 }
@@ -43,7 +50,8 @@ class _RunFinishPageState extends State<RunFinishPage> {
   void initState() {
     super.initState();
 
-    _runFinishBloc = Injector.resolve<RunFinishBloc>();
+    _runFinishBloc = Injector.resolve<RunFinishBloc>()
+      ..add(RunFinishGetAllSectionEvent());
 
     SPref.instance
         .getDouble(Utils.sPrefHeight)
@@ -57,7 +65,21 @@ class _RunFinishPageState extends State<RunFinishPage> {
     return BlocProvider<RunFinishBloc>(
       create: (_) => _runFinishBloc,
       child: BlocConsumer<RunFinishBloc, RunFinishState>(
-        listener: (_, state) {},
+        listener: (_, state) {
+          if (state is RunFinishStateGetAllSectionDone) {
+            var data = state.listSections;
+            int index =
+                data.indexWhere((section) => section.id == widget.section.id);
+            if (index > 17 && index < 45) {
+              var challengeBox = Hive.box('challenge_week');
+              var challengeWeek = ChallengeWeek(
+                  idSection: data[index + 1].id,
+                  title: data[index + 1].title,
+                  index: challengeBox.length);
+              challengeBox.put(data[index + 1].id, challengeWeek);
+            }
+          }
+        },
         builder: (_, state) => Scaffold(
           body: Container(
             child: Stack(

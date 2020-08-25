@@ -11,15 +11,21 @@ import 'package:women_fitness_flutter/data/spref/spref.dart';
 import 'package:women_fitness_flutter/generated/l10n.dart';
 import 'package:women_fitness_flutter/module/run/workout/run_workout_page.dart';
 import 'package:women_fitness_flutter/shared/app_color.dart';
+import 'package:women_fitness_flutter/shared/model/section.dart';
 import 'package:women_fitness_flutter/shared/model/work_out.dart';
 import 'package:women_fitness_flutter/shared/utils.dart';
 import 'package:women_fitness_flutter/shared/widget/text_app.dart';
 
 class RunSplashPage extends StatefulWidget {
   final List<WorkOut> listWorkOutBySection;
+  final Section section;
   final int index;
 
-  RunSplashPage({@required this.listWorkOutBySection, @required this.index});
+  RunSplashPage({
+    @required this.listWorkOutBySection,
+    @required this.index,
+    @required this.section,
+  });
 
   @override
   _RunSplashPageState createState() => _RunSplashPageState();
@@ -104,6 +110,7 @@ class _RunSplashPageState extends State<RunSplashPage>
             pushNewScreen(
               context,
               screen: RunWorkOutPage(
+                section: widget.section,
                 listWorkOutBySection: widget.listWorkOutBySection,
                 index: widget.index,
               ),
@@ -121,7 +128,8 @@ class _RunSplashPageState extends State<RunSplashPage>
 
   Future<void> setSoundFromSetting() async {
     mute = await SPref.instance.getBool(Utils.sPrefSoundMute) ?? false;
-    voiceGuide = await SPref.instance.getBool(Utils.sPrefSoundVoiceGuide) ?? true;
+    voiceGuide =
+        await SPref.instance.getBool(Utils.sPrefSoundVoiceGuide) ?? true;
 
     await flutterTts.setVolume(1.0);
     await flutterTts.setSpeechRate(rate);
@@ -268,6 +276,7 @@ class _RunSplashPageState extends State<RunSplashPage>
                                 pushNewScreen(
                                   context,
                                   screen: RunWorkOutPage(
+                                    section: widget.section,
                                     listWorkOutBySection:
                                         widget.listWorkOutBySection,
                                     index: widget.index - 1,
@@ -310,6 +319,7 @@ class _RunSplashPageState extends State<RunSplashPage>
                               pushNewScreen(
                                 context,
                                 screen: RunWorkOutPage(
+                                  section: widget.section,
                                   listWorkOutBySection:
                                       widget.listWorkOutBySection,
                                   index: widget.index,

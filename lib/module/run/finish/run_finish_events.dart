@@ -8,3 +8,7 @@ class RunFinishRefreshEvent extends RunFinishEvent{
 
   RunFinishRefreshEvent({@required this.height,@required this.weight});
 }
+
+class RunFinishGetAllSectionEvent extends RunFinishEvent{
+
+}

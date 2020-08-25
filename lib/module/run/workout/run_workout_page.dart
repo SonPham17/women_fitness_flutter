@@ -12,6 +12,7 @@ import 'package:women_fitness_flutter/generated/l10n.dart';
 import 'package:women_fitness_flutter/module/run/finish/run_finish_page.dart';
 import 'package:women_fitness_flutter/module/run/splash/run_splash_page.dart';
 import 'package:women_fitness_flutter/shared/app_color.dart';
+import 'package:women_fitness_flutter/shared/model/section.dart';
 import 'package:women_fitness_flutter/shared/model/work_out.dart';
 import 'package:women_fitness_flutter/shared/utils.dart';
 import 'package:women_fitness_flutter/shared/widget/dialog_sound_option.dart';
@@ -19,9 +20,14 @@ import 'package:women_fitness_flutter/shared/widget/text_app.dart';
 
 class RunWorkOutPage extends StatefulWidget {
   final List<WorkOut> listWorkOutBySection;
+  final Section section;
   final int index;
 
-  RunWorkOutPage({@required this.listWorkOutBySection, @required this.index});
+  RunWorkOutPage({
+    @required this.listWorkOutBySection,
+    @required this.index,
+    @required this.section,
+  });
 
   @override
   _RunWorkOutPageState createState() => _RunWorkOutPageState();
@@ -110,10 +116,11 @@ class _RunWorkOutPageState extends State<RunWorkOutPage>
               if (time < 1) {
                 timer.cancel();
                 if (widget.index == widget.listWorkOutBySection.length - 1) {
-
                   pushNewScreen(
                     context,
-                    screen: RunFinishPage(),
+                    screen: RunFinishPage(
+                      section: widget.section,
+                    ),
                     pageTransitionAnimation: PageTransitionAnimation.cupertino,
                     withNavBar: false,
                   );
@@ -121,6 +128,7 @@ class _RunWorkOutPageState extends State<RunWorkOutPage>
                   pushNewScreen(
                     context,
                     screen: RunSplashPage(
+                      section: widget.section,
                       listWorkOutBySection: widget.listWorkOutBySection,
                       index: widget.index + 1,
                     ),
@@ -376,6 +384,7 @@ class _RunWorkOutPageState extends State<RunWorkOutPage>
                                           pushNewScreen(
                                             context,
                                             screen: RunWorkOutPage(
+                                              section: widget.section,
                                               listWorkOutBySection:
                                                   widget.listWorkOutBySection,
                                               index: widget.index - 1,
@@ -393,6 +402,7 @@ class _RunWorkOutPageState extends State<RunWorkOutPage>
                                           pushNewScreen(
                                             context,
                                             screen: RunSplashPage(
+                                              section: widget.section,
                                               listWorkOutBySection:
                                                   widget.listWorkOutBySection,
                                               index: widget.index + 1,
@@ -423,6 +433,7 @@ class _RunWorkOutPageState extends State<RunWorkOutPage>
                                           pushNewScreen(
                                             context,
                                             screen: RunSplashPage(
+                                              section: widget.section,
                                               listWorkOutBySection:
                                                   widget.listWorkOutBySection,
                                               index: widget.index + 1,
@@ -471,6 +482,7 @@ class _RunWorkOutPageState extends State<RunWorkOutPage>
                                                 pushNewScreen(
                                                   context,
                                                   screen: RunWorkOutPage(
+                                                    section: widget.section,
                                                     listWorkOutBySection: widget
                                                         .listWorkOutBySection,
                                                     index: widget.index - 1,

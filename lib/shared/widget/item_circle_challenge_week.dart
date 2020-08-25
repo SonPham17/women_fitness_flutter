@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
+import 'package:women_fitness_flutter/db/hive/challenge_week.dart';
 import 'package:women_fitness_flutter/module/training/favorite/favorite_training_page.dart';
 import 'package:women_fitness_flutter/shared/app_color.dart';
 import 'package:women_fitness_flutter/shared/model/section.dart';
@@ -25,12 +26,19 @@ class ItemCircleChallengeWeek extends StatefulWidget {
 
 class _ItemCircleChallengeWeekState extends State<ItemCircleChallengeWeek> {
   bool enable;
+  bool isFinished = false;
 
   @override
   void initState() {
     super.initState();
     var challengeBox = Hive.box('challenge_week');
+    int lengthBox = challengeBox.length;
     if (challengeBox.get(widget.section.id) != null) {
+      ChallengeWeek challengeWeek = challengeBox.get(widget.section.id);
+      int indexChallenge = challengeWeek.index;
+      if (indexChallenge<lengthBox-1) {
+        isFinished = true;
+      }
       enable = true;
     } else {
       enable = false;
@@ -60,17 +68,24 @@ class _ItemCircleChallengeWeekState extends State<ItemCircleChallengeWeek> {
         width: 45,
         height: 45,
         decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            border: Border.all(
-              width: 1,
-              color: enable ? AppColor.main : Colors.grey,
-            )),
-        child: Center(
-          child: TextApp(
-            content: '${widget.day}',
-            size: 18,
-            textColor: enable ? AppColor.main : Colors.grey,
+          shape: BoxShape.circle,
+          color: isFinished ? AppColor.main : Colors.transparent,
+          border: Border.all(
+            width: 1,
+            color: enable ? AppColor.main : Colors.grey,
           ),
+        ),
+        child: Center(
+          child: isFinished
+              ? Icon(
+                  Icons.check,
+                  color: Colors.white,
+                )
+              : TextApp(
+                  content: '${widget.day}',
+                  size: 18,
+                  textColor: enable ? AppColor.main : Colors.grey,
+                ),
         ),
       ),
     );

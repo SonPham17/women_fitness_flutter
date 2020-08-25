@@ -4,7 +4,7 @@ import 'package:women_fitness_flutter/data/spref/spref.dart';
 import 'package:women_fitness_flutter/shared/model/description_language.dart';
 import 'package:women_fitness_flutter/shared/model/title_language.dart';
 
-class Section {
+class Section{
   int id;
   String title;
   String description;

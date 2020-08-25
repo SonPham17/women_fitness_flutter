@@ -10,8 +10,12 @@ class ChallengeWeek extends HiveObject {
   @HiveField(1)
   String title;
 
+  @HiveField(2)
+  int index;
+
   ChallengeWeek({
     this.idSection,
     this.title,
+    this.index
   });
 }

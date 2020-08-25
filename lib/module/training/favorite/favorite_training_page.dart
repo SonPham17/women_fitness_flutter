@@ -153,6 +153,7 @@ class _FavoriteTrainingPageState extends State<FavoriteTrainingPage> {
                             screen: RunSplashPage(
                               listWorkOutBySection: listWorkOutBySection,
                               index: 0,
+                              section: widget.section,
                             ),
                             pageTransitionAnimation:
                                 PageTransitionAnimation.cupertino,
@@ -266,7 +267,8 @@ class _FavoriteTrainingPageState extends State<FavoriteTrainingPage> {
                     color: Colors.white,
                   ),
                   TextApp(
-                    content: '${widget.section.workoutsId.length} ${S.current.training_workouts}',
+                    content:
+                        '${widget.section.workoutsId.length} ${S.current.training_workouts}',
                     textColor: Colors.white,
                     size: SizeConfig.defaultSize * 1.8,
                   ),

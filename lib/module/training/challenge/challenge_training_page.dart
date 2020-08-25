@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
+import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:women_fitness_flutter/db/hive/challenge_week.dart';
 import 'package:women_fitness_flutter/generated/l10n.dart';
+import 'package:women_fitness_flutter/module/run/finish/run_finish_page.dart';
 import 'package:women_fitness_flutter/shared/app_color.dart';
 import 'package:women_fitness_flutter/shared/model/section.dart';
 import 'package:women_fitness_flutter/shared/model/work_out.dart';
@@ -27,9 +29,14 @@ class _ChallengeTrainingPageState extends State<ChallengeTrainingPage> {
     super.initState();
     var challengeBox = Hive.box('challenge_week');
     if (challengeBox.length == 0) {
-      var challengeWeek = ChallengeWeek(idSection: 101, title: 'Day 1');
+      var challengeWeek =
+          ChallengeWeek(idSection: 101, title: 'Day 1', index: 0);
       challengeBox.put(101, challengeWeek);
     }
+    var challengeWeek =
+    ChallengeWeek(idSection: 102, title: 'Day 2', index: 1);
+    challengeBox.put(102, challengeWeek);
+    print("challenge box length= ${challengeBox.length}");
   }
 
   @override
