@@ -93,5 +93,8 @@
   "dialog_sound_coach_tips": "Lời khuyên của hlv",
   "first_target": "Đặt mục tiêu luyện tập hàng tuần của bạn",
   "first_weight_height": "Thiết lập cân nặng và chiều cao",
-  "first_finish": "hoàn thành"
+  "first_finish": "hoàn thành",
+  "iap_premium": "Nâng cấp gói",
+  "iap_remove": "loại bỏ quảng cáo",
+  "iap_unlimited": "thời gian và tính năng không giới hạn"
 }

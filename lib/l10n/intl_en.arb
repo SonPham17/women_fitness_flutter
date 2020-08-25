@@ -93,5 +93,8 @@
   "dialog_sound_coach_tips": "Coach tips",
   "first_target": "Set your weekly training goals",
   "first_weight_height": "Set weight and height",
-  "first_finish": "finish"
+  "first_finish": "finish",
+  "iap_premium": "Go Premium",
+  "iap_remove": "remove ads",
+  "iap_unlimited": "unlimited times and features"
 }

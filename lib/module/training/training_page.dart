@@ -8,6 +8,7 @@ import 'package:women_fitness_flutter/generated/l10n.dart';
 import 'package:women_fitness_flutter/injector/injector.dart';
 import 'package:women_fitness_flutter/module/home/home_bloc.dart';
 import 'package:women_fitness_flutter/module/home/home_events.dart';
+import 'package:women_fitness_flutter/module/in_app_purchase/IAPPage.dart';
 import 'package:women_fitness_flutter/module/training/challenge/challenge_training_page.dart';
 import 'package:women_fitness_flutter/module/training/favorite/favorite_training_page.dart';
 import 'package:women_fitness_flutter/module/training/training_bloc.dart';
@@ -385,18 +386,25 @@ class _TrainingPageState extends State<TrainingPage> {
             aspectRatio: 1.65,
             child: InkWell(
               onTap: () {
-                pushNewScreenWithRouteSettings(
+//                pushNewScreenWithRouteSettings(
+//                  context,
+//                  screen: ChallengeTrainingPage(
+//                    listSections: widget.listSections,
+//                    listWorkOuts: widget.listWorkOuts,
+//                  ),
+//                  settings: RouteSettings(
+//                    name: '/training/challenge',
+//                    arguments: {
+//                      'test': 123,
+//                    },
+//                  ),
+//                  withNavBar: false,
+//                  pageTransitionAnimation: PageTransitionAnimation.cupertino,
+//                );
+
+                pushNewScreen(
                   context,
-                  screen: ChallengeTrainingPage(
-                    listSections: widget.listSections,
-                    listWorkOuts: widget.listWorkOuts,
-                  ),
-                  settings: RouteSettings(
-                    name: '/training/challenge',
-                    arguments: {
-                      'test': 123,
-                    },
-                  ),
+                  screen: IAPPage(),
                   withNavBar: false,
                   pageTransitionAnimation: PageTransitionAnimation.cupertino,
                 );

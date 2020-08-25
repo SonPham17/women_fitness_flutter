@@ -982,6 +982,36 @@ class S {
       args: [],
     );
   }
+
+  /// `Go Premium`
+  String get iap_premium {
+    return Intl.message(
+      'Go Premium',
+      name: 'iap_premium',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `remove ads`
+  String get iap_remove {
+    return Intl.message(
+      'remove ads',
+      name: 'iap_remove',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `unlimited times and features`
+  String get iap_unlimited {
+    return Intl.message(
+      'unlimited times and features',
+      name: 'iap_unlimited',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

@@ -57,6 +57,7 @@ dependencies:
   hive: ^1.4.4
   hive_flutter: ^0.3.1
   firebase_admob: ^0.9.3
+  in_app_purchase: ^0.3.4+4
 
 dev_dependencies:
   flutter_test:
