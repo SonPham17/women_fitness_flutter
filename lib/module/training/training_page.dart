@@ -386,28 +386,28 @@ class _TrainingPageState extends State<TrainingPage> {
             aspectRatio: 1.65,
             child: InkWell(
               onTap: () {
-                pushNewScreenWithRouteSettings(
-                  context,
-                  screen: ChallengeTrainingPage(
-                    listSections: widget.listSections,
-                    listWorkOuts: widget.listWorkOuts,
-                  ),
-                  settings: RouteSettings(
-                    name: '/training/challenge',
-                    arguments: {
-                      'test': 123,
-                    },
-                  ),
-                  withNavBar: false,
-                  pageTransitionAnimation: PageTransitionAnimation.cupertino,
-                );
-
-//                pushNewScreen(
+//                pushNewScreenWithRouteSettings(
 //                  context,
-//                  screen: IAPPage(),
+//                  screen: ChallengeTrainingPage(
+//                    listSections: widget.listSections,
+//                    listWorkOuts: widget.listWorkOuts,
+//                  ),
+//                  settings: RouteSettings(
+//                    name: '/training/challenge',
+//                    arguments: {
+//                      'test': 123,
+//                    },
+//                  ),
 //                  withNavBar: false,
 //                  pageTransitionAnimation: PageTransitionAnimation.cupertino,
 //                );
+
+                pushNewScreen(
+                  context,
+                  screen: IAPPage(),
+                  withNavBar: false,
+                  pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                );
               },
               child: Container(
                 decoration: BoxDecoration(
