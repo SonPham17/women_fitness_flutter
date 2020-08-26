@@ -1,8 +1,10 @@
 import 'package:calendar_strip/calendar_strip.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hive/hive.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:women_fitness_flutter/data/spref/spref.dart';
+import 'package:women_fitness_flutter/db/hive/section_history.dart';
 import 'package:women_fitness_flutter/generated/l10n.dart';
 import 'package:women_fitness_flutter/injector/injector.dart';
 import 'package:women_fitness_flutter/module/report/report_bloc.dart';
@@ -10,6 +12,7 @@ import 'package:women_fitness_flutter/module/report/report_states.dart';
 import 'package:women_fitness_flutter/module/training/week_goal/calendar_week_goal_page.dart';
 import 'package:women_fitness_flutter/module/training/week_goal/edit_week_goal_page.dart';
 import 'package:women_fitness_flutter/shared/app_color.dart';
+import 'package:women_fitness_flutter/shared/model/section.dart';
 import 'package:women_fitness_flutter/shared/size_config.dart';
 import 'package:women_fitness_flutter/shared/utils.dart';
 import 'package:women_fitness_flutter/shared/widget/bar_chart_fitness.dart';
@@ -17,6 +20,10 @@ import 'package:women_fitness_flutter/shared/widget/dialog_edit.dart';
 import 'package:women_fitness_flutter/shared/widget/text_app.dart';
 
 class ReportPage extends StatefulWidget {
+  final List<Section> listSections;
+
+  ReportPage({@required this.listSections});
+
   @override
   _ReportPageState createState() => _ReportPageState();
 }
@@ -30,6 +37,10 @@ class _ReportPageState extends State<ReportPage> {
   String statusWeight;
   double currentHeight;
   double weight;
+
+  int totalWorkOuts = 0;
+  double totalKcal = 0;
+  int totalMinutes = 0;
 
   DateTime startDate = DateTime.now().subtract(Duration(days: 2));
   DateTime endDate = DateTime.now().add(Duration(days: 2));
@@ -68,6 +79,30 @@ class _ReportPageState extends State<ReportPage> {
     SPref.instance.getInt(Utils.sPrefWeekGoal).then((value) {
       setState(() {
         weekTraining = value ?? 2;
+      });
+    });
+
+    _getDataTotal();
+  }
+
+  Future<void> _getDataTotal() async {
+    var sectionBox = Hive.box('section_history');
+    for (int i = 0; i < sectionBox.length; i++) {
+      SectionHistory sectionHistory = sectionBox.getAt(i);
+      totalKcal += sectionHistory.calories;
+      totalMinutes += sectionHistory.totalTime;
+    }
+
+    setState(() {
+      totalWorkOuts = sectionBox.length;
+    });
+
+    sectionBox.watch().listen((event) {
+      setState(() {
+        totalWorkOuts = sectionBox.length;
+        SectionHistory sectionHistory = event.value;
+        totalKcal += sectionHistory.calories;
+        totalMinutes += sectionHistory.totalTime;
       });
     });
   }
@@ -116,10 +151,10 @@ class _ReportPageState extends State<ReportPage> {
                 _buildHeight(),
                 Divider(),
                 _buildChart(
-                    S.current.report_chart_1, S.current.report_chart_1_1),
+                    S.current.report_chart_1, S.current.report_chart_1_1, true),
                 Divider(),
-                _buildChart(
-                    S.current.report_chart_2, S.current.report_chart_2_1),
+                _buildChart(S.current.report_chart_2,
+                    S.current.report_chart_2_1, false),
               ],
             ),
           ),
@@ -128,7 +163,8 @@ class _ReportPageState extends State<ReportPage> {
     );
   }
 
-  Widget _buildChart(String title, String titleCard) => Container(
+  Widget _buildChart(String title, String titleCard, bool isCalories) =>
+      Container(
         margin: EdgeInsets.only(left: 14, right: 14, bottom: 20, top: 10),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -144,6 +180,7 @@ class _ReportPageState extends State<ReportPage> {
             ),
             BarChartFitness(
               title: titleCard,
+              isCalories: isCalories,
             ),
           ],
         ),
@@ -507,7 +544,9 @@ class _ReportPageState extends State<ReportPage> {
                 onTap: () {
                   pushNewScreenWithRouteSettings(
                     context,
-                    screen: CalendarWeekGoalPage(),
+                    screen: CalendarWeekGoalPage(
+                      listSections: widget.listSections,
+                    ),
                     settings: RouteSettings(
                       name: '/training/week_goal/calendar_week_goal',
                       arguments: {
@@ -524,7 +563,9 @@ class _ReportPageState extends State<ReportPage> {
                   onDateSelected: (date) {
                     pushNewScreenWithRouteSettings(
                       context,
-                      screen: CalendarWeekGoalPage(),
+                      screen: CalendarWeekGoalPage(
+                        listSections: widget.listSections,
+                      ),
                       settings: RouteSettings(
                         name: '/training/week_goal/calendar_week_goal',
                         arguments: {
@@ -578,7 +619,7 @@ class _ReportPageState extends State<ReportPage> {
                 Column(
                   children: <Widget>[
                     TextApp(
-                      content: '0',
+                      content: '$totalWorkOuts',
                       size: 30,
                       textColor: AppColor.main,
                     ),
@@ -591,7 +632,7 @@ class _ReportPageState extends State<ReportPage> {
                 Column(
                   children: <Widget>[
                     TextApp(
-                      content: '0',
+                      content: '${totalKcal.toStringAsFixed(0)}',
                       size: 30,
                       textColor: AppColor.main,
                     ),
@@ -604,7 +645,7 @@ class _ReportPageState extends State<ReportPage> {
                 Column(
                   children: <Widget>[
                     TextApp(
-                      content: '0',
+                      content: '${Utils.convertSecondToTime(totalMinutes)}',
                       size: 30,
                       textColor: AppColor.main,
                     ),

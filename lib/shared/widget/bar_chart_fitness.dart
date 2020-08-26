@@ -5,8 +5,12 @@ import 'package:women_fitness_flutter/shared/widget/text_app.dart';
 
 class BarChartFitness extends StatefulWidget {
   final String title;
+  final bool isCalories;
 
-  BarChartFitness({@required this.title});
+  BarChartFitness({
+    @required this.title,
+    @required this.isCalories,
+  });
 
   @override
   _BarChartFitnessState createState() => _BarChartFitnessState();
@@ -198,50 +202,33 @@ class _BarChartFitnessState extends State<BarChartFitness> {
                       borderData: FlBorderData(
                         show: false,
                       ),
-                      barGroups: [
-                        BarChartGroupData(x: 0, barRods: [
-                          BarChartRodData(
-                              y: 0, color: Colors.lightBlueAccent, width: 15)
-                        ], showingTooltipIndicators: [
-
-                        ]),
-                        BarChartGroupData(x: 1, barRods: [
-                          BarChartRodData(
-                              y: 0, color: Colors.lightBlueAccent, width: 15)
-                        ], showingTooltipIndicators: [
-
-                        ]),
-                        BarChartGroupData(x: 2, barRods: [
-                          BarChartRodData(
-                              y: 0, color: Colors.lightBlueAccent, width: 15)
-                        ], showingTooltipIndicators: [
-
-                        ]),
-                        BarChartGroupData(x: 3, barRods: [
-                          BarChartRodData(
-                              y: 0, color: Colors.lightBlueAccent, width: 15)
-                        ], showingTooltipIndicators: [
-
-                        ]),
-                        BarChartGroupData(x: 4, barRods: [
-                          BarChartRodData(
-                              y: 0, color: Colors.lightBlueAccent, width: 15)
-                        ], showingTooltipIndicators: [
-
-                        ]),
-                        BarChartGroupData(x: 5, barRods: [
-                          BarChartRodData(
-                              y: 0, color: Colors.lightBlueAccent, width: 15)
-                        ], showingTooltipIndicators: [
-
-                        ]),
-                        BarChartGroupData(x: 6, barRods: [
-                          BarChartRodData(
-                              y: 0, color: Colors.lightBlueAccent, width: 15)
-                        ], showingTooltipIndicators: [
-
-                        ]),
-                      ],
+                      barGroups: widget.isCalories ? dayOfWeek.map((day) {
+                        double calories = Utils.getTotalCaloriesByDay(
+                            '$day/${Utils.getYearFromControl(controlWeek)}');
+                        return BarChartGroupData(
+                          x: dayOfWeek.indexOf(day),
+                          barRods: [
+                            BarChartRodData(
+                                y: calories > 500 ? 500 : calories,
+                                color: Colors.lightBlueAccent,
+                                width: 15)
+                          ],
+                          showingTooltipIndicators: calories == 0 ? [] : [0],
+                        );
+                      }).toList() : dayOfWeek.map((day) {
+                        double exercises = Utils.getTotalExercisesByDay(
+                            '$day/${Utils.getYearFromControl(controlWeek)}');
+                        return BarChartGroupData(
+                          x: dayOfWeek.indexOf(day),
+                          barRods: [
+                            BarChartRodData(
+                                y: exercises > 500 ? 500 : exercises,
+                                color: Colors.lightBlueAccent,
+                                width: 15)
+                          ],
+                          showingTooltipIndicators: exercises == 0 ? [] : [0],
+                        );
+                      }).toList(),
                     ),
                   ),
                 ),

@@ -1,13 +1,22 @@
 import 'package:date_time_format/date_time_format.dart';
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
+import 'package:women_fitness_flutter/db/hive/section_history.dart';
 import 'package:women_fitness_flutter/generated/l10n.dart';
 import 'package:women_fitness_flutter/shared/app_color.dart';
+import 'package:women_fitness_flutter/shared/model/section.dart';
 import 'package:women_fitness_flutter/shared/size_config.dart';
+import 'package:women_fitness_flutter/shared/utils.dart';
 import 'package:women_fitness_flutter/shared/widget/text_app.dart';
 
 class CalendarWeekGoalPage extends StatefulWidget {
+  final List<Section> listSections;
+
+  CalendarWeekGoalPage({@required this.listSections});
+
   @override
   _CalendarWeekGoalPageState createState() => _CalendarWeekGoalPageState();
 }
@@ -56,7 +65,7 @@ class _CalendarWeekGoalPageState extends State<CalendarWeekGoalPage>
         ),
         centerTitle: false,
       ),
-      body: Container(
+      body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
             TableCalendar(
@@ -107,82 +116,94 @@ class _CalendarWeekGoalPageState extends State<CalendarWeekGoalPage>
               onCalendarCreated: _onCalendarCreated,
             ),
             Divider(),
-            _buildFooter(),
+            ValueListenableBuilder(
+              valueListenable: Hive.box('section_history').listenable(),
+              builder: (_, Box box, __) {
+                return ListView.separated(
+                  itemCount: box.values.length,
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  itemBuilder: (_, index) {
+                    SectionHistory history = box.getAt(index);
+                    return Container(
+                      margin: EdgeInsets.only(
+                          left: 15, right: 15, top: 5, bottom: 5),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          ClipOval(
+                            child: Image.asset(
+                              'assets/images/sections/${history.thumb}.jpg',
+                              fit: BoxFit.cover,
+                              width: 55,
+                              height: 55,
+                            ),
+                          ),
+                          SizedBox(
+                            width: 15,
+                          ),
+                          Expanded(
+                            child: Column(
+                              children: [
+                                TextApp(
+                                  content: history.timeFinish,
+                                  textColor: Colors.grey,
+                                ),
+                                TextApp(
+                                  content: widget.listSections[index].title
+                                      .toUpperCase(),
+                                  textColor: Colors.black,
+                                ),
+                                Row(
+                                  children: [
+                                    Icon(
+                                      Icons.timer,
+                                      color: AppColor.main,
+                                      size: 15,
+                                    ),
+                                    SizedBox(
+                                      width: 5,
+                                    ),
+                                    TextApp(
+                                      content: Utils.convertSecondToTime(
+                                          history.totalTime),
+                                      textColor: Colors.grey,
+                                    ),
+                                    SizedBox(
+                                      width: 20,
+                                    ),
+                                    Image.asset(
+                                      'assets/images/firecalo.png',
+                                      width: 15,
+                                      height: 15,
+                                    ),
+                                    SizedBox(
+                                      width: 5,
+                                    ),
+                                    TextApp(
+                                      content:
+                                          '${history.calories.toStringAsFixed(2)} Calo',
+                                      textColor: Colors.grey,
+                                    )
+                                  ],
+                                )
+                              ],
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                            ),
+                          )
+                        ],
+                      ),
+                    );
+                  },
+                  separatorBuilder: (_, __) => Divider(),
+                );
+              },
+            )
           ],
         ),
       ),
     );
   }
-
-  Widget _buildFooter() => Container(
-        padding: EdgeInsets.only(
-          top: SizeConfig.defaultSize,
-          left: SizeConfig.defaultSize * 2,
-          right: SizeConfig.defaultSize * 2,
-        ),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                TextApp(
-                  content: '$_firstDayOfTheWeek - $_endDayOfTheWeek',
-                  size: SizeConfig.defaultSize * 1.9,
-                ),
-                TextApp(
-                  content: '0 workouts',
-                  textColor: Colors.black54,
-                ),
-              ],
-            ),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                SizedBox(
-                  height: 3,
-                ),
-                Row(
-                  children: <Widget>[
-                    Icon(
-                      Icons.timer,
-                      color: AppColor.main,
-                      size: 15,
-                    ),
-                    SizedBox(
-                      width: 5,
-                    ),
-                    TextApp(
-                      content: '00:00',
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: 2,
-                ),
-                Row(
-                  children: <Widget>[
-                    Image.asset(
-                      'assets/images/firecalo.png',
-                      width: 15,
-                      height: 15,
-                    ),
-                    SizedBox(
-                      width: 5,
-                    ),
-                    TextApp(
-                      content: '0.00 Calories',
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ],
-        ),
-      );
 
   void _onVisibleDaysChanged(
       DateTime first, DateTime last, CalendarFormat format) {

@@ -13,12 +13,15 @@ class ChallengeWeekWidget extends StatefulWidget {
   final bool isWeekSelected;
   final List<WorkOut> listWorkOuts;
   final List<Section> listSections;
+  final int dayFinish;
 
-  ChallengeWeekWidget(
-      {@required this.week,
-      @required this.isWeekSelected,
-      @required this.listWorkOuts,
-      @required this.listSections});
+  ChallengeWeekWidget({
+    @required this.week,
+    @required this.isWeekSelected,
+    @required this.listWorkOuts,
+    @required this.listSections,
+    @required this.dayFinish,
+  });
 
   @override
   _ChallengeWeekWidgetState createState() => _ChallengeWeekWidgetState();
@@ -56,7 +59,7 @@ class _ChallengeWeekWidgetState extends State<ChallengeWeekWidget> {
                   ),
                   children: [
                     TextSpan(
-                      text: '0',
+                      text: '${widget.dayFinish}',
                       style: TextStyle(
                         color: AppColor.main,
                       ),

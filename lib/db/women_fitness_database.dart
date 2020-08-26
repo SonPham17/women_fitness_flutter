@@ -21,7 +21,7 @@ class WomenFitnessDatabase {
 
     if (!exists) {
       // Should happen only the first time you launch your application
-      print("Creating new copy from asset");
+      // print("Creating new copy from asset");
 
       // Make sure the parent directory exists
       try {

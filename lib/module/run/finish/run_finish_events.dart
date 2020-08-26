@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:women_fitness_flutter/shared/model/work_out.dart';
 
 abstract class RunFinishEvent{}
 
@@ -10,5 +11,7 @@ class RunFinishRefreshEvent extends RunFinishEvent{
 }
 
 class RunFinishGetAllSectionEvent extends RunFinishEvent{
+  List<WorkOut> listWorkOuts;
 
+  RunFinishGetAllSectionEvent({this.listWorkOuts});
 }

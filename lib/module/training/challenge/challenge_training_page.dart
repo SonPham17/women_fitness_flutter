@@ -9,6 +9,7 @@ import 'package:women_fitness_flutter/shared/app_color.dart';
 import 'package:women_fitness_flutter/shared/model/section.dart';
 import 'package:women_fitness_flutter/shared/model/work_out.dart';
 import 'package:women_fitness_flutter/shared/size_config.dart';
+import 'package:women_fitness_flutter/shared/utils.dart';
 import 'package:women_fitness_flutter/shared/widget/challenge_week_widget.dart';
 import 'package:women_fitness_flutter/shared/widget/text_app.dart';
 
@@ -24,19 +25,13 @@ class ChallengeTrainingPage extends StatefulWidget {
 }
 
 class _ChallengeTrainingPageState extends State<ChallengeTrainingPage> {
+  int dayFinished = 0;
+
   @override
   void initState() {
     super.initState();
     var challengeBox = Hive.box('challenge_week');
-    if (challengeBox.length == 0) {
-      var challengeWeek =
-          ChallengeWeek(idSection: 101, title: 'Day 1', index: 0);
-      challengeBox.put(101, challengeWeek);
-    }
-    var challengeWeek =
-    ChallengeWeek(idSection: 102, title: 'Day 2', index: 1);
-    challengeBox.put(102, challengeWeek);
-    print("challenge box length= ${challengeBox.length}");
+    dayFinished = challengeBox.length - 1;
   }
 
   @override
@@ -57,24 +52,28 @@ class _ChallengeTrainingPageState extends State<ChallengeTrainingPage> {
                           week: 1,
                           listSections: widget.listSections.sublist(18, 25),
                           isWeekSelected: true,
+                          dayFinish: dayFinished > 7 ? 7 : dayFinished,
                         ),
                         ChallengeWeekWidget(
                           listWorkOuts: widget.listWorkOuts,
                           week: 2,
                           listSections: widget.listSections.sublist(25, 32),
-                          isWeekSelected: false,
+                          isWeekSelected: dayFinished > 6,
+                          dayFinish: dayFinished < 14 ? dayFinished - 7 : 7,
                         ),
                         ChallengeWeekWidget(
                           listWorkOuts: widget.listWorkOuts,
                           week: 3,
                           listSections: widget.listSections.sublist(32, 39),
-                          isWeekSelected: false,
+                          isWeekSelected: dayFinished > 13,
+                          dayFinish: dayFinished < 21 ? dayFinished - 14 : 7,
                         ),
                         ChallengeWeekWidget(
                           listWorkOuts: widget.listWorkOuts,
                           week: 4,
                           listSections: widget.listSections.sublist(39, 46),
-                          isWeekSelected: false,
+                          isWeekSelected: dayFinished > 20,
+                          dayFinish: dayFinished < 28 ? dayFinished - 21 : 7,
                         ),
                         SizedBox(
                           height: 60,
@@ -157,7 +156,8 @@ class _ChallengeTrainingPageState extends State<ChallengeTrainingPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               TextApp(
-                content: '${S.current.challenge_progress} 0%',
+                content:
+                    '${S.current.challenge_progress} ${((dayFinished / 28) * 100).toStringAsFixed(2)}%',
                 textColor: Colors.white,
                 size: SizeConfig.defaultSize * 2,
               ),
@@ -165,7 +165,7 @@ class _ChallengeTrainingPageState extends State<ChallengeTrainingPage> {
                 height: 10,
               ),
               TextApp(
-                content: '28 ${S.current.challenge_day_left}',
+                content: '${28 - dayFinished} ${S.current.challenge_day_left}',
                 textColor: Colors.white,
                 size: SizeConfig.defaultSize * 2,
               ),
@@ -177,9 +177,9 @@ class _ChallengeTrainingPageState extends State<ChallengeTrainingPage> {
                 animation: true,
                 lineHeight: 15,
                 animationDuration: 2000,
-                percent: 0,
+                percent: dayFinished / 28,
                 center: TextApp(
-                  content: '0%',
+                  content: '${((dayFinished / 28) * 100).toStringAsFixed(2)}%',
                   size: 10,
                 ),
                 linearStrokeCap: LinearStrokeCap.roundAll,

@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive/hive.dart';
 import 'package:women_fitness_flutter/data/spref/spref.dart';
 import 'package:women_fitness_flutter/db/hive/challenge_week.dart';
+import 'package:women_fitness_flutter/db/hive/section_history.dart';
 import 'package:women_fitness_flutter/generated/l10n.dart';
 import 'package:women_fitness_flutter/injector/injector.dart';
 import 'package:women_fitness_flutter/module/run/finish/run_finish_bloc.dart';
@@ -10,6 +11,7 @@ import 'package:women_fitness_flutter/module/run/finish/run_finish_events.dart';
 import 'package:women_fitness_flutter/module/run/finish/run_finish_states.dart';
 import 'package:women_fitness_flutter/shared/app_color.dart';
 import 'package:women_fitness_flutter/shared/model/section.dart';
+import 'package:women_fitness_flutter/shared/model/work_out.dart';
 import 'package:women_fitness_flutter/shared/size_config.dart';
 import 'package:women_fitness_flutter/shared/utils.dart';
 import 'package:women_fitness_flutter/shared/widget/dialog_edit.dart';
@@ -17,8 +19,9 @@ import 'package:women_fitness_flutter/shared/widget/text_app.dart';
 
 class RunFinishPage extends StatefulWidget {
   final Section section;
+  final List<WorkOut> listWorkOutBySection;
 
-  RunFinishPage({@required this.section});
+  RunFinishPage({@required this.section, @required this.listWorkOutBySection});
 
   @override
   _RunFinishPageState createState() => _RunFinishPageState();
@@ -31,6 +34,9 @@ class _RunFinishPageState extends State<RunFinishPage> {
   double currentHeight;
   double weight;
   String statusWeight;
+
+  int totalTime = 0;
+  double calories = 0;
 
   double calBMI() {
     if (calculatorBMI < 13.5) {
@@ -51,7 +57,9 @@ class _RunFinishPageState extends State<RunFinishPage> {
     super.initState();
 
     _runFinishBloc = Injector.resolve<RunFinishBloc>()
-      ..add(RunFinishGetAllSectionEvent());
+      ..add(RunFinishGetAllSectionEvent(
+        listWorkOuts: widget.listWorkOutBySection,
+      ));
 
     SPref.instance
         .getDouble(Utils.sPrefHeight)
@@ -67,6 +75,12 @@ class _RunFinishPageState extends State<RunFinishPage> {
       child: BlocConsumer<RunFinishBloc, RunFinishState>(
         listener: (_, state) {
           if (state is RunFinishStateGetAllSectionDone) {
+            setState(() {
+              totalTime = state.totalTime;
+              calories = state.totalCalories;
+            });
+
+            var sectionBox = Hive.box('section_history');
             var data = state.listSections;
             int index =
                 data.indexWhere((section) => section.id == widget.section.id);
@@ -78,6 +92,16 @@ class _RunFinishPageState extends State<RunFinishPage> {
                   index: challengeBox.length);
               challengeBox.put(data[index + 1].id, challengeWeek);
             }
+
+            var sectionHistory = SectionHistory(
+              sectionId: widget.section.id,
+              totalTime: state.totalTime,
+              calories: state.totalCalories,
+              day: Utils.getDateNowFormat(),
+              timeFinish: Utils.getDateNowFormatHour(),
+              thumb: widget.section.thumb,
+            );
+            sectionBox.add(sectionHistory);
           }
         },
         builder: (_, state) => Scaffold(
@@ -417,7 +441,7 @@ class _RunFinishPageState extends State<RunFinishPage> {
                         color: Colors.white,
                       ),
                       TextApp(
-                        content: '20',
+                        content: '${widget.listWorkOutBySection.length}',
                         size: 26,
                         fontWeight: FontWeight.bold,
                         textColor: Colors.white,
@@ -435,7 +459,7 @@ class _RunFinishPageState extends State<RunFinishPage> {
                         color: Colors.white,
                       ),
                       TextApp(
-                        content: '26',
+                        content: calories.toStringAsFixed(2),
                         size: 26,
                         fontWeight: FontWeight.bold,
                         textColor: Colors.white,
@@ -453,7 +477,7 @@ class _RunFinishPageState extends State<RunFinishPage> {
                         color: Colors.white,
                       ),
                       TextApp(
-                        content: '00:05',
+                        content: Utils.convertSecondToTime(totalTime),
                         size: 26,
                         fontWeight: FontWeight.bold,
                         textColor: Colors.white,

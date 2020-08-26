@@ -146,7 +146,9 @@ class _HomePageState extends State<HomePage> {
         listSections: listSections,
         listWorkOuts: listWorkOuts,
       ),
-      ReportPage(),
+      ReportPage(
+        listSections: listSections,
+      ),
       SettingPage(),
     ];
   }

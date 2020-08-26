@@ -1,4 +1,6 @@
+import 'package:hive/hive.dart';
 import 'package:intl/intl.dart';
+import 'package:women_fitness_flutter/db/hive/section_history.dart';
 
 class Utils {
   static final String keyIndex = 'index_run';
@@ -51,6 +53,38 @@ class Utils {
     final firstDayOfWeek =
         now.subtract(Duration(days: now.weekday - 1 + controlWeek));
     return firstDayOfWeek.year;
+  }
+
+  static double getTotalCaloriesByDay(String day) {
+    double calories = 0;
+    var sectionBox = Hive.box('section_history');
+    for (int i = 0; i < sectionBox.length; i++) {
+      SectionHistory history = sectionBox.getAt(i);
+      if (history.day == day) {
+        calories += history.calories;
+      }
+    }
+    return calories;
+  }
+
+  static double getTotalExercisesByDay(String day) {
+    double exercises = 0;
+    var sectionBox = Hive.box('section_history');
+    for (int i = 0; i < sectionBox.length; i++) {
+      SectionHistory history = sectionBox.getAt(i);
+      if (history.day == day) {
+        exercises++;
+      }
+    }
+    return exercises;
+  }
+
+  static String getDateNowFormat() {
+    return DateFormat('d/M/yyyy').format(DateTime.now());
+  }
+
+  static String getDateNowFormatHour() {
+    return DateFormat('hh:mm a d/M/yyyy').format(DateTime.now());
   }
 
   static double calculatorBMI(double f, double f2) {

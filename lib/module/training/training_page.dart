@@ -1,9 +1,13 @@
 import 'package:calendar_strip/calendar_strip.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hive/hive.dart';
 import 'package:like_button/like_button.dart';
+import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:women_fitness_flutter/data/spref/spref.dart';
+import 'package:women_fitness_flutter/db/hive/challenge_week.dart';
+import 'package:women_fitness_flutter/db/hive/section_history.dart';
 import 'package:women_fitness_flutter/generated/l10n.dart';
 import 'package:women_fitness_flutter/injector/injector.dart';
 import 'package:women_fitness_flutter/module/home/home_bloc.dart';
@@ -44,6 +48,11 @@ class _TrainingPageState extends State<TrainingPage> {
   HomeBloc _homeBloc;
 
   int weekTraining = 0;
+  int dayFinished;
+
+  int totalWorkOuts = 0;
+  double totalKcal = 0;
+  int totalMinutes = 0;
 
   DateTime startDate = DateTime.now().subtract(Duration(days: 2));
   DateTime endDate = DateTime.now().add(Duration(days: 2));
@@ -67,6 +76,39 @@ class _TrainingPageState extends State<TrainingPage> {
     SPref.instance.getInt(Utils.sPrefWeekGoal).then((value) {
       setState(() {
         weekTraining = value ?? 2;
+      });
+    });
+
+    var challengeBox = Hive.box('challenge_week');
+    if (challengeBox.length == 0) {
+      var challengeWeek =
+          ChallengeWeek(idSection: 101, title: 'Day 1', index: 0);
+      challengeBox.put(101, challengeWeek);
+    }
+    dayFinished = challengeBox.length - 1;
+
+    _getDataTotal();
+  }
+
+  Future<void> _getDataTotal() async {
+    var sectionBox = Hive.box('section_history');
+    for (int i = 0; i < sectionBox.length; i++) {
+      SectionHistory sectionHistory = sectionBox.getAt(i);
+      totalKcal += sectionHistory.calories;
+      totalMinutes += sectionHistory.totalTime;
+    }
+
+    setState(() {
+      totalWorkOuts = sectionBox.length;
+    });
+
+    sectionBox.watch().listen((event) {
+      setState(() {
+        totalWorkOuts = sectionBox.length;
+        SectionHistory sectionHistory = event.value;
+        totalKcal += sectionHistory.calories;
+        totalMinutes += sectionHistory.totalTime;
+        print('event section box watch= ${sectionHistory.calories}');
       });
     });
   }
@@ -386,28 +428,28 @@ class _TrainingPageState extends State<TrainingPage> {
             aspectRatio: 1.65,
             child: InkWell(
               onTap: () {
-//                pushNewScreenWithRouteSettings(
-//                  context,
-//                  screen: ChallengeTrainingPage(
-//                    listSections: widget.listSections,
-//                    listWorkOuts: widget.listWorkOuts,
-//                  ),
-//                  settings: RouteSettings(
-//                    name: '/training/challenge',
-//                    arguments: {
-//                      'test': 123,
-//                    },
-//                  ),
-//                  withNavBar: false,
-//                  pageTransitionAnimation: PageTransitionAnimation.cupertino,
-//                );
-
-                pushNewScreen(
+                pushNewScreenWithRouteSettings(
                   context,
-                  screen: IAPPage(),
+                  screen: ChallengeTrainingPage(
+                    listSections: widget.listSections,
+                    listWorkOuts: widget.listWorkOuts,
+                  ),
+                  settings: RouteSettings(
+                    name: '/training/challenge',
+                    arguments: {
+                      'test': 123,
+                    },
+                  ),
                   withNavBar: false,
                   pageTransitionAnimation: PageTransitionAnimation.cupertino,
                 );
+
+                // pushNewScreen(
+                //   context,
+                //   screen: IAPPage(),
+                //   withNavBar: false,
+                //   pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                // );
               },
               child: Container(
                 decoration: BoxDecoration(
@@ -438,21 +480,24 @@ class _TrainingPageState extends State<TrainingPage> {
                       SizedBox(
                         height: defaultSize,
                       ),
-                      Container(
-                        width: defaultSize * 12,
-                        height: defaultSize * 4.5,
-                        decoration: BoxDecoration(
-                            color: AppColor.main,
-                            borderRadius:
-                                BorderRadius.circular(defaultSize * 2)),
-                        child: Center(
-                          child: TextApp(
-                            content: S.current.training_btn_start.toUpperCase(),
-                            size: defaultSize * 2,
-                            textColor: Colors.white,
-                          ),
-                        ),
-                      )
+                      dayFinished == 0
+                          ? Container(
+                              width: defaultSize * 12,
+                              height: defaultSize * 4.5,
+                              decoration: BoxDecoration(
+                                  color: AppColor.main,
+                                  borderRadius:
+                                      BorderRadius.circular(defaultSize * 2)),
+                              child: Center(
+                                child: TextApp(
+                                  content: S.current.training_btn_start
+                                      .toUpperCase(),
+                                  size: defaultSize * 2,
+                                  textColor: Colors.white,
+                                ),
+                              ),
+                            )
+                          : _buildProgressChallenge()
                     ],
                   ),
                 ),
@@ -463,6 +508,22 @@ class _TrainingPageState extends State<TrainingPage> {
       ),
     );
   }
+
+  Widget _buildProgressChallenge() => Container(
+        margin: EdgeInsets.only(right: 10, top: 10),
+        child: LinearPercentIndicator(
+          animation: true,
+          lineHeight: 15,
+          animationDuration: 2000,
+          percent: dayFinished / 28,
+          center: TextApp(
+            content: '${((dayFinished / 28) * 100).toStringAsFixed(2)}%',
+            size: 10,
+          ),
+          linearStrokeCap: LinearStrokeCap.roundAll,
+          progressColor: Colors.greenAccent,
+        ),
+      );
 
   dateTileBuilder(
       date, selectedDate, rowIndex, dayName, isDateMarked, isDateOutOfRange) {
@@ -570,7 +631,9 @@ class _TrainingPageState extends State<TrainingPage> {
                 onTap: () {
                   pushNewScreenWithRouteSettings(
                     context,
-                    screen: CalendarWeekGoalPage(),
+                    screen: CalendarWeekGoalPage(
+                      listSections: widget.listSections,
+                    ),
                     settings: RouteSettings(
                       name: '/training/week_goal/calendar_week_goal',
                       arguments: {
@@ -587,7 +650,9 @@ class _TrainingPageState extends State<TrainingPage> {
                   onDateSelected: (date) {
                     pushNewScreenWithRouteSettings(
                       context,
-                      screen: CalendarWeekGoalPage(),
+                      screen: CalendarWeekGoalPage(
+                        listSections: widget.listSections,
+                      ),
                       settings: RouteSettings(
                         name: '/training/week_goal/calendar_week_goal',
                         arguments: {
@@ -641,7 +706,7 @@ class _TrainingPageState extends State<TrainingPage> {
                 Column(
                   children: <Widget>[
                     TextApp(
-                      content: '0',
+                      content: '$totalWorkOuts',
                       size: 30,
                       textColor: AppColor.main,
                     ),
@@ -654,7 +719,7 @@ class _TrainingPageState extends State<TrainingPage> {
                 Column(
                   children: <Widget>[
                     TextApp(
-                      content: '0',
+                      content: '${totalKcal.toStringAsFixed(0)}',
                       size: 30,
                       textColor: AppColor.main,
                     ),
@@ -667,7 +732,7 @@ class _TrainingPageState extends State<TrainingPage> {
                 Column(
                   children: <Widget>[
                     TextApp(
-                      content: '0',
+                      content: '${Utils.convertSecondToTime(totalMinutes)}',
                       size: 30,
                       textColor: AppColor.main,
                     ),

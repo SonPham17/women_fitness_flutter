@@ -91,7 +91,7 @@ class _RunWorkOutPageState extends State<RunWorkOutPage>
     time = workOut.timeDefault;
     _progressValue = 0.0;
 
-    Future.delayed(Duration(seconds: 1), () {
+    Future.delayed(Duration(seconds: 2), () {
       if (workOut.type == 0) {
         _timerProgress = Timer.periodic(Duration(seconds: 1), (timer) {
           if (!isPaused) {
@@ -120,6 +120,7 @@ class _RunWorkOutPageState extends State<RunWorkOutPage>
                     context,
                     screen: RunFinishPage(
                       section: widget.section,
+                      listWorkOutBySection: widget.listWorkOutBySection,
                     ),
                     pageTransitionAnimation: PageTransitionAnimation.cupertino,
                     withNavBar: false,
@@ -211,17 +212,15 @@ class _RunWorkOutPageState extends State<RunWorkOutPage>
               height: 10,
               width: MediaQuery.of(context).size.width,
               child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: listInt
-                    .map((e) => Expanded(
-                          child: Container(
-                            margin: widget.listWorkOutBySection.length - 1 ==
-                                    listInt.indexOf(e)
-                                ? EdgeInsets.only(left: 2)
-                                : EdgeInsets.only(right: 2),
-                            color: listInt.indexOf(e) < widget.index
-                                ? AppColor.main
-                                : AppColor.main[200],
-                          ),
+                    .map((e) => Container(
+                          width: MediaQuery.of(context).size.width /
+                                  widget.listWorkOutBySection.length -
+                              2,
+                          color: listInt.indexOf(e) < widget.index
+                              ? AppColor.main
+                              : AppColor.main[200],
                         ))
                     .toList(),
               ),
