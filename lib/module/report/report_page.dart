@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive/hive.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
+import 'package:women_fitness_flutter/ad/ad_task.dart';
 import 'package:women_fitness_flutter/data/spref/spref.dart';
 import 'package:women_fitness_flutter/db/hive/section_history.dart';
 import 'package:women_fitness_flutter/generated/l10n.dart';
@@ -501,23 +502,27 @@ class _ReportPageState extends State<ReportPage> {
                     width: 60,
                     child: InkWell(
                       onTap: () {
-                        pushNewScreen(
-                          context,
-                          screen: EditWeekGoalPage(
-                            weeklyTraining: weekTraining,
-                          ),
-                          pageTransitionAnimation:
-                              PageTransitionAnimation.cupertino,
-                          withNavBar: false,
-                        ).then((value) {
-                          if (value != null) {
-                            setState(() {
-                              weekTraining = value;
-                              SPref.instance
-                                  .setInt(Utils.sPrefWeekGoal, weekTraining);
-                            });
-                          }
-                        });
+                        // pushNewScreen(
+                        //   context,
+                        //   screen: EditWeekGoalPage(
+                        //     weeklyTraining: weekTraining,
+                        //   ),
+                        //   pageTransitionAnimation:
+                        //       PageTransitionAnimation.cupertino,
+                        //   withNavBar: false,
+                        // ).then((value) {
+                        //   if (value != null) {
+                        //     setState(() {
+                        //       weekTraining = value;
+                        //       SPref.instance
+                        //           .setInt(Utils.sPrefWeekGoal, weekTraining);
+                        //     });
+                        //   }
+                        // });
+
+                        AdTask.instance.getAdsServerConfig();
+                        AdTask.instance.loadAdsInterstitialGoogle();
+                        AdTask.instance.showInterstitialAds();
                       },
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
