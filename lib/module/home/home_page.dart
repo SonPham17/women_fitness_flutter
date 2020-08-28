@@ -1,3 +1,4 @@
+import 'package:facebook_audience_network/facebook_audience_network.dart';
 import 'package:firebase_admob/firebase_admob.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -48,8 +49,10 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  Future<void> _initAdMob() {
-    return FirebaseAdMob.instance.initialize(appId: AdManager.appId);
+  _initAdMob() {
+    FacebookAudienceNetwork.init(
+        testingId: "55245acc-562e-461f-88fd-21a33ef4a290");
+    FirebaseAdMob.instance.initialize(appId: AdManager.appId);
   }
 
   @override

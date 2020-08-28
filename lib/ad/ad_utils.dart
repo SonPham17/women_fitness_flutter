@@ -1,6 +1,6 @@
 class AdUtils{
   static final String deviceTestAdmob = "A769DBCCFAD24AC37DBD483F9CA83A66";
-  static final String deviceTestFacebook = "12a4b096-f6cb-47bf-8996-f1b96fce8131";
+  static final String deviceTestFacebook = "2ede2698-852b-4d9c-a062-70283c0772ca";
 
   static final String timeAdsConfigGlobalApp = "ad_utils_time";
   static final String adsConfigGlobalApp = "ad_utils_config_global_app";

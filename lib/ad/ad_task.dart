@@ -3,13 +3,14 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:facebook_audience_network/facebook_audience_network.dart';
 import 'package:firebase_admob/firebase_admob.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:package_info/package_info.dart';
 import 'package:women_fitness_flutter/ad/ad_utils.dart';
 import 'package:women_fitness_flutter/ad/reward_listener.dart';
 import 'package:women_fitness_flutter/data/spref/spref.dart';
 import 'package:women_fitness_flutter/network/women_fitness_client.dart';
 
-class AdTask {
+abstract class AdTask {
   static final int oneHour = 3600000;
   static final int oneMinute = 60 * 1000;
   static final int oneDay = 0;
@@ -19,14 +20,14 @@ class AdTask {
   InterstitialAd _interstitialAdGoogle;
   bool _isInterstitialAdFacebookLoaded = false;
 
-  //singleton
-  factory AdTask() {
-    return instance;
-  }
-
-  static final AdTask instance = AdTask._internal();
-
-  AdTask._internal();
+  // singleton
+  // factory AdTask() {
+  //   return instance;
+  // }
+  //
+  // static final AdTask instance = AdTask._internal();
+  //
+  // AdTask._internal();
 
   MobileAdTargetingInfo targetingInfo = MobileAdTargetingInfo(
     keywords: <String>['women fitness', 'beautiful apps'],
@@ -38,32 +39,45 @@ class AdTask {
     ], // Android emulators are considered test devices
   );
 
+  Widget loadBannerAdsFacebook() {
+    return FacebookBannerAd(
+      placementId: "284129658790784_474035083133573",
+      bannerSize: BannerSize.STANDARD,
+      listener: (result, value) {
+        switch (result) {
+          case BannerAdResult.ERROR:
+            print("Error: $value");
+            break;
+          case BannerAdResult.LOADED:
+            print("Loaded: $value");
+            break;
+          case BannerAdResult.CLICKED:
+            print("Clicked: $value");
+            break;
+          case BannerAdResult.LOGGING_IMPRESSION:
+            print("Logging Impression: $value");
+            break;
+        }
+      },
+    );
+  }
+
   Future<void> getAdsServerConfig() async {
     int previousTime =
         await SPref.instance.getInt(AdUtils.timeAdsConfigGlobalApp) ?? 0;
-    if (DateTime
-        .now()
-        .millisecondsSinceEpoch - previousTime >= oneHour) {
+    if (DateTime.now().millisecondsSinceEpoch - previousTime >= oneHour) {
       PackageInfo packageInfo = await PackageInfo.fromPlatform();
       String jsonResult = "";
-      // String query = "/app-ads/public/api/app/" + packageInfo.packageName +
-      //     "/detail";
       String query =
-          "http://isub.mobi/app-ads/public/api/app/com.iphoneringtone.ringtoneiphone/detail";
+          "/app-ads/public/api/app/" + packageInfo.packageName + "/detail";
       Response response = await WomenFitnessClient.instance.dio.get(query);
       if (response.statusCode == 200) {
         jsonResult = json.encode(response.data);
         SPref.instance.setString(AdUtils.adsConfigGlobalApp, jsonResult);
         SPref.instance.setInt(AdUtils.timeAdsConfigGlobalApp,
-            DateTime
-                .now()
-                .millisecondsSinceEpoch);
+            DateTime.now().millisecondsSinceEpoch);
       }
     }
-    FacebookAudienceNetwork.init(
-        testingId: "55245acc-562e-461f-88fd-21a33ef4a290");
-
-    print("rewards= ${await getRewardFacebook()}");
   }
 
   Future<String> getRewardFacebook() async {
@@ -180,8 +194,8 @@ class AdTask {
     rewardedVideoAd.load(adUnitId: await getIDRewardGoogle());
   }
 
-  Future<void> loadRewardFacebook(RewardListener rewardListener,
-      bool showAfterLoaded) async {
+  Future<void> loadRewardFacebook(
+      RewardListener rewardListener, bool showAfterLoaded) async {
     FacebookRewardedVideoAd.loadRewardedVideoAd(
         placementId: await getRewardFacebook(),
         listener: (result, value) {
@@ -236,9 +250,7 @@ class AdTask {
     bool checkPremium = await SPref.instance.getBool("premium") ?? false;
     int previousTime =
         await SPref.instance.getInt(AdUtils.deltaTimeAdShowInterstitial) ?? 0;
-    if (DateTime
-        .now()
-        .millisecondsSinceEpoch - previousTime >= oneMinute &&
+    if (DateTime.now().millisecondsSinceEpoch - previousTime >= oneMinute &&
         !checkPremium) {
       return true;
     } else {
@@ -250,9 +262,7 @@ class AdTask {
     bool checkPremium = await SPref.instance.getBool("premium") ?? false;
     int previousTime =
         await SPref.instance.getInt(AdUtils.deltaTimeAdShowBanner) ?? 0;
-    if (DateTime
-        .now()
-        .millisecondsSinceEpoch - previousTime >= oneMinute &&
+    if (DateTime.now().millisecondsSinceEpoch - previousTime >= oneMinute &&
         !checkPremium) {
       return true;
     } else {
@@ -264,15 +274,11 @@ class AdTask {
     int previousTime =
         await SPref.instance.getInt(AdUtils.deltaTimeAdShowNotification) ?? 0;
     if (previousTime == 0) {
-      previousTime = DateTime
-          .now()
-          .millisecondsSinceEpoch;
+      previousTime = DateTime.now().millisecondsSinceEpoch;
       SPref.instance.setInt(AdUtils.deltaTimeAdShowNotification, previousTime);
       return true;
     }
-    if (DateTime
-        .now()
-        .millisecondsSinceEpoch - previousTime >= oneDay) {
+    if (DateTime.now().millisecondsSinceEpoch - previousTime >= oneDay) {
       return true;
     } else {
       return false;
@@ -285,33 +291,35 @@ class AdTask {
         targetingInfo: targetingInfo,
         listener: (MobileAdEvent event) {
           if (event == MobileAdEvent.opened) {
-            SPref.instance.setInt(AdUtils.deltaTimeAdShowInterstitial, DateTime
-                .now()
-                .millisecondsSinceEpoch);
+            SPref.instance.setInt(AdUtils.deltaTimeAdShowInterstitial,
+                DateTime.now().millisecondsSinceEpoch);
           }
-        }
-    );
-    _interstitialAdGoogle.load();
+        });
+    await _interstitialAdGoogle.load();
   }
 
   Future<void> showInterstitialAds() async {
-    if (await needShowInterstitialAds()) {
-      if (_isInterstitialAdFacebookLoaded){
-        FacebookInterstitialAd.showInterstitialAd();
-      }else if(_interstitialAdGoogle!=null && await _interstitialAdGoogle.isLoaded()){
-        _interstitialAdGoogle.show();
-      }
-      loadInterstitialAds();
-    }
+    FacebookInterstitialAd.showInterstitialAd();
+    // if (await needShowInterstitialAds()) {
+    //   if (_isInterstitialAdFacebookLoaded) {
+    //     FacebookInterstitialAd.showInterstitialAd();
+    //     print('facebook interstitialads');
+    //   } else if (_interstitialAdGoogle != null) {
+    //     print('showInterstitialAds');
+    //     _interstitialAdGoogle.show();
+    //   }
+    //   await loadInterstitialAds();
+    // }
   }
 
-  Future<void> loadInterstitialAds() async{
+  Future<void> loadInterstitialAds() async {
     FacebookInterstitialAd.loadInterstitialAd(
-      placementId: await getInterstitialIDFacebook(),
+      placementId: "284129658790784_474035296466885",
       listener: (result, value) {
-        switch(result){
+        switch (result) {
           case InterstitialAdResult.DISPLAYED:
-            SPref.instance.setInt(AdUtils.deltaTimeAdShowInterstitial, DateTime.now().millisecondsSinceEpoch);
+            SPref.instance.setInt(AdUtils.deltaTimeAdShowInterstitial,
+                DateTime.now().millisecondsSinceEpoch);
             break;
           case InterstitialAdResult.DISMISSED:
             break;
@@ -321,7 +329,8 @@ class AdTask {
           case InterstitialAdResult.LOADED:
             break;
           case InterstitialAdResult.CLICKED:
-            SPref.instance.setInt(AdUtils.deltaTimeAdShowBanner, DateTime.now().millisecondsSinceEpoch);
+            SPref.instance.setInt(AdUtils.deltaTimeAdShowBanner,
+                DateTime.now().millisecondsSinceEpoch);
             FacebookInterstitialAd.destroyInterstitialAd();
             break;
           case InterstitialAdResult.LOGGING_IMPRESSION:
@@ -329,6 +338,5 @@ class AdTask {
         }
       },
     );
-    FacebookInterstitialAd.loadInterstitialAd();
   }
 }
