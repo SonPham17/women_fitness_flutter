@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -22,9 +23,11 @@ class _IAPPageState extends State<IAPPage> {
       InAppPurchaseConnection.instance;
   bool _available = true;
 
-  StreamSubscription _subscription;
+  List<ProductDetails> _products = [];
 
-  int _credits = 0;
+  List<PurchaseDetails> _purchases = [];
+
+  StreamSubscription _subscription;
 
   @override
   void initState() {
@@ -35,20 +38,58 @@ class _IAPPageState extends State<IAPPage> {
   Future<void> _initialize() async {
     _available = await _appPurchaseConnection.isAvailable();
     if (_available) {
-      await _getListSanPham();
+      await _getProducts();
+      await _getPastPurchases();
+
+//      _verifyPurchase();
 
       _subscription =
           _appPurchaseConnection.purchaseUpdatedStream.listen((data) {
-        print('new purchase= $data');
+        print('new purchase= ${data.length}');
+        _appPurchaseConnection.completePurchase(data[0]);
+        _purchases.addAll(data);
+        _verifyPurchase();
+      }, onDone: () {
+        _subscription.cancel();
       });
     }
   }
 
-  Future<void> _getListSanPham() async {
-    _appPurchaseConnection.queryProductDetails(ids).then((value) {
-      var data = value.productDetails;
-      print(data);
+  Future<void> _getProducts() async {
+    ProductDetailsResponse response =
+        await _appPurchaseConnection.queryProductDetails(ids);
+
+    setState(() {
+      _products = response.productDetails;
     });
+  }
+
+  Future<void> _getPastPurchases() async {
+    QueryPurchaseDetailsResponse response =
+        await _appPurchaseConnection.queryPastPurchases();
+
+    print('length past purchase= ${response.pastPurchases.length}');
+
+    for (PurchaseDetails purchase in response.pastPurchases) {
+      if (Platform.isIOS) {
+        _appPurchaseConnection.completePurchase(purchase);
+      }
+    }
+
+    _purchases = response.pastPurchases;
+  }
+
+  PurchaseDetails _hasPurchased(String productID) {
+    return _purchases.firstWhere((purchase) => purchase.productID == productID,
+        orElse: () => null);
+  }
+
+  void _verifyPurchase() {
+    PurchaseDetails purchase = _hasPurchased('forever');
+
+    if (purchase != null && purchase.status == PurchaseStatus.purchased) {
+      print('da mua ');
+    }
   }
 
   @override
@@ -134,37 +175,70 @@ class _IAPPageState extends State<IAPPage> {
                 ],
               ),
             ),
-            FutureBuilder<ProductDetailsResponse>(
-              future: _appPurchaseConnection.queryProductDetails(ids),
-              builder: (_, snapshot) {
-                switch (snapshot.connectionState) {
-                  case ConnectionState.waiting:
-                    return TextApp(
-                      content: 'Loading....',
+            ListView.builder(
+              shrinkWrap: true,
+              physics: NeverScrollableScrollPhysics(),
+              itemBuilder: (_, index) => InkWell(
+                onTap: () {
+                  PurchaseParam purchaseParam = PurchaseParam(
+                      productDetails: _products[index],
+                      applicationUserName: null,
+                      sandboxTesting: true);
+                  if (index == 0) {
+                    _appPurchaseConnection.buyNonConsumable(
+                      purchaseParam: purchaseParam,
                     );
-                  default:
-                    if (snapshot.hasError) {
-                      return TextApp(
-                        content: 'Error: ${snapshot.error}',
-                      );
-                    } else {
-                      var productDetail = snapshot.data.productDetails;
-                      return ListView.builder(
-                        shrinkWrap: true,
-                        itemBuilder: (_, index) => Container(
+                  } else {
+                    _appPurchaseConnection.buyConsumable(
+                        purchaseParam: purchaseParam);
+                  }
+                },
+                child: Container(
+                    height: 90,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: index == 0
+                          ? Colors.orange
+                          : (index == 1 ? Colors.blue : Colors.lightGreen),
+                    ),
+                    margin: EdgeInsets.all(10),
+                    padding: EdgeInsets.all(5),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        SvgPicture.asset(
+                          'assets/svg/premium.svg',
+                          width: 40,
+                          height: 40,
+                          color: index == 0
+                              ? Colors.yellow
+                              : (index == 1 ? Colors.brown : Colors.grey),
+                        ),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        Expanded(
                           child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               TextApp(
-                                content: productDetail[index].title,
+                                textColor: Colors.white,
+                                size: 23,
+                                content:
+                                    '${_products[index].price} (${index == 0 ? 'forever' : (index == 1 ? '/1 month' : '/3 months')})',
+                              ),
+                              TextApp(
+                                content: _products[index].description,
                               )
                             ],
                           ),
-                        ),
-                        itemCount: productDetail.length,
-                      );
-                    }
-                }
-              },
+                        )
+                      ],
+                    )),
+              ),
+              itemCount: _products.length,
             ),
           ],
         ),
