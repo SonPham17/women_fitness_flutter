@@ -1,12 +1,9 @@
 import 'package:calendar_strip/calendar_strip.dart';
-import 'package:facebook_audience_network/facebook_audience_network.dart';
-import 'package:firebase_admob/firebase_admob.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive/hive.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:women_fitness_flutter/ad/ad_task.dart';
-import 'package:women_fitness_flutter/ad/ad_utils.dart';
 import 'package:women_fitness_flutter/data/spref/spref.dart';
 import 'package:women_fitness_flutter/db/hive/section_history.dart';
 import 'package:women_fitness_flutter/generated/l10n.dart';
@@ -54,16 +51,6 @@ class _ReportPageState extends State<ReportPage> with AdTask {
     DateTime.now().subtract(Duration(days: 2)),
     DateTime.now().add(Duration(days: 4))
   ];
-
-  MobileAdTargetingInfo targetingInfo = MobileAdTargetingInfo(
-    keywords: <String>['women fitness', 'beautiful apps'],
-    contentUrl: 'https://flutter.io',
-    childDirected: false,
-    testDevices: <String>[
-      AdUtils.deviceTestAdmob,
-      AdUtils.deviceTestFacebook,
-    ], // Android emulators are considered test devices
-  );
 
   double calBMI() {
     if (calculatorBMI < 13.5) {
@@ -119,14 +106,6 @@ class _ReportPageState extends State<ReportPage> with AdTask {
         totalMinutes += sectionHistory.totalTime;
       });
     });
-
-    FacebookInterstitialAd.loadInterstitialAd(
-      placementId: "284129658790784_474035296466885",
-      listener: (result, value) {
-        if (result == InterstitialAdResult.LOADED)
-          FacebookInterstitialAd.showInterstitialAd();
-      },
-    );
   }
 
   @override
@@ -500,12 +479,6 @@ class _ReportPageState extends State<ReportPage> with AdTask {
     );
   }
 
-  Future<void> loadAds() async {
-    await getAdsServerConfig();
-    await loadInterstitialAds();
-    await showInterstitialAds();
-  }
-
   Widget _buildWeekGoal(BuildContext context) => Container(
         height: SizeConfig.defaultSize * 20,
         padding: EdgeInsets.all(10),
@@ -546,11 +519,8 @@ class _ReportPageState extends State<ReportPage> with AdTask {
                         //     });
                         //   }
                         // });
-                        // loadAds();
 
-                        // myInterstitial
-                        //   ..load()
-                        //   ..show();
+                        loadAds();
                       },
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -628,6 +598,11 @@ class _ReportPageState extends State<ReportPage> with AdTask {
           ],
         ),
       );
+
+  Future<void> loadAds() async{
+    await getAdsServerConfig();
+    await loadBannerAdsGoogle();
+  }
 
   Widget _buildTotal() => Container(
         padding: EdgeInsets.all(10),

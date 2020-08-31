@@ -16,6 +16,8 @@ class _IAPPageState extends State<IAPPage> {
   final String month = "1_month";
   final String year = "1_year";
 
+  Set<String> ids = Set.from(["forever", "1_month", "1_year"]);
+
   InAppPurchaseConnection _appPurchaseConnection =
       InAppPurchaseConnection.instance;
   bool _available = true;
@@ -43,8 +45,7 @@ class _IAPPageState extends State<IAPPage> {
   }
 
   Future<void> _getListSanPham() async {
-    Set<String> ids = Set.from([forever, month, year]);
-    _appPurchaseConnection.queryProductDetails(ids).then((value){
+    _appPurchaseConnection.queryProductDetails(ids).then((value) {
       var data = value.productDetails;
       print(data);
     });
@@ -132,6 +133,24 @@ class _IAPPageState extends State<IAPPage> {
                   )
                 ],
               ),
+            ),
+            FutureBuilder<ProductDetailsResponse>(
+              future: _appPurchaseConnection.queryProductDetails(ids),
+              builder: (_, snapshot) {
+                switch (snapshot.connectionState) {
+                  case ConnectionState.waiting:
+                    return TextApp(
+                      content: 'Loading....',
+                    );
+                  default:
+                    if (snapshot.hasError)
+                      return TextApp(
+                        content: 'Error: ${snapshot.error}',
+                      );
+                    else
+                      return Text('Result: ${snapshot.data.productDetails}');
+                }
+              },
             ),
           ],
         ),

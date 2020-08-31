@@ -20,6 +20,8 @@ abstract class AdTask {
   InterstitialAd _interstitialAdGoogle;
   bool _isInterstitialAdFacebookLoaded = false;
 
+  BannerAd bannerGoogle;
+
   // singleton
   // factory AdTask() {
   //   return instance;
@@ -338,5 +340,46 @@ abstract class AdTask {
         }
       },
     );
+  }
+
+  Future<void> loadBannerAdsGoogle() async {
+    if (await needShowBannerAds()) {
+      bannerGoogle = BannerAd(
+        adUnitId: "ca-app-pub-3940256099942544/6300978111",
+        size: AdSize.smartBanner,
+        targetingInfo: targetingInfo,
+        listener: (MobileAdEvent event) {
+          switch (event) {
+            case MobileAdEvent.loaded:
+              break;
+            case MobileAdEvent.failedToLoad:
+              break;
+            case MobileAdEvent.clicked:
+              break;
+            case MobileAdEvent.impression:
+              break;
+            case MobileAdEvent.opened:
+              break;
+            case MobileAdEvent.leftApplication:
+              SPref.instance.setInt(AdUtils.deltaTimeAdShowBanner,
+                  DateTime.now().millisecondsSinceEpoch);
+              destroyBannerAds();
+              break;
+            case MobileAdEvent.closed:
+              break;
+          }
+        },
+      )
+        ..load()
+        ..show(
+          anchorType: AnchorType.bottom,
+        );
+    }
+  }
+
+  Future<void> destroyBannerAds() async {
+    if (bannerGoogle != null) {
+      bannerGoogle.dispose();
+    }
   }
 }
