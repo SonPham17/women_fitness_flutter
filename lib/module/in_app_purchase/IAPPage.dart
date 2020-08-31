@@ -143,12 +143,25 @@ class _IAPPageState extends State<IAPPage> {
                       content: 'Loading....',
                     );
                   default:
-                    if (snapshot.hasError)
+                    if (snapshot.hasError) {
                       return TextApp(
                         content: 'Error: ${snapshot.error}',
                       );
-                    else
-                      return Text('Result: ${snapshot.data.productDetails}');
+                    } else {
+                      var productDetail = snapshot.data.productDetails;
+                      return ListView.builder(
+                        itemBuilder: (_, index) => Container(
+                          child: Column(
+                            children: [
+                              TextApp(
+                                content: productDetail[index].title,
+                              )
+                            ],
+                          ),
+                        ),
+                        itemCount: productDetail.length,
+                      );
+                    }
                 }
               },
             ),
