@@ -150,6 +150,7 @@ class _IAPPageState extends State<IAPPage> {
                     } else {
                       var productDetail = snapshot.data.productDetails;
                       return ListView.builder(
+                        shrinkWrap: true,
                         itemBuilder: (_, index) => Container(
                           child: Column(
                             children: [
