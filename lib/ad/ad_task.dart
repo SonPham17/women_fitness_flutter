@@ -345,7 +345,7 @@ abstract class AdTask {
     if (await needShowBannerAds()) {
       bannerGoogle = BannerAd(
         adUnitId: await getBannerIDAdsAdsmob(),
-        size: AdSize.smartBanner,
+        size: AdSize.banner,
         targetingInfo: targetingInfo,
         listener: (MobileAdEvent event) {
           switch (event) {
