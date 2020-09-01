@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:women_fitness_flutter/ad/ad_utils.dart';
 import 'package:women_fitness_flutter/db/hive/admob_fitness.dart';
+import 'package:women_fitness_flutter/db/hive/iap_fitness.dart';
 
 class PageContainer extends StatefulWidget {
   final Widget child;
@@ -20,9 +21,9 @@ class _PageContainerState extends State<PageContainer> {
   void initState() {
     super.initState();
 
-    var adsBox = Hive.box('admob_fitness');
-    AdmobFitness admobFitness = adsBox.get(AdUtils.bannerLoaded);
-    isLoadAds = admobFitness.isLoaded;
+    var iapBox = Hive.box('iap_fitness');
+    IAPFitness iapFitness = iapBox.get("premium");
+    isLoadAds = iapFitness.isBuy;
   }
 
   @override
@@ -31,8 +32,8 @@ class _PageContainerState extends State<PageContainer> {
       appBar: widget.appBar,
       body: Container(
         margin: isLoadAds
-            ? EdgeInsets.only(bottom: 50)
-            : EdgeInsets.only(bottom: 0),
+            ? EdgeInsets.only(bottom: 0)
+            : EdgeInsets.only(bottom: 50),
         child: widget.child,
       ),
     );

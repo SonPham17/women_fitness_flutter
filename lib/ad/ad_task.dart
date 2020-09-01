@@ -226,7 +226,7 @@ abstract class AdTask {
     bool checkPremium;
     var iapBox = Hive.box('iap_fitness');
     IAPFitness iapFitness = iapBox.get('premium');
-    if (iapFitness == null) {
+    if (iapFitness != null) {
       checkPremium = iapFitness.isBuy;
     } else {
       checkPremium = false;
@@ -238,7 +238,7 @@ abstract class AdTask {
     bool checkPremium;
     var iapBox = Hive.box('iap_fitness');
     IAPFitness iapFitness = iapBox.get('premium');
-    if (iapFitness == null) {
+    if (iapFitness != null) {
       checkPremium = iapFitness.isBuy;
     } else {
       checkPremium = false;
@@ -257,7 +257,7 @@ abstract class AdTask {
     bool checkPremium;
     var iapBox = Hive.box('iap_fitness');
     IAPFitness iapFitness = iapBox.get('premium');
-    if (iapFitness == null) {
+    if (iapFitness != null) {
       checkPremium = iapFitness.isBuy;
     } else {
       checkPremium = false;

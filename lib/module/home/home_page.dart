@@ -10,6 +10,7 @@ import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:women_fitness_flutter/ad/ad_manager.dart';
 import 'package:women_fitness_flutter/ad/ad_task.dart';
 import 'package:women_fitness_flutter/db/hive/admob_fitness.dart';
+import 'package:women_fitness_flutter/db/hive/iap_fitness.dart';
 import 'package:women_fitness_flutter/generated/l10n.dart';
 import 'package:women_fitness_flutter/injector/injector.dart';
 import 'package:women_fitness_flutter/module/home/home_bloc.dart';
@@ -39,7 +40,7 @@ class _HomePageState extends State<HomePage> with AdTask {
   InAppPurchaseConnection _appPurchaseConnection =
       InAppPurchaseConnection.instance;
 
-  bool isLoadedAds = true;
+  bool isLoadedAds = false;
 
   @override
   void initState() {
@@ -49,8 +50,6 @@ class _HomePageState extends State<HomePage> with AdTask {
     _controller = PersistentTabController(initialIndex: 0);
 
     _initAdMob();
-
-    _loadAds();
 
     var admobBox = Hive.box('admob_fitness');
     admobBox.watch().listen((event) {
@@ -63,10 +62,18 @@ class _HomePageState extends State<HomePage> with AdTask {
     _getPastPurchases();
   }
 
-  Future<void> _getPastPurchases() async{
-    if(await _appPurchaseConnection.isAvailable()){
+  Future<void> _getPastPurchases() async {
+    if (await _appPurchaseConnection.isAvailable()) {
       QueryPurchaseDetailsResponse response =
-      await _appPurchaseConnection.queryPastPurchases();
+          await _appPurchaseConnection.queryPastPurchases();
+
+      if (response.pastPurchases.length == 0) {
+        _loadAds();
+
+        var iapBox = Hive.box('iap_fitness');
+        IAPFitness iapFitness = IAPFitness(isBuy: false, idIAP: 'premium');
+        iapBox.put('premium', iapFitness);
+      }
 
       print('length past purchase= ${response.pastPurchases.length}');
     }
