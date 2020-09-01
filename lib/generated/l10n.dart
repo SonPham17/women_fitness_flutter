@@ -1012,6 +1012,16 @@ class S {
       args: [],
     );
   }
+
+  /// `Your payment will be charged to your google account, and your subscription will automatically renew for the same price until you cancel in setting in the Android Play Store prior to the end of then current period`
+  String get iap_license {
+    return Intl.message(
+      'Your payment will be charged to your google account, and your subscription will automatically renew for the same price until you cancel in setting in the Android Play Store prior to the end of then current period',
+      name: 'iap_license',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

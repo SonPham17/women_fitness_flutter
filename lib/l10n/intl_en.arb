@@ -96,5 +96,6 @@
   "first_finish": "finish",
   "iap_premium": "Go Premium",
   "iap_remove": "remove ads",
-  "iap_unlimited": "unlimited times and features"
+  "iap_unlimited": "unlimited times and features",
+  "iap_license": "Your payment will be charged to your google account, and your subscription will automatically renew for the same price until you cancel in setting in the Android Play Store prior to the end of then current period"
 }

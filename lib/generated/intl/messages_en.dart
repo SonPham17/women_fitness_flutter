@@ -43,6 +43,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "first_target" : MessageLookupByLibrary.simpleMessage("Set your weekly training goals"),
     "first_weight_height" : MessageLookupByLibrary.simpleMessage("Set weight and height"),
     "history" : MessageLookupByLibrary.simpleMessage("history"),
+    "iap_license" : MessageLookupByLibrary.simpleMessage("Your payment will be charged to your google account, and your subscription will automatically renew for the same price until you cancel in setting in the Android Play Store prior to the end of then current period"),
     "iap_premium" : MessageLookupByLibrary.simpleMessage("Go Premium"),
     "iap_remove" : MessageLookupByLibrary.simpleMessage("remove ads"),
     "iap_unlimited" : MessageLookupByLibrary.simpleMessage("unlimited times and features"),

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:women_fitness_flutter/generated/l10n.dart';
+import 'package:women_fitness_flutter/shared/widget/page_container.dart';
 import 'package:women_fitness_flutter/shared/widget/text_app.dart';
 
 class IAPPage extends StatefulWidget {
@@ -94,7 +95,7 @@ class _IAPPageState extends State<IAPPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return PageContainer(
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Colors.blue,
@@ -108,7 +109,7 @@ class _IAPPageState extends State<IAPPage> {
           },
         ),
       ),
-      body: SingleChildScrollView(
+      child: SingleChildScrollView(
         child: Column(
           children: [
             Container(
@@ -242,6 +243,14 @@ class _IAPPageState extends State<IAPPage> {
               ),
               itemCount: _products.length,
             ),
+            SizedBox(
+              height: 20,
+            ),
+            TextApp(
+              content: S.current.iap_license,
+              size: 17,
+              textAlign: TextAlign.center,
+            )
           ],
         ),
       ),

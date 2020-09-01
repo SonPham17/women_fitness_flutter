@@ -43,6 +43,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "first_target" : MessageLookupByLibrary.simpleMessage("Đặt mục tiêu luyện tập hàng tuần của bạn"),
     "first_weight_height" : MessageLookupByLibrary.simpleMessage("Thiết lập cân nặng và chiều cao"),
     "history" : MessageLookupByLibrary.simpleMessage("lịch sử"),
+    "iap_license" : MessageLookupByLibrary.simpleMessage("Thanh toán của bạn sẽ được tính vào tài khoản google của bạn và đăng ký của bạn sẽ tự động gia hạn với cùng một mức giá cho đến khi bạn hủy cài đặt trong Cửa hàng Android Play trước khi kết thúc giai đoạn hiện tại"),
     "iap_premium" : MessageLookupByLibrary.simpleMessage("Nâng cấp gói"),
     "iap_remove" : MessageLookupByLibrary.simpleMessage("loại bỏ quảng cáo"),
     "iap_unlimited" : MessageLookupByLibrary.simpleMessage("thời gian và tính năng không giới hạn"),
