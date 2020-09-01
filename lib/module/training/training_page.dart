@@ -443,13 +443,6 @@ class _TrainingPageState extends State<TrainingPage> {
                   withNavBar: false,
                   pageTransitionAnimation: PageTransitionAnimation.cupertino,
                 );
-
-                // pushNewScreen(
-                //   context,
-                //   screen: IAPPage(),
-                //   withNavBar: false,
-                //   pageTransitionAnimation: PageTransitionAnimation.cupertino,
-                // );
               },
               child: Container(
                 decoration: BoxDecoration(

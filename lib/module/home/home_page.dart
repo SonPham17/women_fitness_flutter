@@ -3,6 +3,7 @@ import 'package:firebase_admob/firebase_admob.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hive/hive.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:women_fitness_flutter/ad/ad_manager.dart';
@@ -12,6 +13,7 @@ import 'package:women_fitness_flutter/generated/l10n.dart';
 import 'package:women_fitness_flutter/injector/injector.dart';
 import 'package:women_fitness_flutter/module/home/home_bloc.dart';
 import 'package:women_fitness_flutter/module/home/home_states.dart';
+import 'package:women_fitness_flutter/module/in_app_purchase/IAPPage.dart';
 import 'package:women_fitness_flutter/module/report/report_page.dart';
 import 'package:women_fitness_flutter/module/setting/setting_page.dart';
 import 'package:women_fitness_flutter/module/training/training_page.dart';
@@ -86,6 +88,24 @@ class _HomePageState extends State<HomePage> with AdTask {
         title: TextApp(
           content: 'Women\'s Fitness',
         ),
+        actions: [
+          IconButton(
+            icon: SvgPicture.asset(
+              'assets/svg/crown.svg',
+              width: 25,
+              height: 25,
+              color: Colors.white,
+            ),
+            onPressed: () {
+              pushNewScreen(
+                context,
+                screen: IAPPage(),
+                withNavBar: false,
+                pageTransitionAnimation: PageTransitionAnimation.cupertino,
+              );
+            },
+          )
+        ],
       ),
       body: SafeArea(
         child: BlocProvider<HomeBloc>(
