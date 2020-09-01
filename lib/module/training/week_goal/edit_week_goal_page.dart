@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:women_fitness_flutter/ad/ad_task.dart';
 import 'package:women_fitness_flutter/generated/l10n.dart';
 import 'package:women_fitness_flutter/shared/app_color.dart';
 import 'package:women_fitness_flutter/shared/size_config.dart';
@@ -16,7 +17,7 @@ class EditWeekGoalPage extends StatefulWidget {
   _EditWeekGoalPageState createState() => _EditWeekGoalPageState();
 }
 
-class _EditWeekGoalPageState extends State<EditWeekGoalPage> {
+class _EditWeekGoalPageState extends State<EditWeekGoalPage> with AdTask{
   final itemsWeekly = List<String>.generate(7, (i) => (i + 1).toString());
   final itemsFirstDay = [
     'Sunday',
@@ -46,6 +47,7 @@ class _EditWeekGoalPageState extends State<EditWeekGoalPage> {
             color: Colors.black,
           ),
           onPressed: () {
+            showInterstitialAds();
             Navigator.of(context).pop();
           },
         ),

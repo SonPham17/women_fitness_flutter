@@ -79,6 +79,8 @@ class _HomePageState extends State<HomePage> with AdTask {
       }
 
       print('length past purchase= ${response.pastPurchases.length}');
+    }else{
+
     }
   }
 
