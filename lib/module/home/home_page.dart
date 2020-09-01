@@ -67,11 +67,14 @@ class _HomePageState extends State<HomePage> with AdTask {
       QueryPurchaseDetailsResponse response =
           await _appPurchaseConnection.queryPastPurchases();
 
+      var iapBox = Hive.box('iap_fitness');
       if (response.pastPurchases.length == 0) {
         _loadAds();
 
-        var iapBox = Hive.box('iap_fitness');
         IAPFitness iapFitness = IAPFitness(isBuy: false, idIAP: 'premium');
+        iapBox.put('premium', iapFitness);
+      } else {
+        IAPFitness iapFitness = IAPFitness(isBuy: true, idIAP: 'premium');
         iapBox.put('premium', iapFitness);
       }
 
