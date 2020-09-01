@@ -10,6 +10,7 @@ import 'package:women_fitness_flutter/shared/model/section.dart';
 import 'package:women_fitness_flutter/shared/model/work_out.dart';
 import 'package:women_fitness_flutter/shared/utils.dart';
 import 'package:women_fitness_flutter/shared/widget/dialog_item_workout.dart';
+import 'package:women_fitness_flutter/shared/widget/page_container.dart';
 import 'package:women_fitness_flutter/shared/widget/text_app.dart';
 
 class FavoriteTrainingEditPage extends StatefulWidget {
@@ -48,7 +49,7 @@ class _FavoriteTrainingEditPageState extends State<FavoriteTrainingEditPage> {
       create: (_) => _favoriteTrainingBloc,
       child: BlocConsumer<FavoriteTrainingBloc, FavoriteTrainingState>(
         builder: (context, state) {
-          return Scaffold(
+          return PageContainer(
             appBar: AppBar(
               title: TextApp(
                 content: S.current.training_edit_plan.toUpperCase(),
@@ -76,7 +77,7 @@ class _FavoriteTrainingEditPageState extends State<FavoriteTrainingEditPage> {
                 ),
               ],
             ),
-            body: Container(
+            child: Container(
               margin: EdgeInsets.only(left: 10, right: 10),
               child: Column(
                 children: <Widget>[

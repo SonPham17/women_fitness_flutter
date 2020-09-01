@@ -11,6 +11,7 @@ import 'package:women_fitness_flutter/shared/model/work_out.dart';
 import 'package:women_fitness_flutter/shared/size_config.dart';
 import 'package:women_fitness_flutter/shared/utils.dart';
 import 'package:women_fitness_flutter/shared/widget/challenge_week_widget.dart';
+import 'package:women_fitness_flutter/shared/widget/page_container.dart';
 import 'package:women_fitness_flutter/shared/widget/text_app.dart';
 
 class ChallengeTrainingPage extends StatefulWidget {
@@ -36,8 +37,8 @@ class _ChallengeTrainingPageState extends State<ChallengeTrainingPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
+    return PageContainer(
+      child: Container(
         child: Stack(
           children: <Widget>[
             NestedScrollView(

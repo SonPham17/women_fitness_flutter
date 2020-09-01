@@ -9,6 +9,7 @@ import 'package:women_fitness_flutter/generated/l10n.dart';
 import 'package:women_fitness_flutter/shared/app_color.dart';
 import 'package:women_fitness_flutter/shared/model/section.dart';
 import 'package:women_fitness_flutter/shared/utils.dart';
+import 'package:women_fitness_flutter/shared/widget/page_container.dart';
 import 'package:women_fitness_flutter/shared/widget/text_app.dart';
 
 class CalendarWeekGoalPage extends StatefulWidget {
@@ -57,14 +58,14 @@ class _CalendarWeekGoalPageState extends State<CalendarWeekGoalPage>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return PageContainer(
       appBar: AppBar(
         title: TextApp(
           content: S.current.history.toUpperCase(),
         ),
         centerTitle: false,
       ),
-      body: SingleChildScrollView(
+      child: SingleChildScrollView(
         child: Column(
           children: <Widget>[
             TableCalendar(

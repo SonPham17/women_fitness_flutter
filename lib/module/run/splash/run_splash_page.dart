@@ -14,6 +14,7 @@ import 'package:women_fitness_flutter/shared/app_color.dart';
 import 'package:women_fitness_flutter/shared/model/section.dart';
 import 'package:women_fitness_flutter/shared/model/work_out.dart';
 import 'package:women_fitness_flutter/shared/utils.dart';
+import 'package:women_fitness_flutter/shared/widget/page_container.dart';
 import 'package:women_fitness_flutter/shared/widget/text_app.dart';
 
 class RunSplashPage extends StatefulWidget {
@@ -176,8 +177,8 @@ class _RunSplashPageState extends State<RunSplashPage>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
+    return PageContainer(
+      child: Container(
         child: Stack(
           children: [
             Image.asset(
@@ -218,8 +219,8 @@ class _RunSplashPageState extends State<RunSplashPage>
                           ),
                           TextApp(
                             content:
-                                '${widget.index + 1}/${widget.listWorkOutBySection.length} ${widget.listWorkOutBySection[widget.index].title.toUpperCase()} ${widget.listWorkOutBySection[widget.index].type == 0 ? Utils.convertSecondToTime(widget.listWorkOutBySection[widget.index].timeDefault) : 'x${widget.listWorkOutBySection[widget.index].countDefault}'}'
-                                    .toUpperCase(),
+                            '${widget.index + 1}/${widget.listWorkOutBySection.length} ${widget.listWorkOutBySection[widget.index].title.toUpperCase()} ${widget.listWorkOutBySection[widget.index].type == 0 ? Utils.convertSecondToTime(widget.listWorkOutBySection[widget.index].timeDefault) : 'x${widget.listWorkOutBySection[widget.index].countDefault}'}'
+                                .toUpperCase(),
                             textColor: Colors.black,
                             maxLines: 2,
                             textOverflow: TextOverflow.ellipsis,
@@ -278,11 +279,11 @@ class _RunSplashPageState extends State<RunSplashPage>
                                   screen: RunWorkOutPage(
                                     section: widget.section,
                                     listWorkOutBySection:
-                                        widget.listWorkOutBySection,
+                                    widget.listWorkOutBySection,
                                     index: widget.index - 1,
                                   ),
                                   pageTransitionAnimation:
-                                      PageTransitionAnimation.cupertino,
+                                  PageTransitionAnimation.cupertino,
                                   withNavBar: false,
                                 );
                               },
@@ -321,11 +322,11 @@ class _RunSplashPageState extends State<RunSplashPage>
                                 screen: RunWorkOutPage(
                                   section: widget.section,
                                   listWorkOutBySection:
-                                      widget.listWorkOutBySection,
+                                  widget.listWorkOutBySection,
                                   index: widget.index,
                                 ),
                                 pageTransitionAnimation:
-                                    PageTransitionAnimation.cupertino,
+                                PageTransitionAnimation.cupertino,
                                 withNavBar: false,
                               );
                             },

@@ -3,9 +3,11 @@ import 'package:firebase_admob/firebase_admob.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hive/hive.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:women_fitness_flutter/ad/ad_manager.dart';
 import 'package:women_fitness_flutter/ad/ad_task.dart';
+import 'package:women_fitness_flutter/db/hive/admob_fitness.dart';
 import 'package:women_fitness_flutter/generated/l10n.dart';
 import 'package:women_fitness_flutter/injector/injector.dart';
 import 'package:women_fitness_flutter/module/home/home_bloc.dart';
@@ -24,47 +26,33 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
+class _HomePageState extends State<HomePage> with AdTask {
   HomeBloc _homeBloc;
 
   PersistentTabController _controller;
   List<Section> listSections;
   List<WorkOut> listWorkOuts;
 
+  bool isLoadedAds = true;
+
   @override
   void initState() {
     super.initState();
-
-    WidgetsBinding.instance.addObserver(this);
 
     _homeBloc = Injector.resolve<HomeBloc>();
     _controller = PersistentTabController(initialIndex: 0);
 
     _initAdMob();
-  }
 
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    switch(state){
-      case AppLifecycleState.resumed:
-        print("resumed");
-        break;
-      case AppLifecycleState.inactive:
-        print("inactive");
-        break;
-      case AppLifecycleState.paused:
-        print("paused");
-        break;
-      case AppLifecycleState.detached:
-        print("detached");
-        break;
-    }
-  }
+    _loadAds();
 
-  @override
-  void deactivate() {
-    super.deactivate();
-    print('deactivate home');
+    var admobBox = Hive.box('admob_fitness');
+    admobBox.watch().listen((event) {
+      AdmobFitness admobFitness = event.value;
+      setState(() {
+        isLoadedAds = admobFitness.isLoaded;
+      });
+    });
   }
 
   @override
@@ -75,6 +63,12 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
       listSections = args['list_section'];
       listWorkOuts = args['list_workout'];
     }
+  }
+
+  Future<void> _loadAds() async {
+    await getAdsServerConfig();
+    await loadBannerAdsGoogle();
+    // await loadRewardGoogle(this);
   }
 
   _initAdMob() {
@@ -98,7 +92,9 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
           create: (_) => _homeBloc,
           child: BlocConsumer<HomeBloc, HomeState>(
             builder: (context, state) => Container(
-              margin: EdgeInsets.only(bottom: 50),
+              margin: isLoadedAds
+                  ? EdgeInsets.only(bottom: 50)
+                  : EdgeInsets.only(bottom: 0),
               child: PersistentTabView(
                 controller: _controller,
                 items: _navBarsItems(),
@@ -110,10 +106,6 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                 // This needs to be true if you want to move up the screen when keyboard appears.
                 hideNavigationBarWhenKeyboardShows: true,
                 stateManagement: true,
-                decoration: NavBarDecoration(
-                  borderRadius: BorderRadius.circular(10.0),
-                  colorBehindNavBar: Colors.white,
-                ),
                 popAllScreensOnTapOfSelectedTab: true,
                 itemAnimationProperties: ItemAnimationProperties(
                   duration: Duration(milliseconds: 200),
@@ -187,6 +179,8 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   @override
   void dispose() {
     super.dispose();
+
+    destroyBannerAds();
     _controller.dispose();
     _homeBloc.close();
   }

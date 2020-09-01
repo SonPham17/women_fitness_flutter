@@ -15,6 +15,7 @@ import 'package:women_fitness_flutter/shared/model/work_out.dart';
 import 'package:women_fitness_flutter/shared/size_config.dart';
 import 'package:women_fitness_flutter/shared/utils.dart';
 import 'package:women_fitness_flutter/shared/widget/dialog_edit.dart';
+import 'package:women_fitness_flutter/shared/widget/page_container.dart';
 import 'package:women_fitness_flutter/shared/widget/text_app.dart';
 
 class RunFinishPage extends StatefulWidget {
@@ -104,8 +105,8 @@ class _RunFinishPageState extends State<RunFinishPage> {
             sectionBox.add(sectionHistory);
           }
         },
-        builder: (_, state) => Scaffold(
-          body: Container(
+        builder: (_, state) => PageContainer(
+          child: Container(
             child: Stack(
               children: [
                 NestedScrollView(
@@ -137,7 +138,7 @@ class _RunFinishPageState extends State<RunFinishPage> {
                           icon: Icon(Icons.close),
                           onPressed: () {
                             Navigator.of(context).popUntil(
-                                (route) => route.settings.name == '/home');
+                                    (route) => route.settings.name == '/home');
                           },
                         ),
                       )

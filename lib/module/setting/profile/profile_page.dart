@@ -10,6 +10,7 @@ import 'package:women_fitness_flutter/shared/app_color.dart';
 import 'package:women_fitness_flutter/shared/size_config.dart';
 import 'package:women_fitness_flutter/shared/utils.dart';
 import 'package:women_fitness_flutter/shared/widget/dialog_edit.dart';
+import 'package:women_fitness_flutter/shared/widget/page_container.dart';
 import 'package:women_fitness_flutter/shared/widget/text_app.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -49,13 +50,13 @@ class _ProfilePageState extends State<ProfilePage> {
       create: (_) => _profileBloc,
       child: BlocConsumer<ProfileBloc, ProfileState>(
         builder: (_, state) {
-          return Scaffold(
+          return PageContainer(
             appBar: AppBar(
               title: TextApp(
                 content: S.current.setting_profile.toUpperCase(),
               ),
             ),
-            body: FutureBuilder<bool>(
+            child: FutureBuilder<bool>(
               future: SPref.instance.getBool(Utils.sPrefIsKgCm),
               builder: (_, snapshot) {
                 if (snapshot.hasData) {
@@ -82,7 +83,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                 leading: Radio(
                                   value: TypeUnits.kgCm,
                                   groupValue:
-                                      isKg ? TypeUnits.kgCm : TypeUnits.lbFt,
+                                  isKg ? TypeUnits.kgCm : TypeUnits.lbFt,
                                   onChanged: (value) {
                                     setState(() {
                                       SPref.instance
@@ -115,7 +116,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                 leading: Radio(
                                   value: TypeUnits.lbFt,
                                   groupValue:
-                                      isKg ? TypeUnits.kgCm : TypeUnits.lbFt,
+                                  isKg ? TypeUnits.kgCm : TypeUnits.lbFt,
                                   onChanged: (value) {
                                     setState(() {
                                       SPref.instance

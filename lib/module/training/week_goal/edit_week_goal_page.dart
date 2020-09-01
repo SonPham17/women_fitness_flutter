@@ -4,6 +4,7 @@ import 'package:women_fitness_flutter/generated/l10n.dart';
 import 'package:women_fitness_flutter/shared/app_color.dart';
 import 'package:women_fitness_flutter/shared/size_config.dart';
 import 'package:women_fitness_flutter/shared/widget/dialog_picker.dart';
+import 'package:women_fitness_flutter/shared/widget/page_container.dart';
 import 'package:women_fitness_flutter/shared/widget/text_app.dart';
 
 class EditWeekGoalPage extends StatefulWidget {
@@ -35,7 +36,7 @@ class _EditWeekGoalPageState extends State<EditWeekGoalPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return PageContainer(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -49,7 +50,7 @@ class _EditWeekGoalPageState extends State<EditWeekGoalPage> {
           },
         ),
       ),
-      body: SafeArea(
+      child: SafeArea(
         child: Container(
           margin: EdgeInsets.only(
             left: SizeConfig.defaultSize * 3,

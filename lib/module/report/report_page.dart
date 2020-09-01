@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive/hive.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
-import 'package:women_fitness_flutter/ad/ad_task.dart';
 import 'package:women_fitness_flutter/data/spref/spref.dart';
 import 'package:women_fitness_flutter/db/hive/section_history.dart';
 import 'package:women_fitness_flutter/generated/l10n.dart';
@@ -29,7 +28,7 @@ class ReportPage extends StatefulWidget {
   _ReportPageState createState() => _ReportPageState();
 }
 
-class _ReportPageState extends State<ReportPage> with AdTask {
+class _ReportPageState extends State<ReportPage> {
   ReportBloc _reportBloc;
 
   int weekTraining = 0;
@@ -502,25 +501,23 @@ class _ReportPageState extends State<ReportPage> with AdTask {
                     width: 60,
                     child: InkWell(
                       onTap: () {
-                        // pushNewScreen(
-                        //   context,
-                        //   screen: EditWeekGoalPage(
-                        //     weeklyTraining: weekTraining,
-                        //   ),
-                        //   pageTransitionAnimation:
-                        //       PageTransitionAnimation.cupertino,
-                        //   withNavBar: false,
-                        // ).then((value) {
-                        //   if (value != null) {
-                        //     setState(() {
-                        //       weekTraining = value;
-                        //       SPref.instance
-                        //           .setInt(Utils.sPrefWeekGoal, weekTraining);
-                        //     });
-                        //   }
-                        // });
-
-                        loadAds();
+                        pushNewScreen(
+                          context,
+                          screen: EditWeekGoalPage(
+                            weeklyTraining: weekTraining,
+                          ),
+                          pageTransitionAnimation:
+                              PageTransitionAnimation.cupertino,
+                          withNavBar: false,
+                        ).then((value) {
+                          if (value != null) {
+                            setState(() {
+                              weekTraining = value;
+                              SPref.instance
+                                  .setInt(Utils.sPrefWeekGoal, weekTraining);
+                            });
+                          }
+                        });
                       },
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -598,11 +595,6 @@ class _ReportPageState extends State<ReportPage> with AdTask {
           ],
         ),
       );
-
-  Future<void> loadAds() async{
-    await getAdsServerConfig();
-    await loadBannerAdsGoogle();
-  }
 
   Widget _buildTotal() => Container(
         padding: EdgeInsets.all(10),

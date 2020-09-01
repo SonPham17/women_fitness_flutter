@@ -5,6 +5,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:hive/hive.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:women_fitness_flutter/db/hive/admob_fitness.dart';
 import 'package:women_fitness_flutter/db/hive/challenge_week.dart';
 import 'package:women_fitness_flutter/db/hive/section_history.dart';
 import 'package:women_fitness_flutter/db/women_fitness_database.dart';
@@ -37,8 +38,10 @@ Future<void> main() async {
   Hive.init(appDocumentDirectory.path);
   Hive.registerAdapter(ChallengeWeekAdapter());
   Hive.registerAdapter(SectionHistoryAdapter());
+  Hive.registerAdapter(AdmobFitnessAdapter());
   await Hive.openBox('challenge_week');
   await Hive.openBox('section_history');
+  await Hive.openBox('admob_fitness');
 
   //iap
   InAppPurchaseConnection.enablePendingPurchases();

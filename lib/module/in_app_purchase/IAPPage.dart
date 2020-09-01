@@ -103,7 +103,9 @@ class _IAPPageState extends State<IAPPage> {
             Icons.keyboard_backspace,
             color: Colors.white,
           ),
-          onPressed: () {},
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
         ),
       ),
       body: SingleChildScrollView(
@@ -249,6 +251,6 @@ class _IAPPageState extends State<IAPPage> {
   @override
   void dispose() {
     super.dispose();
-    _subscription.cancel();
+    _subscription?.cancel();
   }
 }

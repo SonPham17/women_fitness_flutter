@@ -3,11 +3,12 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:facebook_audience_network/facebook_audience_network.dart';
 import 'package:firebase_admob/firebase_admob.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:hive/hive.dart';
 import 'package:package_info/package_info.dart';
 import 'package:women_fitness_flutter/ad/ad_utils.dart';
 import 'package:women_fitness_flutter/ad/reward_listener.dart';
 import 'package:women_fitness_flutter/data/spref/spref.dart';
+import 'package:women_fitness_flutter/db/hive/admob_fitness.dart';
 import 'package:women_fitness_flutter/network/women_fitness_client.dart';
 
 abstract class AdTask {
@@ -40,29 +41,6 @@ abstract class AdTask {
       AdUtils.deviceTestFacebook,
     ], // Android emulators are considered test devices
   );
-
-  Widget loadBannerAdsFacebook() {
-    return FacebookBannerAd(
-      placementId: "284129658790784_474035083133573",
-      bannerSize: BannerSize.STANDARD,
-      listener: (result, value) {
-        switch (result) {
-          case BannerAdResult.ERROR:
-            print("Error: $value");
-            break;
-          case BannerAdResult.LOADED:
-            print("Loaded: $value");
-            break;
-          case BannerAdResult.CLICKED:
-            print("Clicked: $value");
-            break;
-          case BannerAdResult.LOGGING_IMPRESSION:
-            print("Logging Impression: $value");
-            break;
-        }
-      },
-    );
-  }
 
   Future<void> getAdsServerConfig() async {
     int previousTime =
@@ -301,17 +279,16 @@ abstract class AdTask {
   }
 
   Future<void> showInterstitialAds() async {
-    FacebookInterstitialAd.showInterstitialAd();
-    // if (await needShowInterstitialAds()) {
-    //   if (_isInterstitialAdFacebookLoaded) {
-    //     FacebookInterstitialAd.showInterstitialAd();
-    //     print('facebook interstitialads');
-    //   } else if (_interstitialAdGoogle != null) {
-    //     print('showInterstitialAds');
-    //     _interstitialAdGoogle.show();
-    //   }
-    //   await loadInterstitialAds();
-    // }
+    if (await needShowInterstitialAds()) {
+      if (_isInterstitialAdFacebookLoaded) {
+        FacebookInterstitialAd.showInterstitialAd();
+        print('facebook interstitialads');
+      } else if (_interstitialAdGoogle != null) {
+        print('showInterstitialAds');
+        _interstitialAdGoogle.show();
+      }
+      await loadInterstitialAds();
+    }
   }
 
   Future<void> loadInterstitialAds() async {
@@ -345,14 +322,24 @@ abstract class AdTask {
   Future<void> loadBannerAdsGoogle() async {
     if (await needShowBannerAds()) {
       bannerGoogle = BannerAd(
-        adUnitId: "ca-app-pub-3940256099942544/6300978111",
+        adUnitId: await getBannerIDAdsAdsmob(),
         size: AdSize.smartBanner,
         targetingInfo: targetingInfo,
         listener: (MobileAdEvent event) {
           switch (event) {
             case MobileAdEvent.loaded:
+              var admobBox = Hive.box('admob_fitness');
+              AdmobFitness admobFitness =
+                  AdmobFitness(title: AdUtils.bannerLoaded, isLoaded: true);
+              admobBox.put(AdUtils.bannerLoaded, admobFitness);
               break;
             case MobileAdEvent.failedToLoad:
+              var admobBox = Hive.box('admob_fitness');
+              if (admobBox.length != 0) {
+                AdmobFitness admobFitness = admobBox.get(AdUtils.bannerLoaded);
+                admobFitness.isLoaded = false;
+                admobFitness.save();
+              }
               break;
             case MobileAdEvent.clicked:
               break;

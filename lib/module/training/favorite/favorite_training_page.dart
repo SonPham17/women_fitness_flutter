@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive/hive.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
+import 'package:women_fitness_flutter/db/hive/admob_fitness.dart';
 import 'package:women_fitness_flutter/generated/l10n.dart';
 import 'package:women_fitness_flutter/injector/injector.dart';
 import 'package:women_fitness_flutter/module/run/finish/run_finish_page.dart';
@@ -15,6 +16,7 @@ import 'package:women_fitness_flutter/shared/model/work_out.dart';
 import 'package:women_fitness_flutter/shared/size_config.dart';
 import 'package:women_fitness_flutter/shared/utils.dart';
 import 'package:women_fitness_flutter/shared/widget/dialog_item_workout.dart';
+import 'package:women_fitness_flutter/shared/widget/page_container.dart';
 import 'package:women_fitness_flutter/shared/widget/text_app.dart';
 
 import 'favorite_training_events.dart';
@@ -48,8 +50,8 @@ class _FavoriteTrainingPageState extends State<FavoriteTrainingPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: BlocProvider<FavoriteTrainingBloc>(
+    return PageContainer(
+      child: BlocProvider<FavoriteTrainingBloc>(
         create: (_) => _favoriteTrainingBloc,
         child: BlocConsumer<FavoriteTrainingBloc, FavoriteTrainingState>(
           listener: (context, state) {},
@@ -150,28 +152,28 @@ class _FavoriteTrainingPageState extends State<FavoriteTrainingPage> {
                         ),
                         color: AppColor.main,
                         onPressed: () {
-                          // pushNewScreen(
-                          //   context,
-                          //   screen: RunSplashPage(
-                          //     listWorkOutBySection: listWorkOutBySection,
-                          //     index: 0,
-                          //     section: widget.section,
-                          //   ),
-                          //   pageTransitionAnimation:
-                          //       PageTransitionAnimation.cupertino,
-                          //   withNavBar: false,
-                          // );
-
                           pushNewScreen(
                             context,
-                            screen: RunFinishPage(
-                              section: widget.section,
+                            screen: RunSplashPage(
                               listWorkOutBySection: listWorkOutBySection,
+                              index: 0,
+                              section: widget.section,
                             ),
                             pageTransitionAnimation:
                                 PageTransitionAnimation.cupertino,
                             withNavBar: false,
                           );
+
+                          // pushNewScreen(
+                          //   context,
+                          //   screen: RunFinishPage(
+                          //     section: widget.section,
+                          //     listWorkOutBySection: listWorkOutBySection,
+                          //   ),
+                          //   pageTransitionAnimation:
+                          //       PageTransitionAnimation.cupertino,
+                          //   withNavBar: false,
+                          // );
                         },
                         child: Center(
                           child: TextApp(
