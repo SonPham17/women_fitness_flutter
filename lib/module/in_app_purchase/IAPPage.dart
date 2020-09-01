@@ -3,7 +3,9 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:hive/hive.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
+import 'package:women_fitness_flutter/db/hive/iap_fitness.dart';
 import 'package:women_fitness_flutter/generated/l10n.dart';
 import 'package:women_fitness_flutter/shared/widget/page_container.dart';
 import 'package:women_fitness_flutter/shared/widget/text_app.dart';
@@ -47,6 +49,11 @@ class _IAPPageState extends State<IAPPage> {
       _subscription =
           _appPurchaseConnection.purchaseUpdatedStream.listen((data) {
         print('new purchase= ${data.length}');
+
+        var iapBox = Hive.box('iap_fitness');
+        IAPFitness iapFitness = IAPFitness(isBuy: true, idIAP: 'premium');
+        iapBox.put('premium', iapFitness);
+
         _appPurchaseConnection.completePurchase(data[0]);
         _purchases.addAll(data);
         _verifyPurchase();
@@ -68,8 +75,6 @@ class _IAPPageState extends State<IAPPage> {
   Future<void> _getPastPurchases() async {
     QueryPurchaseDetailsResponse response =
         await _appPurchaseConnection.queryPastPurchases();
-
-    print('length past purchase= ${response.pastPurchases.length}');
 
     for (PurchaseDetails purchase in response.pastPurchases) {
       if (Platform.isIOS) {

@@ -9,6 +9,7 @@ import 'package:women_fitness_flutter/ad/ad_utils.dart';
 import 'package:women_fitness_flutter/ad/reward_listener.dart';
 import 'package:women_fitness_flutter/data/spref/spref.dart';
 import 'package:women_fitness_flutter/db/hive/admob_fitness.dart';
+import 'package:women_fitness_flutter/db/hive/iap_fitness.dart';
 import 'package:women_fitness_flutter/network/women_fitness_client.dart';
 
 abstract class AdTask {
@@ -222,12 +223,26 @@ abstract class AdTask {
   }
 
   Future<bool> needShowRewardedAds() async {
-    bool checkPremium = await SPref.instance.getBool("premium") ?? false;
+    bool checkPremium;
+    var iapBox = Hive.box('iap_fitness');
+    IAPFitness iapFitness = iapBox.get('premium');
+    if (iapFitness == null) {
+      checkPremium = iapFitness.isBuy;
+    } else {
+      checkPremium = false;
+    }
     return !checkPremium;
   }
 
   Future<bool> needShowInterstitialAds() async {
-    bool checkPremium = await SPref.instance.getBool("premium") ?? false;
+    bool checkPremium;
+    var iapBox = Hive.box('iap_fitness');
+    IAPFitness iapFitness = iapBox.get('premium');
+    if (iapFitness == null) {
+      checkPremium = iapFitness.isBuy;
+    } else {
+      checkPremium = false;
+    }
     int previousTime =
         await SPref.instance.getInt(AdUtils.deltaTimeAdShowInterstitial) ?? 0;
     if (DateTime.now().millisecondsSinceEpoch - previousTime >= oneMinute &&
@@ -239,7 +254,14 @@ abstract class AdTask {
   }
 
   Future<bool> needShowBannerAds() async {
-    bool checkPremium = await SPref.instance.getBool("premium") ?? false;
+    bool checkPremium;
+    var iapBox = Hive.box('iap_fitness');
+    IAPFitness iapFitness = iapBox.get('premium');
+    if (iapFitness == null) {
+      checkPremium = iapFitness.isBuy;
+    } else {
+      checkPremium = false;
+    }
     int previousTime =
         await SPref.instance.getInt(AdUtils.deltaTimeAdShowBanner) ?? 0;
     if (DateTime.now().millisecondsSinceEpoch - previousTime >= oneMinute &&

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hive/hive.dart';
+import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:women_fitness_flutter/ad/ad_manager.dart';
 import 'package:women_fitness_flutter/ad/ad_task.dart';
@@ -35,6 +36,9 @@ class _HomePageState extends State<HomePage> with AdTask {
   List<Section> listSections;
   List<WorkOut> listWorkOuts;
 
+  InAppPurchaseConnection _appPurchaseConnection =
+      InAppPurchaseConnection.instance;
+
   bool isLoadedAds = true;
 
   @override
@@ -55,6 +59,17 @@ class _HomePageState extends State<HomePage> with AdTask {
         isLoadedAds = admobFitness.isLoaded;
       });
     });
+
+    _getPastPurchases();
+  }
+
+  Future<void> _getPastPurchases() async{
+    if(await _appPurchaseConnection.isAvailable()){
+      QueryPurchaseDetailsResponse response =
+      await _appPurchaseConnection.queryPastPurchases();
+
+      print('length past purchase= ${response.pastPurchases.length}');
+    }
   }
 
   @override
