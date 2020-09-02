@@ -301,6 +301,7 @@ abstract class AdTask {
   }
 
   Future<void> showInterstitialAds() async {
+    await loadAdsInterstitialGoogle();
     if (await needShowInterstitialAds()) {
       if (_isInterstitialAdFacebookLoaded) {
         FacebookInterstitialAd.showInterstitialAd();
@@ -309,7 +310,6 @@ abstract class AdTask {
         print('showInterstitialAds');
         _interstitialAdGoogle.show();
       }
-      await loadInterstitialAds();
     }
   }
 

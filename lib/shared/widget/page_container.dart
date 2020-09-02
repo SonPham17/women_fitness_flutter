@@ -23,7 +23,7 @@ class _PageContainerState extends State<PageContainer> {
 
     var iapBox = Hive.box('iap_fitness');
     IAPFitness iapFitness = iapBox.get("premium");
-    isLoadAds = iapFitness?.isBuy ?? true;
+    isLoadAds = iapFitness?.isBuy ?? false;
   }
 
   @override

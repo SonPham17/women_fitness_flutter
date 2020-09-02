@@ -17,7 +17,7 @@ class EditWeekGoalPage extends StatefulWidget {
   _EditWeekGoalPageState createState() => _EditWeekGoalPageState();
 }
 
-class _EditWeekGoalPageState extends State<EditWeekGoalPage> with AdTask{
+class _EditWeekGoalPageState extends State<EditWeekGoalPage> {
   final itemsWeekly = List<String>.generate(7, (i) => (i + 1).toString());
   final itemsFirstDay = [
     'Sunday',
@@ -47,7 +47,6 @@ class _EditWeekGoalPageState extends State<EditWeekGoalPage> with AdTask{
             color: Colors.black,
           ),
           onPressed: () {
-            showInterstitialAds();
             Navigator.of(context).pop();
           },
         ),
