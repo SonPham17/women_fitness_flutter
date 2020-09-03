@@ -30,7 +30,7 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> with AdTask {
+class _HomePageState extends State<HomePage>{
   HomeBloc _homeBloc;
 
   PersistentTabController _controller;
@@ -95,8 +95,8 @@ class _HomePageState extends State<HomePage> with AdTask {
   }
 
   Future<void> _loadAds() async {
-    await getAdsServerConfig();
-    await loadBannerAdsGoogle();
+    await AdTask.instance.getAdsServerConfig();
+    await AdTask.instance.loadBannerAdsGoogle();
     // await loadRewardGoogle(this);
   }
 
@@ -227,7 +227,7 @@ class _HomePageState extends State<HomePage> with AdTask {
   void dispose() {
     super.dispose();
 
-    destroyBannerAds();
+    AdTask.instance.destroyBannerAds();
     _controller.dispose();
     _homeBloc.close();
   }

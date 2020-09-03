@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
+import 'package:women_fitness_flutter/ad/reward_listener.dart';
 import 'package:women_fitness_flutter/db/hive/challenge_week.dart';
+import 'package:women_fitness_flutter/db/hive/iap_fitness.dart';
 import 'package:women_fitness_flutter/module/training/favorite/favorite_training_page.dart';
 import 'package:women_fitness_flutter/shared/app_color.dart';
 import 'package:women_fitness_flutter/shared/model/section.dart';
 import 'package:women_fitness_flutter/shared/model/work_out.dart';
+import 'package:women_fitness_flutter/shared/widget/dialog_iap.dart';
 import 'package:women_fitness_flutter/shared/widget/text_app.dart';
 
 class ItemCircleChallengeWeek extends StatefulWidget {
@@ -24,7 +27,8 @@ class ItemCircleChallengeWeek extends StatefulWidget {
       _ItemCircleChallengeWeekState();
 }
 
-class _ItemCircleChallengeWeekState extends State<ItemCircleChallengeWeek> {
+class _ItemCircleChallengeWeekState extends State<ItemCircleChallengeWeek>
+    implements RewardListener {
   bool enable;
   bool isFinished = false;
 
@@ -36,7 +40,7 @@ class _ItemCircleChallengeWeekState extends State<ItemCircleChallengeWeek> {
     if (challengeBox.get(widget.section.id) != null) {
       ChallengeWeek challengeWeek = challengeBox.get(widget.section.id);
       int indexChallenge = challengeWeek.index;
-      if (indexChallenge<lengthBox-1) {
+      if (indexChallenge < lengthBox - 1) {
         isFinished = true;
       }
       enable = true;
@@ -50,18 +54,48 @@ class _ItemCircleChallengeWeekState extends State<ItemCircleChallengeWeek> {
     return GestureDetector(
       onTap: enable
           ? () {
-              pushNewScreenWithRouteSettings(
-                context,
-                screen: FavoriteTrainingPage(
-                  section: widget.section,
-                  listWorkOuts: widget.listWorkOuts,
-                ),
-                settings: RouteSettings(
-                  name: '/training/favorite',
-                ),
-                withNavBar: false,
-                pageTransitionAnimation: PageTransitionAnimation.cupertino,
-              );
+              var iapBox = Hive.box('iap_fitness');
+              IAPFitness iapFitness = iapBox.get('premium');
+              if (widget.section.id >= 201) {
+                if (iapFitness != null) {
+                  if (iapFitness.isBuy) {
+                    pushNewScreenWithRouteSettings(
+                      context,
+                      screen: FavoriteTrainingPage(
+                        section: widget.section,
+                        listWorkOuts: widget.listWorkOuts,
+                      ),
+                      settings: RouteSettings(
+                        name: '/training/favorite',
+                      ),
+                      withNavBar: false,
+                      pageTransitionAnimation:
+                          PageTransitionAnimation.cupertino,
+                    );
+                  } else {
+                    showDialog(
+                      context: context,
+                      builder: (context) => DialogIAP(
+                        rewardListener: this,
+                      ),
+                    );
+                  }
+                }
+              } else {
+                pushNewScreenWithRouteSettings(
+                  context,
+                  screen: FavoriteTrainingPage(
+                    section: widget.section,
+                    listWorkOuts: widget.listWorkOuts,
+                  ),
+                  settings: RouteSettings(
+                    name: '/training/favorite',
+                  ),
+                  withNavBar: false,
+                  pageTransitionAnimation:
+                  PageTransitionAnimation.cupertino,
+                );
+              }
             }
           : null,
       child: Container(
@@ -89,5 +123,33 @@ class _ItemCircleChallengeWeekState extends State<ItemCircleChallengeWeek> {
         ),
       ),
     );
+  }
+
+  @override
+  void onRewardCancel() {
+    print('onRewardCancel');
+  }
+
+  @override
+  void onRewardEarned() {
+    pushNewScreenWithRouteSettings(
+      context,
+      screen: FavoriteTrainingPage(
+        section: widget.section,
+        listWorkOuts: widget.listWorkOuts,
+      ),
+      settings: RouteSettings(
+        name: '/training/favorite',
+      ),
+      withNavBar: false,
+      pageTransitionAnimation:
+      PageTransitionAnimation.cupertino,
+    );
+    print('onRewardEarned');
+  }
+
+  @override
+  void onRewardError() {
+    print('onRewardError');
   }
 }

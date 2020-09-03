@@ -5,6 +5,7 @@ import 'package:hive/hive.dart';
 import 'package:like_button/like_button.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
+import 'package:women_fitness_flutter/ad/ad_task.dart';
 import 'package:women_fitness_flutter/data/spref/spref.dart';
 import 'package:women_fitness_flutter/db/hive/challenge_week.dart';
 import 'package:women_fitness_flutter/db/hive/section_history.dart';
@@ -213,7 +214,7 @@ class _TrainingPageState extends State<TrainingPage> {
               ),
               withNavBar: false,
               pageTransitionAnimation: PageTransitionAnimation.cupertino,
-            );
+            ).then((value) => AdTask.instance.showInterstitialAds());
           },
           child: Container(
             decoration: BoxDecoration(
@@ -442,7 +443,7 @@ class _TrainingPageState extends State<TrainingPage> {
                   ),
                   withNavBar: false,
                   pageTransitionAnimation: PageTransitionAnimation.cupertino,
-                );
+                ).then((value) => AdTask.instance.showInterstitialAds());
               },
               child: Container(
                 decoration: BoxDecoration(
@@ -590,6 +591,7 @@ class _TrainingPageState extends State<TrainingPage> {
                               PageTransitionAnimation.cupertino,
                           withNavBar: false,
                         ).then((value) {
+                          AdTask.instance.showInterstitialAds();
                           if (value != null) {
                             setState(() {
                               weekTraining = value;
@@ -635,7 +637,7 @@ class _TrainingPageState extends State<TrainingPage> {
                     ),
                     withNavBar: false,
                     pageTransitionAnimation: PageTransitionAnimation.cupertino,
-                  );
+                  ).then((value) => AdTask.instance.showInterstitialAds());
                 },
                 child: CalendarStrip(
                   startDate: startDate,

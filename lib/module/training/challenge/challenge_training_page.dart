@@ -5,6 +5,7 @@ import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:women_fitness_flutter/db/hive/challenge_week.dart';
 import 'package:women_fitness_flutter/generated/l10n.dart';
 import 'package:women_fitness_flutter/module/run/finish/run_finish_page.dart';
+import 'package:women_fitness_flutter/module/training/favorite/favorite_training_page.dart';
 import 'package:women_fitness_flutter/shared/app_color.dart';
 import 'package:women_fitness_flutter/shared/model/section.dart';
 import 'package:women_fitness_flutter/shared/model/work_out.dart';
@@ -120,7 +121,23 @@ class _ChallengeTrainingPageState extends State<ChallengeTrainingPage> {
                   ),
                   color: AppColor.main,
                   onPressed: () {
-//                  Navigator.of(context).pop(weeklyTraining);
+                    var challengeBox = Hive.box('challenge_week');
+                    int lengthBox = challengeBox.length;
+                    if (lengthBox + 17 <= 46) {
+                      pushNewScreenWithRouteSettings(
+                        context,
+                        screen: FavoriteTrainingPage(
+                          section: widget.listSections[lengthBox + 17],
+                          listWorkOuts: widget.listWorkOuts,
+                        ),
+                        settings: RouteSettings(
+                          name: '/training/favorite',
+                        ),
+                        withNavBar: false,
+                        pageTransitionAnimation:
+                            PageTransitionAnimation.cupertino,
+                      );
+                    }
                   },
                   child: Center(
                     child: TextApp(

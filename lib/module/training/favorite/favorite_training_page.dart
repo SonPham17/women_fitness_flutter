@@ -163,17 +163,6 @@ class _FavoriteTrainingPageState extends State<FavoriteTrainingPage> {
                                 PageTransitionAnimation.cupertino,
                             withNavBar: false,
                           );
-
-                          // pushNewScreen(
-                          //   context,
-                          //   screen: RunFinishPage(
-                          //     section: widget.section,
-                          //     listWorkOutBySection: listWorkOutBySection,
-                          //   ),
-                          //   pageTransitionAnimation:
-                          //       PageTransitionAnimation.cupertino,
-                          //   withNavBar: false,
-                          // );
                         },
                         child: Center(
                           child: TextApp(

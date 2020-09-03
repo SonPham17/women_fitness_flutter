@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_share/flutter_share.dart';
 import 'package:hive/hive.dart';
 import 'package:women_fitness_flutter/data/spref/spref.dart';
 import 'package:women_fitness_flutter/db/hive/challenge_week.dart';
@@ -138,7 +139,7 @@ class _RunFinishPageState extends State<RunFinishPage> {
                           icon: Icon(Icons.close),
                           onPressed: () {
                             Navigator.of(context).popUntil(
-                                    (route) => route.settings.name == '/home');
+                                (route) => route.settings.name == '/home');
                           },
                         ),
                       )
@@ -501,7 +502,7 @@ class _RunFinishPageState extends State<RunFinishPage> {
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(25)),
                         onPressed: () {
-//                      Navigator.of(context).pop(widget.workOut);
+                          Navigator.of(context).pop();
                         },
                         padding: EdgeInsets.all(10),
                         color: Colors.grey,
@@ -520,7 +521,7 @@ class _RunFinishPageState extends State<RunFinishPage> {
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(25)),
                         onPressed: () {
-//                      Navigator.of(context).pop(widget.workOut);
+                          share();
                         },
                         padding: EdgeInsets.all(10),
                         color: Colors.white,
@@ -538,6 +539,14 @@ class _RunFinishPageState extends State<RunFinishPage> {
           ),
         ),
       );
+
+  Future<void> share() async {
+    await FlutterShare.share(
+        title: 'Example share',
+        text: 'Example share text',
+        linkUrl: 'https://flutter.dev/',
+        chooserTitle: 'Example Chooser Title');
+  }
 
   @override
   void dispose() {

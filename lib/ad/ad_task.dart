@@ -12,7 +12,7 @@ import 'package:women_fitness_flutter/db/hive/admob_fitness.dart';
 import 'package:women_fitness_flutter/db/hive/iap_fitness.dart';
 import 'package:women_fitness_flutter/network/women_fitness_client.dart';
 
-abstract class AdTask {
+class AdTask {
   static final int oneHour = 3600000;
   static final int oneMinute = 60 * 1000;
   static final int oneDay = 0;
@@ -25,13 +25,13 @@ abstract class AdTask {
   BannerAd bannerGoogle;
 
   // singleton
-  // factory AdTask() {
-  //   return instance;
-  // }
-  //
-  // static final AdTask instance = AdTask._internal();
-  //
-  // AdTask._internal();
+  factory AdTask() {
+    return instance;
+  }
+
+  static final AdTask instance = AdTask._internal();
+
+  AdTask._internal();
 
   MobileAdTargetingInfo targetingInfo = MobileAdTargetingInfo(
     keywords: <String>['women fitness', 'beautiful apps'],
@@ -140,39 +140,41 @@ abstract class AdTask {
   }
 
   Future<void> loadRewardGoogle(RewardListener rewardListener) async {
-    bool checkEarn = false;
-    rewardedVideoAd.listener =
-        (RewardedVideoAdEvent event, {String rewardType, int rewardAmount}) {
-      print('Rewarded video ad event= $event');
-      switch (event) {
-        case RewardedVideoAdEvent.loaded:
-          rewardedVideoAd.show();
-          break;
-        case RewardedVideoAdEvent.failedToLoad:
-          rewardListener.onRewardError();
-          break;
-        case RewardedVideoAdEvent.opened:
-          break;
-        case RewardedVideoAdEvent.leftApplication:
-          break;
-        case RewardedVideoAdEvent.closed:
-          if (checkEarn) {
-            rewardListener.onRewardEarned();
-          } else {
-            rewardListener.onRewardCancel();
-          }
-          break;
-        case RewardedVideoAdEvent.rewarded:
-          checkEarn = true;
-          break;
-        case RewardedVideoAdEvent.started:
-          break;
-        case RewardedVideoAdEvent.completed:
-          break;
-      }
-    };
+    if(await needShowRewardedAds()){
+      bool checkEarn = false;
+      rewardedVideoAd.listener =
+          (RewardedVideoAdEvent event, {String rewardType, int rewardAmount}) {
+        print('Rewarded video ad event= $event');
+        switch (event) {
+          case RewardedVideoAdEvent.loaded:
+            rewardedVideoAd.show();
+            break;
+          case RewardedVideoAdEvent.failedToLoad:
+            rewardListener.onRewardError();
+            break;
+          case RewardedVideoAdEvent.opened:
+            break;
+          case RewardedVideoAdEvent.leftApplication:
+            break;
+          case RewardedVideoAdEvent.closed:
+            if (checkEarn) {
+              rewardListener.onRewardEarned();
+            } else {
+              rewardListener.onRewardCancel();
+            }
+            break;
+          case RewardedVideoAdEvent.rewarded:
+            checkEarn = true;
+            break;
+          case RewardedVideoAdEvent.started:
+            break;
+          case RewardedVideoAdEvent.completed:
+            break;
+        }
+      };
 
-    rewardedVideoAd.load(adUnitId: await getIDRewardGoogle());
+      rewardedVideoAd.load(adUnitId: await getIDRewardGoogle(),targetingInfo: targetingInfo);
+    }
   }
 
   Future<void> loadRewardFacebook(

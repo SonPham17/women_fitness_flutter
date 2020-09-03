@@ -29,7 +29,7 @@ class ReportPage extends StatefulWidget {
   _ReportPageState createState() => _ReportPageState();
 }
 
-class _ReportPageState extends State<ReportPage> with AdTask{
+class _ReportPageState extends State<ReportPage> {
   ReportBloc _reportBloc;
 
   int weekTraining = 0;
@@ -511,7 +511,7 @@ class _ReportPageState extends State<ReportPage> with AdTask{
                               PageTransitionAnimation.cupertino,
                           withNavBar: false,
                         ).then((value) {
-                          showInterstitialAds();
+                          AdTask.instance.showInterstitialAds();
                           if (value != null) {
                             setState(() {
                               weekTraining = value;
@@ -557,7 +557,7 @@ class _ReportPageState extends State<ReportPage> with AdTask{
                     ),
                     withNavBar: false,
                     pageTransitionAnimation: PageTransitionAnimation.cupertino,
-                  );
+                  ).then((value) => AdTask.instance.showInterstitialAds());
                 },
                 child: CalendarStrip(
                   startDate: startDate,

@@ -97,5 +97,9 @@
   "iap_premium": "Go Premium",
   "iap_remove": "remove ads",
   "iap_unlimited": "unlimited times and features",
-  "iap_license": "Your payment will be charged to your google account, and your subscription will automatically renew for the same price until you cancel in setting in the Android Play Store prior to the end of then current period"
+  "iap_license": "Your payment will be charged to your google account, and your subscription will automatically renew for the same price until you cancel in setting in the Android Play Store prior to the end of then current period",
+  "iap_dialog_title": "This feature is a premium feature, you have to pay to use it or view ads!",
+  "iap_dialog_ads": "View advertisement",
+  "iap_dialog_premium": "Register Premium",
+  "snackbar_restart": "Restart progress done!"
 }

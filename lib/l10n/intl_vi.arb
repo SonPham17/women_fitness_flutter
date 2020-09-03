@@ -97,5 +97,9 @@
   "iap_premium": "Nâng cấp gói",
   "iap_remove": "loại bỏ quảng cáo",
   "iap_unlimited": "thời gian và tính năng không giới hạn",
-  "iap_license": "Thanh toán của bạn sẽ được tính vào tài khoản google của bạn và đăng ký của bạn sẽ tự động gia hạn với cùng một mức giá cho đến khi bạn hủy cài đặt trong Cửa hàng Android Play trước khi kết thúc giai đoạn hiện tại"
+  "iap_license": "Thanh toán của bạn sẽ được tính vào tài khoản google của bạn và đăng ký của bạn sẽ tự động gia hạn với cùng một mức giá cho đến khi bạn hủy cài đặt trong Cửa hàng Android Play trước khi kết thúc giai đoạn hiện tại",
+  "iap_dialog_title": "Tính năng này là tính năng cao cấp, bạn phải trả phí để sử dụng tính năng này hoặc xem quảng cáo!",
+  "iap_dialog_ads": "Xem quảng cáo",
+  "iap_dialog_premium": "Đăng kí Premium",
+  "snackbar_restart": "Thông số đã được thiết lập lại từ đầu thành công!"
 }

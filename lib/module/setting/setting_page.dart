@@ -6,6 +6,7 @@ import 'package:flutter_share/flutter_share.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:rate_my_app/rate_my_app.dart';
+import 'package:women_fitness_flutter/ad/ad_task.dart';
 import 'package:women_fitness_flutter/data/spref/spref.dart';
 import 'package:women_fitness_flutter/generated/l10n.dart';
 import 'package:women_fitness_flutter/module/setting/profile/profile_page.dart';
@@ -22,7 +23,7 @@ class SettingPage extends StatefulWidget {
   _SettingPageState createState() => _SettingPageState();
 }
 
-class _SettingPageState extends State<SettingPage> with WidgetsBindingObserver{
+class _SettingPageState extends State<SettingPage> with WidgetsBindingObserver {
   RateMyApp _rateMyApp = RateMyApp(
     preferencesPrefix: 'rateMyApp',
     minDays: 3,
@@ -110,7 +111,7 @@ class _SettingPageState extends State<SettingPage> with WidgetsBindingObserver{
                   screen: ProfilePage(),
                   pageTransitionAnimation: PageTransitionAnimation.cupertino,
                   withNavBar: false,
-                );
+                ).then((value) => AdTask.instance.showInterstitialAds());
               },
               title: S.current.setting_profile,
               iconData: Icons.edit,
@@ -247,15 +248,10 @@ class _SettingPageState extends State<SettingPage> with WidgetsBindingObserver{
               height: 1,
               color: Colors.grey[400],
             ),
-//            ItemSettingWidget(
-//              isShowTime: true,
-//              selection: 'English',
-//              title: S.current.setting_language,
-//              iconData: Icons.translate,
-//            ),
             ItemSettingWidget(
               title: S.current.setting_restart_progress,
               iconData: Icons.refresh,
+              function: restartProgress,
             ),
             ItemSettingWidget(
               title: S.current.setting_share,
@@ -290,6 +286,21 @@ class _SettingPageState extends State<SettingPage> with WidgetsBindingObserver{
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Future<void> restartProgress() async {
+    SPref.instance.setInt(Utils.sPrefTimeSet, 30);
+    SPref.instance.setInt(Utils.sPrefCountdownTime, 15);
+
+    Scaffold.of(context).showSnackBar(
+      SnackBar(
+        content: TextApp(
+          content: S.current.snackbar_restart,
+        ),
+        backgroundColor: AppColor.main,
+        duration: Duration(seconds: 1),
       ),
     );
   }

@@ -1022,6 +1022,46 @@ class S {
       args: [],
     );
   }
+
+  /// `This feature is a premium feature, you have to pay to use it or view ads!`
+  String get iap_dialog_title {
+    return Intl.message(
+      'This feature is a premium feature, you have to pay to use it or view ads!',
+      name: 'iap_dialog_title',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `View advertisement`
+  String get iap_dialog_ads {
+    return Intl.message(
+      'View advertisement',
+      name: 'iap_dialog_ads',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Register Premium`
+  String get iap_dialog_premium {
+    return Intl.message(
+      'Register Premium',
+      name: 'iap_dialog_premium',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Restart progress done!`
+  String get snackbar_restart {
+    return Intl.message(
+      'Restart progress done!',
+      name: 'snackbar_restart',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {
