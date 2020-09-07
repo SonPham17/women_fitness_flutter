@@ -1,5 +1,7 @@
+import 'package:flutter/cupertino.dart';
 import 'package:hive/hive.dart';
 import 'package:intl/intl.dart';
+import 'package:path/path.dart';
 import 'package:women_fitness_flutter/db/hive/section_history.dart';
 
 class Utils {
@@ -37,6 +39,11 @@ class Utils {
     'pt-PT',
     'ru-RU',
   ];
+
+  static String getLanguageDevice(BuildContext context){
+    final Locale myLocale= Localizations.localeOf(context);
+    return myLocale.languageCode;
+  }
 
   static List<String> getDaysOfWeek(String locale, int controlWeek) {
     final now = DateTime.now();

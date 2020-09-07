@@ -101,5 +101,7 @@
   "iap_dialog_title": "Tính năng này là tính năng cao cấp, bạn phải trả phí để sử dụng tính năng này hoặc xem quảng cáo!",
   "iap_dialog_ads": "Xem quảng cáo",
   "iap_dialog_premium": "Đăng kí Premium",
-  "snackbar_restart": "Thông số đã được thiết lập lại từ đầu thành công!"
+  "snackbar_restart": "Thông số đã được thiết lập lại từ đầu thành công!",
+  "video_gif": "hình động",
+  "video": "video"
 }

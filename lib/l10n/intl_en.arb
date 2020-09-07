@@ -101,5 +101,7 @@
   "iap_dialog_title": "This feature is a premium feature, you have to pay to use it or view ads!",
   "iap_dialog_ads": "View advertisement",
   "iap_dialog_premium": "Register Premium",
-  "snackbar_restart": "Restart progress done!"
+  "snackbar_restart": "Restart progress done!",
+  "video_gif": "gif",
+  "video": "video"
 }

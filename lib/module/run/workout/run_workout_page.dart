@@ -11,6 +11,7 @@ import 'package:women_fitness_flutter/data/spref/spref.dart';
 import 'package:women_fitness_flutter/generated/l10n.dart';
 import 'package:women_fitness_flutter/module/run/finish/run_finish_page.dart';
 import 'package:women_fitness_flutter/module/run/splash/run_splash_page.dart';
+import 'package:women_fitness_flutter/module/video_player/video_player_page.dart';
 import 'package:women_fitness_flutter/shared/app_color.dart';
 import 'package:women_fitness_flutter/shared/model/section.dart';
 import 'package:women_fitness_flutter/shared/model/work_out.dart';
@@ -216,13 +217,13 @@ class _RunWorkOutPageState extends State<RunWorkOutPage>
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: listInt
                     .map((e) => Container(
-                  width: MediaQuery.of(context).size.width /
-                      widget.listWorkOutBySection.length -
-                      2,
-                  color: listInt.indexOf(e) < widget.index
-                      ? AppColor.main
-                      : AppColor.main[200],
-                ))
+                          width: MediaQuery.of(context).size.width /
+                                  widget.listWorkOutBySection.length -
+                              2,
+                          color: listInt.indexOf(e) < widget.index
+                              ? AppColor.main
+                              : AppColor.main[200],
+                        ))
                     .toList(),
               ),
             ),
@@ -303,28 +304,28 @@ class _RunWorkOutPageState extends State<RunWorkOutPage>
                         children: [
                           workOut.type == 0
                               ? Padding(
-                            padding: const EdgeInsets.only(
-                                left: 10, right: 10),
-                            child: RichText(
-                              text: TextSpan(
-                                style: TextStyle(
-                                    fontFamily: 'OpenSans',
-                                    color: Colors.black,
-                                    fontSize: 50,
-                                    fontWeight: FontWeight.bold),
-                                children: [
-                                  TextSpan(
-                                    text: '$time"',
-                                    style: TextStyle(
-                                      color: AppColor.main,
+                                  padding: const EdgeInsets.only(
+                                      left: 10, right: 10),
+                                  child: RichText(
+                                    text: TextSpan(
+                                      style: TextStyle(
+                                          fontFamily: 'OpenSans',
+                                          color: Colors.black,
+                                          fontSize: 50,
+                                          fontWeight: FontWeight.bold),
+                                      children: [
+                                        TextSpan(
+                                          text: '$time"',
+                                          style: TextStyle(
+                                            color: AppColor.main,
+                                          ),
+                                        ),
+                                        TextSpan(
+                                            text: '/${workOut.timeDefault}"'),
+                                      ],
                                     ),
                                   ),
-                                  TextSpan(
-                                      text: '/${workOut.timeDefault}"'),
-                                ],
-                              ),
-                            ),
-                          )
+                                )
                               : SizedBox(),
                           Padding(
                             padding: const EdgeInsets.only(left: 10, right: 10),
@@ -343,22 +344,35 @@ class _RunWorkOutPageState extends State<RunWorkOutPage>
                                 ),
                                 workOut.type == 1
                                     ? TextApp(
-                                  content: 'X${workOut.countDefault}',
-                                  textColor: AppColor.main,
-                                  size: 25,
-                                )
+                                        content: 'X${workOut.countDefault}',
+                                        textColor: AppColor.main,
+                                        size: 25,
+                                      )
                                     : SizedBox(),
                                 SizedBox(
                                   width: 10,
                                 ),
-                                Container(
-                                  padding: EdgeInsets.all(5),
-                                  decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      color: Colors.lightBlue),
-                                  child: Icon(
-                                    Icons.videocam,
-                                    color: Colors.white,
+                                GestureDetector(
+                                  onTap: () {
+                                    assetsAudioPlayer.pause();
+                                    isPaused = true;
+                                    pushNewScreen(context,
+                                        screen: VideoPlayerPage(
+                                          workOut: workOut,
+                                        )).then((value) {
+                                      assetsAudioPlayer.play();
+                                      isPaused = false;
+                                    });
+                                  },
+                                  child: Container(
+                                    padding: EdgeInsets.all(5),
+                                    decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        color: Colors.lightBlue),
+                                    child: Icon(
+                                      Icons.videocam,
+                                      color: Colors.white,
+                                    ),
                                   ),
                                 ),
                               ],
@@ -370,150 +384,150 @@ class _RunWorkOutPageState extends State<RunWorkOutPage>
                           ),
                           workOut.type == 1
                               ? Padding(
-                            padding: EdgeInsets.only(bottom: 10),
-                            child: Row(
-                              mainAxisAlignment:
-                              MainAxisAlignment.spaceAround,
-                              children: [
-                                GestureDetector(
-                                  child: Icon(
-                                    Icons.chevron_left,
-                                    size: 50,
-                                  ),
-                                  onTap: () {
-                                    pushNewScreen(
-                                      context,
-                                      screen: RunWorkOutPage(
-                                        section: widget.section,
-                                        listWorkOutBySection:
-                                        widget.listWorkOutBySection,
-                                        index: widget.index - 1,
-                                      ),
-                                      pageTransitionAnimation:
-                                      PageTransitionAnimation
-                                          .cupertino,
-                                      withNavBar: false,
-                                    );
-                                    deactivate();
-                                  },
-                                ),
-                                GestureDetector(
-                                  onTap: () {
-                                    pushNewScreen(
-                                      context,
-                                      screen: RunSplashPage(
-                                        section: widget.section,
-                                        listWorkOutBySection:
-                                        widget.listWorkOutBySection,
-                                        index: widget.index + 1,
-                                      ),
-                                      pageTransitionAnimation:
-                                      PageTransitionAnimation
-                                          .cupertino,
-                                      withNavBar: false,
-                                    );
-                                    deactivate();
-                                  },
-                                  child: Container(
-                                    width: 70,
-                                    height: 70,
-                                    padding: EdgeInsets.all(10),
-                                    decoration: BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        color: AppColor.main),
-                                    child: Icon(
-                                      Icons.check,
-                                      color: Colors.white,
-                                      size: 40,
-                                    ),
-                                  ),
-                                ),
-                                GestureDetector(
-                                  onTap: () {
-                                    pushNewScreen(
-                                      context,
-                                      screen: RunSplashPage(
-                                        section: widget.section,
-                                        listWorkOutBySection:
-                                        widget.listWorkOutBySection,
-                                        index: widget.index + 1,
-                                      ),
-                                      pageTransitionAnimation:
-                                      PageTransitionAnimation
-                                          .cupertino,
-                                      withNavBar: false,
-                                    );
-                                    deactivate();
-                                  },
-                                  child: Icon(
-                                    Icons.chevron_right,
-                                    size: 50,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          )
-                              : Stack(
-                            children: [
-                              LinearProgressIndicator(
-                                value: _progressValue,
-                                minHeight: 70,
-                                backgroundColor: Colors.transparent,
-                                valueColor: AlwaysStoppedAnimation<Color>(
-                                    AppColor.main),
-                              ),
-                              Container(
-                                height: 70,
-                                child: Row(
-                                  crossAxisAlignment:
-                                  CrossAxisAlignment.center,
-                                  mainAxisAlignment:
-                                  MainAxisAlignment.spaceAround,
-                                  children: [
-                                    Opacity(
-                                      opacity: widget.index == 0 ? 0 : 1,
-                                      child: GestureDetector(
+                                  padding: EdgeInsets.only(bottom: 10),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceAround,
+                                    children: [
+                                      GestureDetector(
                                         child: Icon(
                                           Icons.chevron_left,
                                           size: 50,
-                                          color: Colors.black45,
                                         ),
                                         onTap: () {
                                           pushNewScreen(
                                             context,
                                             screen: RunWorkOutPage(
                                               section: widget.section,
-                                              listWorkOutBySection: widget
-                                                  .listWorkOutBySection,
+                                              listWorkOutBySection:
+                                                  widget.listWorkOutBySection,
                                               index: widget.index - 1,
                                             ),
                                             pageTransitionAnimation:
-                                            PageTransitionAnimation
-                                                .cupertino,
+                                                PageTransitionAnimation
+                                                    .cupertino,
                                             withNavBar: false,
                                           );
                                           deactivate();
                                         },
                                       ),
-                                    ),
-                                    Icon(
-                                      Icons.pause,
-                                      size: 50,
-                                      color: Colors.black45,
-                                    ),
-                                    Opacity(
-                                      opacity: 0,
-                                      child: Icon(
-                                        Icons.chevron_right,
-                                        size: 50,
-                                        color: Colors.black45,
+                                      GestureDetector(
+                                        onTap: () {
+                                          pushNewScreen(
+                                            context,
+                                            screen: RunSplashPage(
+                                              section: widget.section,
+                                              listWorkOutBySection:
+                                                  widget.listWorkOutBySection,
+                                              index: widget.index + 1,
+                                            ),
+                                            pageTransitionAnimation:
+                                                PageTransitionAnimation
+                                                    .cupertino,
+                                            withNavBar: false,
+                                          );
+                                          deactivate();
+                                        },
+                                        child: Container(
+                                          width: 70,
+                                          height: 70,
+                                          padding: EdgeInsets.all(10),
+                                          decoration: BoxDecoration(
+                                              shape: BoxShape.circle,
+                                              color: AppColor.main),
+                                          child: Icon(
+                                            Icons.check,
+                                            color: Colors.white,
+                                            size: 40,
+                                          ),
+                                        ),
                                       ),
+                                      GestureDetector(
+                                        onTap: () {
+                                          pushNewScreen(
+                                            context,
+                                            screen: RunSplashPage(
+                                              section: widget.section,
+                                              listWorkOutBySection:
+                                                  widget.listWorkOutBySection,
+                                              index: widget.index + 1,
+                                            ),
+                                            pageTransitionAnimation:
+                                                PageTransitionAnimation
+                                                    .cupertino,
+                                            withNavBar: false,
+                                          );
+                                          deactivate();
+                                        },
+                                        child: Icon(
+                                          Icons.chevron_right,
+                                          size: 50,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                )
+                              : Stack(
+                                  children: [
+                                    LinearProgressIndicator(
+                                      value: _progressValue,
+                                      minHeight: 70,
+                                      backgroundColor: Colors.transparent,
+                                      valueColor: AlwaysStoppedAnimation<Color>(
+                                          AppColor.main),
                                     ),
+                                    Container(
+                                      height: 70,
+                                      child: Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceAround,
+                                        children: [
+                                          Opacity(
+                                            opacity: widget.index == 0 ? 0 : 1,
+                                            child: GestureDetector(
+                                              child: Icon(
+                                                Icons.chevron_left,
+                                                size: 50,
+                                                color: Colors.black45,
+                                              ),
+                                              onTap: () {
+                                                pushNewScreen(
+                                                  context,
+                                                  screen: RunWorkOutPage(
+                                                    section: widget.section,
+                                                    listWorkOutBySection: widget
+                                                        .listWorkOutBySection,
+                                                    index: widget.index - 1,
+                                                  ),
+                                                  pageTransitionAnimation:
+                                                      PageTransitionAnimation
+                                                          .cupertino,
+                                                  withNavBar: false,
+                                                );
+                                                deactivate();
+                                              },
+                                            ),
+                                          ),
+                                          Icon(
+                                            Icons.pause,
+                                            size: 50,
+                                            color: Colors.black45,
+                                          ),
+                                          Opacity(
+                                            opacity: 0,
+                                            child: Icon(
+                                              Icons.chevron_right,
+                                              size: 50,
+                                              color: Colors.black45,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    )
                                   ],
                                 ),
-                              )
-                            ],
-                          ),
                         ],
                       ),
                     ),

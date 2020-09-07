@@ -116,6 +116,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "training_wg" : MessageLookupByLibrary.simpleMessage("week goal"),
     "training_workout" : MessageLookupByLibrary.simpleMessage("workout"),
     "training_workouts" : MessageLookupByLibrary.simpleMessage("workouts"),
+    "video" : MessageLookupByLibrary.simpleMessage("video"),
+    "video_gif" : MessageLookupByLibrary.simpleMessage("gif"),
     "workout_1" : MessageLookupByLibrary.simpleMessage("workouts"),
     "workout_2" : MessageLookupByLibrary.simpleMessage("routines"),
     "workout_abs" : MessageLookupByLibrary.simpleMessage("abs workout"),

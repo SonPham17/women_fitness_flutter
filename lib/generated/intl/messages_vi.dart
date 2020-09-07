@@ -116,6 +116,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "training_wg" : MessageLookupByLibrary.simpleMessage("Mục tiêu tuần"),
     "training_workout" : MessageLookupByLibrary.simpleMessage("chương trình của bạn"),
     "training_workouts" : MessageLookupByLibrary.simpleMessage("Bài tập"),
+    "video" : MessageLookupByLibrary.simpleMessage("video"),
+    "video_gif" : MessageLookupByLibrary.simpleMessage("hình động"),
     "workout_1" : MessageLookupByLibrary.simpleMessage("tập luyện"),
     "workout_2" : MessageLookupByLibrary.simpleMessage("thói quen"),
     "workout_abs" : MessageLookupByLibrary.simpleMessage("bài tập cơ bụng"),

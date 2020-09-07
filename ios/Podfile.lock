@@ -35,9 +35,9 @@ PODS:
     - SDWebImage
     - SDWebImageFLPlugin
   - facebook_audience_network (0.0.1):
-    - FBAudienceNetwork (= 5.8.0)
+    - FBAudienceNetwork (= 5.10.1)
     - Flutter
-  - FBAudienceNetwork (5.8.0):
+  - FBAudienceNetwork (5.10.1):
     - FBSDKCoreKit/Basics (>= 5.6.0)
   - FBSDKCoreKit/Basics (7.1.1)
   - file_picker (0.0.1):
@@ -221,8 +221,8 @@ SPEC CHECKSUMS:
   assets_audio_player_web: 19826380c44375761aa0b9053665c1e3fbc3b86b
   DKImagePickerController: 4a3e7948a848c4348e600b3fe5ce41478835fa10
   DKPhotoGallery: 0290d32343574f06eaa4c26f8f2f8a1035e916be
-  facebook_audience_network: 095026346a64502641df716daf48622cf9e64fb8
-  FBAudienceNetwork: 98c125767300048ad46c756680644f4ecb7c4040
+  facebook_audience_network: ac182eb8f9c22f646baea97d5f5fb1f0f7521ab8
+  FBAudienceNetwork: 6cdcc40aa475e8045ab14398e181a3dc90a5014e
   FBSDKCoreKit: b46507dc8b8cefed31d644e74d7cc30e2a715ef8
   file_picker: 3e6c3790de664ccf9b882732d9db5eaf6b8d4eb1
   Firebase: 210f41ca352067d83b1ba4fd2e7fb49a0c017397

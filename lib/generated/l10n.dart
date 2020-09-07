@@ -1062,6 +1062,26 @@ class S {
       args: [],
     );
   }
+
+  /// `gif`
+  String get video_gif {
+    return Intl.message(
+      'gif',
+      name: 'video_gif',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `video`
+  String get video {
+    return Intl.message(
+      'video',
+      name: 'video',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

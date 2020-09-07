@@ -1,7 +1,6 @@
 import 'dart:convert';
 
-import 'package:women_fitness_flutter/shared/model/description_language.dart';
-import 'package:women_fitness_flutter/shared/model/title_language.dart';
+import 'dart:io';
 
 class WorkOut {
   int id;
@@ -15,8 +14,8 @@ class WorkOut {
   int isTwoSides;
   double calories;
   dynamic group;
-  TitleLanguage titleLanguage;
-  DescriptionLanguage descriptionLanguage;
+  Map<String, dynamic> titleLanguage;
+  Map<String, dynamic> descriptionLanguage;
 
   WorkOut(
       this.id,
@@ -33,7 +32,7 @@ class WorkOut {
       this.titleLanguage,
       this.descriptionLanguage);
 
-  void updateDataModel(WorkOut workOut){
+  void updateDataModel(WorkOut workOut) {
     this.id = workOut.id;
     this.title = workOut.title;
     this.description = workOut.description;
@@ -77,9 +76,15 @@ class WorkOut {
     isTwoSides = map['isTwoSides'];
     calories = map['calories'];
     group = map['group'];
-    titleLanguage = TitleLanguage.fromJson(
-        json.decode(map['title_language'].toString().replaceAll("\n", "\\n")));
-    descriptionLanguage = DescriptionLanguage.fromJson(json.decode(
-        map['description_language'].toString().replaceAll("\n", "\\n")));
+    titleLanguage =
+        json.decode(map['title_language'].toString().replaceAll("\n", "\\n"));
+    descriptionLanguage = json
+        .decode(map['description_language'].toString().replaceAll("\n", "\\n"));
+
+    String languageCode = Platform.localeName.split('_')[0];
+    if (languageCode != 'en') {
+      title = titleLanguage['$languageCode}'];
+      description = descriptionLanguage['$languageCode'];
+    }
   }
 }
