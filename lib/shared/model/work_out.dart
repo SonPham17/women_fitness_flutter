@@ -83,8 +83,8 @@ class WorkOut {
 
     String languageCode = Platform.localeName.split('_')[0];
     if (languageCode != 'en') {
-      title = titleLanguage['$languageCode}'];
-      description = descriptionLanguage['$languageCode'];
+      title = titleLanguage['$languageCode'] ?? title;
+      description = descriptionLanguage['$languageCode'] ?? description;
     }
   }
 }

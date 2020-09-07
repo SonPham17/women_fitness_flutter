@@ -248,7 +248,7 @@ class _FavoriteTrainingPageState extends State<FavoriteTrainingPage> {
         background: Container(
           padding: EdgeInsets.only(
             left: 20,
-            top: 130,
+            top: 120,
           ),
           decoration: BoxDecoration(
             image: DecorationImage(
@@ -279,11 +279,13 @@ class _FavoriteTrainingPageState extends State<FavoriteTrainingPage> {
                 ],
               ),
               SizedBox(
-                height: 10,
+                height: 5,
               ),
               TextApp(
                 content: widget.section.description,
                 textColor: Colors.white,
+                maxLines: 2,
+                textOverflow: TextOverflow.ellipsis,
                 size: SizeConfig.defaultSize * 1.4,
               ),
               SizedBox(

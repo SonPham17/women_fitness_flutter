@@ -26,7 +26,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
     _controller = YoutubePlayerController(
       initialVideoId: widget.workOut.video,
       flags: YoutubePlayerFlags(
-        autoPlay: false,
+        autoPlay: true,
         mute: false,
       ),
     );
@@ -100,7 +100,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
                 ? YoutubePlayer(
                     controller: _controller,
                     showVideoProgressIndicator: true,
-                    liveUIColor: Colors.amber,
+                    progressIndicatorColor: Colors.amber,
                   )
                 : Image.asset(
                     'assets/data/${widget.workOut.anim}_0.gif',

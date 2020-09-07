@@ -1,8 +1,6 @@
 import 'dart:convert';
-
+import 'dart:io';
 import 'package:women_fitness_flutter/data/spref/spref.dart';
-import 'package:women_fitness_flutter/shared/model/description_language.dart';
-import 'package:women_fitness_flutter/shared/model/title_language.dart';
 
 class Section{
   int id;
@@ -13,8 +11,8 @@ class Section{
   int type;
   int status;
   List<String> workoutsId;
-  TitleLanguage titleLanguage;
-  DescriptionLanguage descriptionLanguage;
+  Map<String,dynamic> titleLanguage;
+  Map<String,dynamic> descriptionLanguage;
   bool isLiked;
 
   Section.fromData(Map<String, dynamic> map) {
@@ -28,9 +26,16 @@ class Section{
     workoutsId = (json.decode(map['workoutsId']) as List)
         ?.map((e) => e as String)
         ?.toList();
-    titleLanguage = TitleLanguage.fromJson(json.decode(map['title_language']));
+    titleLanguage = json.decode(map['title_language']);
     descriptionLanguage =
-        DescriptionLanguage.fromJson(json.decode(map['description_language']));
+        json.decode(map['description_language']);
+
+    String languageCode = Platform.localeName.split('_')[0];
+    if (languageCode != 'en') {
+      title = titleLanguage['$languageCode'] ?? title;
+      description = descriptionLanguage['$languageCode'] ?? description;
+    }
+
     SPref.instance.getBool(title).then((value) {
       isLiked = value ?? false;
     });
